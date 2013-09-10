@@ -1,0 +1,268 @@
+body {
+    /*font-family: "宋体";*/
+}
+
+.nav-system-info {
+    min-height: 0px;
+    height: 25px;
+    margin-bottom: 0px;
+    border-radius: 0px;
+}
+
+.nav-system-info .navbar-nav>li>a {
+    padding: 0px 10px;
+    font-size: 12px;
+    color: #fff;
+}
+
+.nav-system-header {
+    border-radius: 0px;
+}
+
+.nav-system-header a{
+    font-weight: bold;
+}
+
+.main-nav a:hover {
+    text-decoration: none;
+}
+
+@media screen and (min-width: 992px) {
+    .system-sidebar .nav > .active > ul {
+        display: block;
+    }
+
+    /* Widen the fixed sidebar */
+    .system-sidebar {
+        width: 213px;
+    }
+
+    .system-sidebar {
+        position: fixed;
+        top: 140px;
+    }
+}
+
+@media screen and (min-width: 1200px) {
+    /* Widen the fixed sidebar again */
+    .system-sidebar {
+        width: 263px;
+    }
+}
+
+.system-sidenav {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    text-shadow: 0 1px 0 #fff;
+    border-radius: 5px;
+    background-color: #f8f8f8;
+}
+
+.system-sidenav.nav {
+    /*padding: 10px 0px 10px 10px;*/
+}
+
+.system-sidenav.nav a,
+.system-sidenav.nav .nav-header {
+    padding: 5px 10px;
+}
+
+.system-sidenav .glyphicon-all {
+    margin-right: 6px;
+}
+
+.system-sidenav .text-all {
+    color: #563d7c;
+    font-size: 15px;
+}
+
+.system-sidenav.nav .nav a {
+    padding: 5px 30px;
+    color: #333;
+}
+
+.system-sidenav.nav .nav>li.active {
+    border-right: 2px solid #b94a48;
+}
+
+.system-sidenav.nav .nav>li.active a {
+    color: #b94a48;
+    font-weight: bold;
+}
+
+.system-sidenav.nav .nav-header {
+    font-weight: bold;
+    color: #428bca;
+    font-size: 16px;
+}
+
+.system-sidenav hr {
+    margin: 10px 10px;
+    border-top: 1px solid #DDDDDD;
+}
+
+.system-toolbar {
+    position: fixed;
+    top: 76px;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background: #fff;
+    padding-top: 10px;
+}
+
+.table.list-table {
+    table-layout: fixed;
+}
+
+.table.list-table tbody>tr>td {
+    white-space: nowrap;
+    overflow: hidden;
+    vertical-align: middle;
+    outline: none;
+    empty-cells: show;
+}
+
+.table.list-table tbody>tr {
+    cursor: pointer;
+    height: 61px;
+}
+
+.attchment-table {
+    font-size: 13px;
+}
+
+.timespan-status {
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    margin: 0px 5px;
+    float: none;
+    color: #3a87ad;
+}
+
+.timespan-expired, .timespan-today, .timespan, .timespan-day, .timespan-week, .timespan-month {
+    font-size: 20px;
+    text-align: center;
+    margin: 0px 5px;
+    float: none;
+}
+
+.timespan-expired {
+    color: #999999;
+}
+
+.timespan-day {
+    color: #b94a48;
+}
+
+.timespan-week {
+    color: #c09853;
+}
+
+.timespan-month {
+    color: #468847;
+}
+
+.btn-new {
+    width: 100px;
+    margin-bottom: 10px;
+}
+
+.btn-action {
+    width: 72px;
+    margin-right: 10px;
+}
+
+.btn .caret-right {
+    margin-left: 10px;
+}
+
+.btn-checkbox {
+    padding: 1px 10px;
+    float: left;
+}
+
+.toolbar-hr {
+    margin: 0px 0px 10px 0px;
+    border-top: 1px solid #e5e5e5;
+}
+
+.item-action {
+    /*display: none;*/
+}
+
+.input-append-search {
+    margin-bottom: 0px;
+}
+
+.nav-header > h5 {
+
+}
+
+.title-content-hr {
+    margin: 5px 0px;
+    border-top: 1px solid #e5e5e5;
+}
+
+.comment-content {
+    font-size: 13px;
+    margin-bottom: 20px;
+}
+
+.comment-user, .comment-date {
+    color: #999;
+    font-size: 13px;
+    margin-right: 5px;
+}
+
+.comment-action-link {
+    font-size: 13px;
+}
+
+.note-item {
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.note-title {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.note-content {
+    font-size: 13px;
+}
+
+.note-hr {
+    margin: 5px 0px;
+    border-top: 1px dashed #e5e5e5;
+}
+
+.note-date {
+    color: #999;
+    font-size: 13px;
+    margin-right: 5px;
+}
+
+.note-detail-date {
+    color: #999;
+    font-size: 13px;
+    margin-top: 10px;
+}
+
+.note-detail-hr {
+    margin: 15px 0px;
+    border-top: 1px dashed #e5e5e5;
+}
+
+/*
+.nav-list > .active > a {
+    padding-left: 12px;
+    font-weight: bold;
+    color: #dd4b39;
+    text-shadow: none;
+    background-color: transparent;
+    border-left: 3px solid #dd4b39;
+}*/
