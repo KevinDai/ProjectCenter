@@ -9,27 +9,28 @@
                     <label class="col-md-2 control-label">
                         项目类型：</label>
                     <div class="col-md-4">
-                        <select class="form-control">
-                            <option>纵向研究</option>
-                            <option>横向研究</option>
-                            <option>横向咨询</option>
-                            <option>纵向工作</option>
-                            <option>中心工作</option>
+                        <select data-bind="value: Type" class="form-control">
+                            <option value=""></option>
+                            <option value="0">纵向研究</option>
+                            <option value="1">横向研究</option>
+                            <option value="2">横向咨询</option>
+                            <option value="3">纵向工作</option>
+                            <option value="4">中心工作</option>
                         </select>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-md-2 control-label" for="taskName">
+                    <label class="col-md-2 control-label">
                         项目名称：</label>
                     <div class="col-md-8">
-                        <input class="form-control" type="text" id="taskName">
+                        <input data-bind="value: Name" class="form-control" type="text" id="taskName">
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-md-2 control-label" for="description">
+                    <label class="col-md-2 control-label">
                         委托单位：</label>
                     <div class="col-md-8">
-                        <input class="form-control" id="description" type="text">
+                        <input data-bind="value: Consignor" class="form-control" id="description" type="text">
                     </div>
                 </div>
                 <div class="form-group">
@@ -37,7 +38,7 @@
                         开始时间：</label>
                     <div class="col-md-4">
                         <div class="input-group date form_datetime">
-                            <input class="form-control" type="text" value="">
+                            <input data-bind="value: StartTime" class="form-control" type="text" value="">
                             <span class="input-group-addon">
                                 <span class="glyphicon glyphicon-remove"></span>
                             </span>
@@ -52,7 +53,7 @@
                         截止时间：</label>
                     <div class="col-md-4">
                         <div class="input-group date form_datetime">
-                            <input class="form-control" type="text" value="">
+                            <input data-bind="value: Deadline" class="form-control" type="text" value="">
                             <span class="input-group-addon">
                                 <span class="glyphicon glyphicon-remove"></span>
                             </span>
@@ -60,6 +61,60 @@
                                 <span class="glyphicon glyphicon-calendar"></span>
                             </span>
                         </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-2 control-label">
+                        项目状态：</label>
+                    <div class="col-md-4">
+                        @{
+                            if (ViewBag.User.RightLevel == RightLevel.Common)
+                            {
+                            <select data-bind="value: Status" class="form-control">
+                                <option value="0">发布待审</option>
+                                <option value="2">完成待审</option>
+                            </select>
+                            }
+                            else
+                            {
+                            <select data-bind="value: Status" class="form-control">
+                                <option value="0">发布待审</option>
+                                <option value="1">发布已审核</option>
+                                <option value="2">完成待审</option>
+                                <option value="3">完成已审核</option>
+                                <option value="4">已取消</option>
+                            </select>
+                            }
+                        }
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-2 control-label">
+                        负责人：</label>
+                    <div class="col-md-8">
+
+                        <input id="manager" data-bind="value: ManagerIds" type="text" />
+
+                        @*  <div class="input-group">
+                            <div class="form-control"></div>
+                            <span class="input-group-btn">
+                                <a class="btn btn-default">
+                                    <span class="glyphicon glyphicon-chevron-down"></span>
+                                </a>
+                            </span>
+                        </div>
+                        <div class="panel panel-default panel-user-select">
+                            <div data-bind="foreach: $root.users" class="row">
+                                <div class="col-md-3">
+                                    <div class="checkbox">
+                                        <label>
+                                            <input data-bind="value: Id" type="checkbox">
+                                            <span data-bind="text: Name"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>*@
                     </div>
                 </div>
                 <div class="form-group">
@@ -88,7 +143,7 @@
                         项目金额：</label>
                     <div class="col-md-4">
                         <div class="input-group">
-                            <input class="form-control" type="text" value="">
+                            <input class="form-control easyui-numberbox" data-options="precision:2,groupSeparator:','" type="text" value="">
                             <span class="input-group-addon">元
                             </span>
                         </div>
@@ -115,7 +170,7 @@
                         <div class="input-group">
                             <span class="input-group-addon">已收
                             </span>
-                            <input class="form-control" type="text" value="">
+                            <input class="form-control easyui-numberbox" data-options="precision:2,groupSeparator:','" type="text" value="">
                             <span class="input-group-addon">元
                             </span>
                         </div>
@@ -145,3 +200,63 @@
         </div>
     </div>
 </div>
+
+<script type="text/ecmascript">
+    (function ($) {
+
+        var UserSelectBox = function (element, selectedIds) {
+            var self = this;
+
+            self.element = $(element);
+            self.container = $('<div class="input-group"><div class="form-control"></div><span class="input-group-btn"><a class="btn btn-default"><span class="glyphicon glyphicon-chevron-down"></span></a></span></div>');
+            self.userlistPanel = $('<div class="panel panel-default panel-user-select" style="display: none;"><div data-bind="foreach: $root.users" class="row"><div class="col-md-3"><div class="checkbox"><label><input data-bind="value: Id" type="checkbox"><span data-bind="text: Name"></span></label></div></div></div></div>');
+            self.init = function () {
+                self.element.hide();
+                self.container.insertAfter(self.element);
+                self.userlistPanel.insertAfter(self.container);
+
+                self.setValue(selectedIds);
+
+                self.container.find("a").click(function () {
+                    if ($(this).find("span").hasClass("glyphicon-chevron-down")) {
+                        var value = self.element.val();
+                        if (value) {
+                            self.setValue(value.split(","));
+                        }
+                    }
+
+                    $(this).find("span").toggleClass("glyphicon-chevron-down glyphicon-chevron-up");
+                    self.userlistPanel.toggle();
+                });
+
+            }
+            self.setValue = function (ids) {
+                self.clearValue();
+                if (ids) {
+                    self.userlistPanel.find("input:checkbox").each(function () {
+                        var $this = $(this);
+                        for (var i = 0; i < ids.length; i++) {
+                            if (ids[i] == $this.val()) {
+                                this.checked = true;
+                                break;
+                            }
+                        }
+                    });
+                }
+            };
+            self.clearValue = function () {
+                self.userlistPanel.find("input:checkbox").each(function () {
+                    this.checked = false;
+                });
+            };
+            self.init();
+        }
+
+        $.fn.userSelectBox = function () {
+            this.each(function () {
+                new UserSelectBox(this);
+            });
+        }
+
+    })(jQuery);
+</script>

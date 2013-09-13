@@ -22,7 +22,6 @@ namespace ProjectCenter.Models
             modelBuilder.Configurations.Add(new AttachmentMap());
             modelBuilder.Configurations.Add(new CommentMap());
             modelBuilder.Configurations.Add(new NoteMap());
-            modelBuilder.Configurations.Add(new ProjectAttachmentMap());
             modelBuilder.Configurations.Add(new ProjectMap());
             modelBuilder.Configurations.Add(new ProjectUserMap());
             modelBuilder.Configurations.Add(new RoleMap());

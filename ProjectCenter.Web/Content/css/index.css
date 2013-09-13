@@ -288,3 +288,12 @@ body {
 .table-panel > .panel-heading {
     border-bottom: 0px;
 }
+
+.panel-user-select {
+    margin: 2px 0px;
+    padding: 5px;
+}
+
+    .panel-user-select .checkbox {
+        margin: 2px 10px;
+    }

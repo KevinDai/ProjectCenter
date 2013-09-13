@@ -21,6 +21,10 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>4.0</OldToolsVersion>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -64,11 +68,14 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\NoteController.cs" />
     <Compile Include="Controllers\ProjectController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\RightLevel.cs" />
+    <Compile Include="Models\UserInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -77,6 +84,30 @@
     <Content Include="Content\css\bootstrap.css" />
     <Content Include="Content\css\bootstrap.min.css" />
     <Content Include="Content\css\datetimepicker.css" />
+    <Content Include="Content\css\easyui\combobox.css" />
+    <Content Include="Content\css\easyui\easyui.css" />
+    <Content Include="Content\css\easyui\icon.css" />
+    <Content Include="Content\css\easyui\icons\back.png" />
+    <Content Include="Content\css\easyui\icons\blank.gif" />
+    <Content Include="Content\css\easyui\icons\cancel.png" />
+    <Content Include="Content\css\easyui\icons\cut.png" />
+    <Content Include="Content\css\easyui\icons\edit_add.png" />
+    <Content Include="Content\css\easyui\icons\edit_remove.png" />
+    <Content Include="Content\css\easyui\icons\filesave.png" />
+    <Content Include="Content\css\easyui\icons\help.png" />
+    <Content Include="Content\css\easyui\icons\mini_add.png" />
+    <Content Include="Content\css\easyui\icons\mini_edit.png" />
+    <Content Include="Content\css\easyui\icons\mini_refresh.png" />
+    <Content Include="Content\css\easyui\icons\no.png" />
+    <Content Include="Content\css\easyui\icons\ok.png" />
+    <Content Include="Content\css\easyui\icons\pencil.png" />
+    <Content Include="Content\css\easyui\icons\print.png" />
+    <Content Include="Content\css\easyui\icons\redo.png" />
+    <Content Include="Content\css\easyui\icons\reload.png" />
+    <Content Include="Content\css\easyui\icons\search.png" />
+    <Content Include="Content\css\easyui\icons\sum.png" />
+    <Content Include="Content\css\easyui\icons\tip.png" />
+    <Content Include="Content\css\easyui\icons\undo.png" />
     <Content Include="Content\css\index.css" />
     <Content Include="Content\css\minimal.css" />
     <Content Include="Content\css\todc-bootstrap.css" />
@@ -108,6 +139,7 @@
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\jquery-1.7.1.js" />
+    <Content Include="Scripts\jquery.easyui.min.js" />
     <Content Include="Scripts\jquery.icheck.js" />
     <Content Include="Scripts\knockout-2.3.0.js" />
     <Content Include="Scripts\locales\bootstrap-datetimepicker.zh-CN.js" />
@@ -131,7 +163,6 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Models\" />
     <Folder Include="Scripts\models\" />
   </ItemGroup>
   <ItemGroup>
@@ -141,6 +172,9 @@
     <Content Include="Views\Project\List.cshtml" />
     <Content Include="Views\Note\List.cshtml" />
     <Content Include="Views\Shared\PaginationPartialView.cshtml" />
+    <Content Include="Views\Project\EditPartialView.cshtml" />
+    <Content Include="Views\Project\AttachmentPartialView.cshtml" />
+    <Content Include="Views\Project\CommentPartialView.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

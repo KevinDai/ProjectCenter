@@ -9,15 +9,16 @@
     <link href="@Url.Content("~/Content/css/minimal.css")" rel="stylesheet" media="screen">
     <link href="@Url.Content("~/Content/css/datetimepicker.css")" rel="stylesheet" media="screen">
     <link href="@Url.Content("~/Content/css/index.css")" rel="stylesheet" media="screen">
+    @*<link href="@Url.Content("~/Content/css//easyui/easyui.css")" rel="stylesheet" media="screen">*@
     <script src="@Url.Content("~/Scripts/jquery-1.7.1.js")" type="text/javascript"></script>
     <script src="@Url.Content("~/Scripts/bootstrap.min.js")" type="text/javascript"></script>
     <script src="@Url.Content("~/Scripts/knockout-2.3.0.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.easyui.min.js")" type="text/javascript"></script>
     <script src="@Url.Content("~/Scripts/jquery.icheck.js")" type="text/javascript"></script>
     <script src="@Url.Content("~/Scripts/bootstrap-datetimepicker.js")" type="text/javascript"></script>
     <script src="@Url.Content("~/Scripts/locales/bootstrap-datetimepicker.zh-CN.js")" type="text/javascript"></script>
     <style>
-        body
-        {
+        body {
             padding-top: 90px;
         }
     </style>
@@ -25,16 +26,16 @@
 <body>
     <div class="container">
         <header class="navbar-fixed-top  main-nav" role="banner">
-    <nav class="navbar navbar-inverse nav-system-info" role="navigation">
-        <div class="container">
-            <ul class="nav navbar-nav navbar-right">
-                <li>
-                    <a href="#"><span class="glyphicon glyphicon-user"></span> User</a>
-                </li>
-                <li>
-                    <a href="#"><span class="glyphicon glyphicon-off"></span> 退出</a>
-                </li>
-                <!--<li>
+            <nav class="navbar navbar-inverse nav-system-info" role="navigation">
+                <div class="container">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a href="#"><span class="glyphicon glyphicon-user"></span>User</a>
+                        </li>
+                        <li>
+                            <a href="#"><span class="glyphicon glyphicon-off"></span>退出</a>
+                        </li>
+                        <!--<li>
                     <div class="btn-group">
                         <div class="input-append">
                             <input class="col-md-2" id="appendedInputButtons" type="text">
@@ -42,15 +43,15 @@
                         </div>
                     </div>
                 </li>-->
-            </ul>
-        </div>
-    </nav>
-    <nav class="navbar navbar-default nav-system-header" role="navigation">
-        <div class="container">
-            <ul class="nav navbar-nav navbar-right">
-                <li class="@(ViewContext.RouteData.Values["Controller"].ToString() == "Project" ? "active" : "")">@Html.ActionLink("任务清单", "List", "Project")</li>
-                <li class="@(ViewContext.RouteData.Values["Controller"].ToString() == "Note" ? "active" : "")">@Html.ActionLink("工作日志", "List", "Note")</li>
-                <!--<li>
+                    </ul>
+                </div>
+            </nav>
+            <nav class="navbar navbar-default nav-system-header" role="navigation">
+                <div class="container">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="@(ViewContext.RouteData.Values["Controller"].ToString() == "Project" ? "active" : "")">@Html.ActionLink("任务清单", "List", "Project")</li>
+                        <li class="@(ViewContext.RouteData.Values["Controller"].ToString() == "Note" ? "active" : "")">@Html.ActionLink("工作日志", "List", "Note")</li>
+                        <!--<li>
                     <div class="btn-group">
                         <div class="input-append">
                             <input class="col-md-2" id="appendedInputButtons" type="text">
@@ -58,13 +59,13 @@
                         </div>
                     </div>
                 </li>-->
-            </ul>
-            <div class="navbar-header">
-                @*<span class="navbar-brand">广东省科学技术情报研究所咨询策划中心项目管理系统</span>*@
-                <span class="navbar-brand">Project Name</span>
-            </div>
-        </div>
-    </nav>
+                    </ul>
+                    <div class="navbar-header">
+                        @*<span class="navbar-brand">广东省科学技术情报研究所咨询策划中心项目管理系统</span>*@
+                        <span class="navbar-brand">Project Name</span>
+                    </div>
+                </div>
+            </nav>
         </header>
         @RenderBody()
     </div>
@@ -92,6 +93,7 @@
             self.startIndex = (pageIndex - 1) * pageSize + 1;
             self.endIndex = pageIndex * pageSize > total ? total : pageIndex * pageSize;
         };
+
     </script>
 </body>
 </html>

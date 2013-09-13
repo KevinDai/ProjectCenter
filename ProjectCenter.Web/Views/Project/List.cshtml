@@ -1,5 +1,4 @@
 ﻿@{
-    ViewBag.Title = "List";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <div class="row">
@@ -121,7 +120,7 @@
                     <th style="text-align: center;">负责人</th>
                 </tr>
                 </thead>-->
-                                    <tbody data-bind="foreach: taskList.list">
+                                    <tbody data-bind="foreach: list">
                                         <tr data-bind="click: $root.showProjectEditView">
                                             <td>
                                                 <input type="checkbox">
@@ -154,7 +153,7 @@
                                 </ul>
                                 <div id="myTabContent" class="tab-content">
                                     <div class="tab-pane fade active in" id="info">
-                                        <div class="row margin-top-15">
+                                        <div data-bind="with: editItem" class="row margin-top-15">
                                             @{Html.RenderPartial("EditPartialView");}
                                             @{Html.RenderPartial("AttachmentPartialView");}
                                             @{Html.RenderPartial("CommentPartialView");}
@@ -174,7 +173,6 @@
                                     <div class="tab-pane fade" id="comment">
                                         <div class="row">
                                             <div class="col-md-10">
-                                                
                                             </div>
                                         </div>
                                         <div class="row">
@@ -248,6 +246,31 @@
                     { value: "3", name: "纵向工作" },
                     { value: "4", name: "中心工作" }
                 ], "1")]);
+        self.users = [
+            { Id: "1", Name: "用户" },
+            { Id: "2", Name: "用户" },
+            { Id: "3", Name: "用户" },
+            { Id: "4", Name: "用户" },
+            { Id: "5", Name: "用户" },
+            { Id: "6", Name: "用户" },
+            { Id: "7", Name: "用户" },
+            { Id: "8", Name: "用户" },
+            { Id: "9", Name: "用户" },
+            { Id: "10", Name: "用户" },
+            { Id: "11", Name: "用户" },
+            { Id: "12", Name: "用户" },
+            { Id: "13", Name: "用户" },
+            { Id: "14", Name: "用户" }
+        ];
+        self.editItem = ko.observable({
+            Type: ko.observable(0),
+            Name: ko.observable("Name"),
+            Consignor: ko.observable("Consignor"),
+            StartTime: ko.observable("2013-10-1"),
+            Deadline: ko.observable("2014-10-1"),
+            Status: ko.observable(2),
+            ManagerIds: ko.observable("1,2,3,4,5")
+        });
         self.list = ko.observableArray(loadProjects());
         self.paginationInfo = ko.observable(new paginationInfo(1, 20, 0));
         self.showProjectEditView = function () {
@@ -265,9 +288,10 @@
     };
 
     $(function () {
-        $('input').iCheck({
-            checkboxClass: 'icheckbox_minimal'
-        });
+        $("#manager").userSelectBox();
+        //$('input').iCheck({
+        //    checkboxClass: 'icheckbox_minimal'
+        //});
         $(".form_datetime").datetimepicker({
             format: "yyyy-mm-dd",
             autoclose: true,

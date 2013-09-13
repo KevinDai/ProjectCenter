@@ -6,7 +6,7 @@ using System.Web.Mvc;
 
 namespace ProjectCenter.Web.Controllers
 {
-    public class NoteController : Controller
+    public class NoteController : BaseController
     {
         //
         // GET: /Note/
