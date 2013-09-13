@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectCenter.Models", "ProjectCenter.Models\ProjectCenter.Models.csproj", "{10299441-BCD8-43FF-BE9E-669F598DC5C7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectCenter.Services", "ProjectCenter.Services\ProjectCenter.Services.csproj", "{CE3369F2-1422-498A-A75B-08B0BCB43195}"

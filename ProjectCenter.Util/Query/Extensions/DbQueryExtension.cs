@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 
-namespace ProjectCenter.Services.Extensions
+namespace ProjectCenter.Util.Query.Extensions
 {
     public static class DbQueryExtension
     {

@@ -16,7 +16,7 @@ namespace ProjectCenter.Models
         /// <summary>
         /// 任务类型Id
         /// </summary>
-        public string CategoryId
+        public int Type
         {
             get;
             set;
@@ -104,6 +104,15 @@ namespace ProjectCenter.Models
         }
 
         /// <summary>
+        /// 收款状态
+        /// </summary>
+        public int AmountReceivedStatus
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
         /// 已收金额
         /// </summary>
         public string AmountReceived
@@ -131,18 +140,64 @@ namespace ProjectCenter.Models
         }
 
         /// <summary>
-        /// 创建时间
+        /// 负责人Id
         /// </summary>
-        public DateTime CreateTime
+        public string ManagerIds
         {
             get;
             set;
         }
 
         /// <summary>
-        /// 任务类型
+        /// 负责人名称
         /// </summary>
-        public ProjectCategory Category
+        public string ManagerNames
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 参与者Id
+        /// </summary>
+        public string ParticipantIds
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 参与者名称
+        /// </summary>
+        public string ParticipantNames
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 创建人Id
+        /// </summary>
+        public string CreatorId
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 创建人名称
+        /// </summary>
+        public string CreatorName
+        {
+            get;
+            set;
+        }
+
+
+        /// <summary>
+        /// 创建时间
+        /// </summary>
+        public DateTime CreateTime
         {
             get;
             set;

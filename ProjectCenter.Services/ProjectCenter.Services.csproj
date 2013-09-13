@@ -44,8 +44,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Extensions\DbQueryExtension.cs" />
-    <Compile Include="Extensions\IQueryableExtension.cs" />
     <Compile Include="Imp\ServiceBase.cs" />
     <Compile Include="Imp\ProjectService.cs" />
     <Compile Include="IProjectService.cs" />
@@ -57,6 +55,10 @@
     <ProjectReference Include="..\ProjectCenter.Models\ProjectCenter.Models.csproj">
       <Project>{10299441-BCD8-43FF-BE9E-669F598DC5C7}</Project>
       <Name>ProjectCenter.Models</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ProjectCenter.Util\ProjectCenter.Util.csproj">
+      <Project>{C636DD03-0C94-44A4-B8FD-326AF19413E1}</Project>
+      <Name>ProjectCenter.Util</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

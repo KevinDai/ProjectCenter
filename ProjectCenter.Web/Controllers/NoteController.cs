@@ -6,14 +6,13 @@ using System.Web.Mvc;
 
 namespace ProjectCenter.Web.Controllers
 {
-    public class ProjectController : Controller
+    public class NoteController : Controller
     {
         //
-        // GET: /Project/
-        [HttpGet]
+        // GET: /Note/
+
         public ActionResult List()
         {
-            //this.User.Identity.AuthenticationType
             return View();
         }
 

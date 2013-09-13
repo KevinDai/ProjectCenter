@@ -31,8 +31,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.5.0.0\lib\net40\EntityFramework.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -42,6 +46,21 @@
   <ItemGroup>
     <Compile Include="Preconditions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Query\Extensions\DbQueryExtension.cs" />
+    <Compile Include="Query\Extensions\IQueryableExtension.cs" />
+    <Compile Include="Query\ListSortDirection.cs" />
+    <Compile Include="Query\PageList.cs" />
+    <Compile Include="Query\SortDescriptor.cs" />
+    <Compile Include="Query\Specification\AndSpecification.cs" />
+    <Compile Include="Query\Specification\CompositeSpecification.cs" />
+    <Compile Include="Query\Specification\DirectSpecification.cs" />
+    <Compile Include="Query\Specification\ExpressionBuilder.cs" />
+    <Compile Include="Query\Specification\ISpecification.cs" />
+    <Compile Include="Query\Specification\NotSpecification.cs" />
+    <Compile Include="Query\Specification\OrSpecification.cs" />
+    <Compile Include="Query\Specification\ParametersRebinder.cs" />
+    <Compile Include="Query\Specification\Specification.cs" />
+    <Compile Include="Query\Specification\TrueSpecification.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

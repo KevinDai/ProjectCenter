@@ -19,6 +19,12 @@ namespace ProjectCenter.Models
             set;
         }
 
+        public string ProjectId
+        {
+            get;
+            set;
+        }
+
         public string UploadUserId
         {
             get;

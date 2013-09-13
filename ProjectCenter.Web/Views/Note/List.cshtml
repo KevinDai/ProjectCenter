@@ -1,0 +1,73 @@
+﻿@{
+    ViewBag.Title = "List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="row">
+    <div class="col-md-12">
+        <div class="system-toolbar affix">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="btn-group">
+                            <button data-bind="click: showTaskEditView" class="btn btn-danger btn-new">
+                                发布任务</button>
+                        </div>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <ul class="list-inline">
+                                    <li>
+                                        <div class="btn-group">
+                                            <a href="#" class="btn btn-default btn-action dropdown-toggle" data-toggle="dropdown">
+                                                <div class="btn-checkbox">
+                                                    <input type="checkbox">
+                                                </div>
+                                                <span class="caret"></span></a>
+                                            <ul class="dropdown-menu">
+                                                <li><a href="#">全选</a></li>
+                                                <li><a href="#">全不选</a></li>
+                                            </ul>
+                                        </div>
+                                        <div class="btn-group item-action">
+                                            <a class="btn btn-default btn-action" data-toggle="tooltip" data-placement="bottom"
+                                                title="删除"><span class="glyphicon glyphicon-trash"></span></a>
+                                        </div>
+                                        <div class="btn-group item-action">
+                                            <a class="btn btn-default dropdown-toggle btn-action" data-toggle="dropdown"><span
+                                                class="glyphicon glyphicon-tags"></span><span class="caret caret-right"></span>
+                                            </a>
+                                            <ul class="dropdown-menu">
+                                                <li><a href="#">标记为完成</a></li>
+                                                <li><a href="#">标记为取消</a></li>
+                                            </ul>
+                                        </div>
+                                        <a class="btn btn-default btn-action" data-toggle="tooltip" data-placement="bottom"
+                                            title="下载"><span class="glyphicon glyphicon-download-alt"></span></a></li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <ul class="pull-right list-inline">
+                                    <li><span>第 <strong>1-20</strong> 项，共 <strong>55</strong> 项 </span></li>
+                                    <li>
+                                        <div class="btn-group">
+                                            <a class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"></span>
+                                            </a><a class="btn btn-default"><span class="glyphicon glyphicon-chevron-right"></span>
+                                            </a>
+                                        </div>
+                                        <a class="btn btn-default"><span class="glyphicon glyphicon-refresh"></span></a>
+                                        <a class="btn btn-default"><span class="glyphicon glyphicon-search"></span></a>
+                                        <!--<div class="btn-group">
+                                    <a class="btn"><i class="icon-cog"></i></a>
+                                </div>-->
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr class="toolbar-hr">
+            </div>
+        </div>
+    </div>
+</div>

@@ -9,19 +9,19 @@ body {
     border-radius: 0px;
 }
 
-.nav-system-info .navbar-nav>li>a {
-    padding: 0px 10px;
-    font-size: 12px;
-    color: #fff;
-}
+    .nav-system-info .navbar-nav > li > a {
+        padding: 0px 10px;
+        font-size: 12px;
+        color: #fff;
+    }
 
 .nav-system-header {
     border-radius: 0px;
 }
 
-.nav-system-header a{
-    font-weight: bold;
-}
+    .nav-system-header a {
+        font-weight: bold;
+    }
 
 .main-nav a:hover {
     text-decoration: none;
@@ -58,48 +58,47 @@ body {
     background-color: #f8f8f8;
 }
 
-.system-sidenav.nav {
-    /*padding: 10px 0px 10px 10px;*/
-}
+    .system-sidenav.nav {
+        /*padding: 10px 0px 10px 10px;*/
+    }
 
-.system-sidenav.nav a,
-.system-sidenav.nav .nav-header {
-    padding: 5px 10px;
-}
+        .system-sidenav.nav a, .system-sidenav.nav .nav-header {
+            padding: 5px 10px;
+        }
 
-.system-sidenav .glyphicon-all {
-    margin-right: 6px;
-}
+    .system-sidenav .glyphicon-all {
+        margin-right: 6px;
+    }
 
-.system-sidenav .text-all {
-    color: #563d7c;
-    font-size: 15px;
-}
+    .system-sidenav .text-all {
+        color: #563d7c;
+        font-size: 15px;
+    }
 
-.system-sidenav.nav .nav a {
-    padding: 5px 30px;
-    color: #333;
-}
+    .system-sidenav.nav .nav a {
+        padding: 5px 30px;
+        color: #333;
+    }
 
-.system-sidenav.nav .nav>li.active {
-    border-right: 2px solid #b94a48;
-}
+    .system-sidenav.nav .nav > li.active {
+        border-right: 2px solid #b94a48;
+    }
 
-.system-sidenav.nav .nav>li.active a {
-    color: #b94a48;
-    font-weight: bold;
-}
+        .system-sidenav.nav .nav > li.active a {
+            color: #b94a48;
+            font-weight: bold;
+        }
 
-.system-sidenav.nav .nav-header {
-    font-weight: bold;
-    color: #428bca;
-    font-size: 16px;
-}
+    .system-sidenav.nav .nav-header {
+        font-weight: bold;
+        color: #428bca;
+        font-size: 16px;
+    }
 
-.system-sidenav hr {
-    margin: 10px 10px;
-    border-top: 1px solid #DDDDDD;
-}
+    .system-sidenav hr {
+        margin: 10px 10px;
+        border-top: 1px solid #DDDDDD;
+    }
 
 .system-toolbar {
     position: fixed;
@@ -111,26 +110,30 @@ body {
     padding-top: 10px;
 }
 
+.system-content {
+    padding-top: 55px;
+}
+
 .table.list-table {
     table-layout: fixed;
 }
 
-.table.list-table tbody>tr>td {
-    white-space: nowrap;
-    overflow: hidden;
-    vertical-align: middle;
-    outline: none;
-    empty-cells: show;
-}
+    .table.list-table tbody > tr > td {
+        white-space: nowrap;
+        overflow: hidden;
+        vertical-align: middle;
+        outline: none;
+        empty-cells: show;
+    }
 
-.table.list-table tbody>tr {
-    cursor: pointer;
-    height: 61px;
-}
+    .table.list-table tbody > tr {
+        cursor: pointer;
+        height: 61px;
+    }
 
-.attchment-table {
+/*.attchment-table {
     font-size: 13px;
-}
+}*/
 
 .timespan-status {
     font-size: 16px;
@@ -197,7 +200,6 @@ body {
 }
 
 .nav-header > h5 {
-
 }
 
 .title-content-hr {
@@ -266,3 +268,23 @@ body {
     background-color: transparent;
     border-left: 3px solid #dd4b39;
 }*/
+
+.margin-top-15 {
+    margin-top: 15px;
+}
+
+.list-panel-title {
+    margin-bottom: 0px;
+}
+
+    .list-panel-title a {
+        font-size: 13px;
+    }
+
+        .list-panel-title a:hover {
+            text-decoration: none;
+        }
+
+.table-panel > .panel-heading {
+    border-bottom: 0px;
+}

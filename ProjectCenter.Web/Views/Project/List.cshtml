@@ -1,0 +1,283 @@
+﻿@{
+    ViewBag.Title = "List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="row">
+    <div class="col-md-12">
+        <div class="system-toolbar affix">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="btn-group">
+                            <button data-bind="click: showProjectEditView" class="btn btn-danger btn-new">
+                                发布任务</button>
+                        </div>
+                    </div>
+                    <div class="col-md-9">
+                        <div id="listToolbar" class="row">
+                            <div class="col-md-6">
+                                <ul class="list-inline">
+                                    <li>
+                                        <div class="btn-group">
+                                            <a href="#" class="btn btn-default btn-action dropdown-toggle" data-toggle="dropdown">
+                                                <div class="btn-checkbox">
+                                                    <input type="checkbox">
+                                                </div>
+                                                <span class="caret"></span></a>
+                                            <ul class="dropdown-menu">
+                                                <li><a href="#">全选</a></li>
+                                                <li><a href="#">全不选</a></li>
+                                            </ul>
+                                        </div>
+                                        <div class="btn-group item-action">
+                                            <a class="btn btn-default btn-action" data-toggle="tooltip" data-placement="bottom"
+                                                title="删除"><span class="glyphicon glyphicon-trash"></span></a>
+                                        </div>
+                                        <div class="btn-group item-action">
+                                            <a class="btn btn-default dropdown-toggle btn-action" data-toggle="dropdown"><span
+                                                class="glyphicon glyphicon-tags"></span><span class="caret caret-right"></span>
+                                            </a>
+                                            <ul class="dropdown-menu">
+                                                <li><a href="#">标记为完成</a></li>
+                                                <li><a href="#">标记为取消</a></li>
+                                            </ul>
+                                        </div>
+                                        <a class="btn btn-default btn-action" data-toggle="tooltip" data-placement="bottom"
+                                            title="下载"><span class="glyphicon glyphicon-download-alt"></span></a></li>
+                                </ul>
+                            </div>
+                            <div data-bind="with: paginationInfo" class="col-md-6">
+                                @{Html.RenderPartial("PaginationPartialView");}
+                            </div>
+                        </div>
+                        <div id="editToolbar" class="row" style="display: none;">
+                            <div class="col-md-6">
+                                <ul class="list-inline">
+                                    <li>
+                                        <div class="btn-group">
+                                            <a data-bind="click: showProjectListView" data-toggle="tooltip" data-placement="bottom"
+                                                class="btn btn-default btn-action" title="返回"><span class="glyphicon glyphicon-arrow-left"></span></a>
+                                        </div>
+                                        <div class="btn-group item-action">
+                                            <a class="btn btn-default btn-action" data-toggle="tooltip" data-placement="bottom"
+                                                title="保存"><span class="glyphicon glyphicon-ok"></span></a><a class="btn btn-default btn-action"
+                                                    data-toggle="tooltip" data-placement="bottom" title="删除"><span class="glyphicon glyphicon-trash"></span></a>
+                                        </div>
+                                        @*<div class="btn-group item-action">
+                                            <a class="btn dropdown-toggle btn-action" data-toggle="dropdown" title="标记"><i class="glyphicon glyphicon-tags">
+                                            </i><span class="caret"></span></a>
+                                            <ul class="dropdown-menu">
+                                                <li><a href="#"><i class="icon-ok"></i>标记为完成</a></li>
+                                                <li><a href="#"><i class="icon-off"></i>标记为取消</a></li>
+                                            </ul>
+                                        </div>*@ </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr class="toolbar-hr">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 system-content">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="system-sidebar">
+                            <ul class="nav system-sidenav">
+                                <!-- ko foreach: { data: filterLinks, as: 'filterLink' } -->
+                                <li class="nav-header"><span data-bind="text: name"></span></li>
+                                <li data-bind="if: value"><a data-bind="click: clear" href="javascript:void(0);"><span
+                                    class="text-all"><span class="glyphicon glyphicon-minus glyphicon-all"></span>全部</span></a></li>
+                                <li>
+                                    <ul data-bind="foreach: { data: selectListItems, as: 'item' }" class="nav nav-list">
+                                        <li data-bind="attr: { 'class': filterLink.value() == item.value ? 'active' : ''}"><a
+                                            data-bind="text: item.name, click: filterLink.select" class="" href="#"></a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <hr>
+                                </li>
+                                <!-- /ko -->
+                            </ul>
+                        </div>
+                    </div>
+                    <div id="list" class="col-md-9" style="display: none">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <table class="table table-hover list-table ">
+                                    <colgroup>
+                                        <col style="width: 50px;">
+                                        <col style="width: 120px;">
+                                        <col style="width: 350px;">
+                                        <col style="width: 200px;">
+                                    </colgroup>
+                                    <!--<thead>
+                <tr>
+                    <th></th>
+                    <th>截止时间</th>
+                    <th>项目名称</th>
+                    <th style="text-align: center;">负责人</th>
+                </tr>
+                </thead>-->
+                                    <tbody data-bind="foreach: taskList.list">
+                                        <tr data-bind="click: $root.showProjectEditView">
+                                            <td>
+                                                <input type="checkbox">
+                                            </td>
+                                            <td>
+                                                <span data-bind="html: daySpanHtml"></span>
+                                                <br>
+                                                <small data-bind="text: deadline" class="muted"></small>
+                                            </td>
+                                            <td>
+                                                <h5 data-bind="text: taskName" style="font-weight: bold"></h5>
+                                            </td>
+                                            <td>
+                                                <div style="text-align: center;">
+                                                    <span data-bind="text: personInCharge"></span>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="edit" class="col-md-9">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <ul id="myTab" class="nav nav-tabs">
+                                    <li class="active"><a href="#info" data-toggle="tab">任务信息</a></li>
+                                    <li class=""><a href="#comment" data-toggle="tab">评论</a></li>
+                                </ul>
+                                <div id="myTabContent" class="tab-content">
+                                    <div class="tab-pane fade active in" id="info">
+                                        <div class="row margin-top-15">
+                                            @{Html.RenderPartial("EditPartialView");}
+                                            @{Html.RenderPartial("AttachmentPartialView");}
+                                            @{Html.RenderPartial("CommentPartialView");}
+                                        </div>
+
+                                        @*<div class="row">
+                                            <div class="col-md-12">
+                                                <ul class="list-unstyled list-inline pull-right">
+                                                    <li><a class="btn btn-small" href="#"><i class="icon-plus"></i>上传附件</a></li>
+                                                    <li><a class="btn btn-small" href="#"><i class="icon-download-alt"></i>下载全部</a></li>
+                                                </ul>
+                                                <h4>附件列表</h4>
+
+                                            </div>
+                                        </div>*@
+                                    </div>
+                                    <div class="tab-pane fade" id="comment">
+                                        <div class="row">
+                                            <div class="col-md-10">
+                                                
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-10">
+                                                <div class="pagination">
+                                                    <ul>
+                                                        <li class="disabled"><a href="#">&lt</a></li>
+                                                        <li class="active"><a href="#">1</a></li>
+                                                        <li><a href="#">2</a></li>
+                                                        <li><a href="#">3</a></li>
+                                                        <li><a href="#">4</a></li>
+                                                        <li><a href="#">5</a></li>
+                                                        <li><a href="#">...</a></li>
+                                                        <li><a href="#">&gt</a></li>
+                                                    </ul>
+                                                    <div class="pull-right">
+                                                        <span>共</span> <strong>120</strong> <span>条评论</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-8">
+                                                <h5>发表评论：</h5>
+                                                <form class="form-horizontal">
+                                                    <div class="control-group">
+                                                        <textarea class="input-xxlarge" rows="5"></textarea>
+                                                    </div>
+                                                    <a class="btn btn-new btn-primary" href="#">提交评论</a>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+
+    var projectListViewModel = function () {
+        var self = this;
+        var loadProjects = function () {
+            return undefined;
+        };
+        self.tempDatas = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        self.filterLinks = ko.observableArray([
+            new filterLinkViewModel("TaskType", "我的项目",
+                [
+                    { value: "0", name: "我发布的" },
+                    { value: "1", name: "我负责的" },
+                    { value: "2", name: "我参与的" }
+                ], ""),
+            new filterLinkViewModel("Status", "项目状态",
+                [
+                    { value: "1", name: "进行中" },
+                    { value: "3", name: "已完成" },
+                    { value: "4", name: "已取消" },
+                    { value: "0", name: "发布待审" },
+                    { value: "2", name: "完成待审" }
+                ], "1"),
+            new filterLinkViewModel("Deadline", "项目类型",
+                [
+                    { value: "0", name: "纵向研究" },
+                    { value: "1", name: "横向研究" },
+                    { value: "2", name: "横向咨询" },
+                    { value: "3", name: "纵向工作" },
+                    { value: "4", name: "中心工作" }
+                ], "1")]);
+        self.list = ko.observableArray(loadProjects());
+        self.paginationInfo = ko.observable(new paginationInfo(1, 20, 0));
+        self.showProjectEditView = function () {
+            $("#list").hide();
+            $("#listToolbar").hide();
+            $("#edit").show();
+            $("#editToolbar").show();
+        };
+        self.showProjectListView = function () {
+            $("#list").show();
+            $("#listToolbar").show();
+            $("#edit").hide();
+            $("#editToolbar").hide();
+        };
+    };
+
+    $(function () {
+        $('input').iCheck({
+            checkboxClass: 'icheckbox_minimal'
+        });
+        $(".form_datetime").datetimepicker({
+            format: "yyyy-mm-dd",
+            autoclose: true,
+            pickerPosition: "bottom-left",
+            minView: "month",
+            language: "zh-CN",
+            todayBtn: true
+        });
+        $(".btn-action").tooltip();
+        ko.applyBindings(new projectListViewModel());
+    });
+
+</script>

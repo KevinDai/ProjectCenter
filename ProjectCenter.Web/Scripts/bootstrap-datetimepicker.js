@@ -44,8 +44,8 @@
 		this.isInline = false;
 		this.isVisible = false;
 		this.isInput = this.element.is('input');
-		this.component = this.element.is('.date') ? this.element.find('.add-on .icon-th, .add-on .icon-time, .add-on .icon-calendar').parent() : false;
-		this.componentReset = this.element.is('.date') ? this.element.find('.add-on .icon-remove').parent() : false;
+		this.component = this.element.is('.date') ? this.element.find('.input-group-addon .glyphicon-th, .input-group-addon .glyphicon-time, .input-group-addon .glyphicon-calendar').parent() : false;
+		this.componentReset = this.element.is('.date') ? this.element.find('.input-group-addon .glyphicon-remove').parent() : false;
 		this.hasInput = this.component && this.element.find('input').length;
 		if (this.component && this.component.length === 0) {
 			this.component = false;
@@ -153,8 +153,8 @@
 		}
 		if (this.isRTL){
 			this.picker.addClass('datetimepicker-rtl');
-			this.picker.find('.prev i, .next i')
-						.toggleClass('icon-arrow-left icon-arrow-right');
+			this.picker.find('.prev span, .next span')
+						.toggleClass('glyphicon-arrow-left glyphicon-arrow-right');
 		}
 		$(document).on('mousedown', function (e) {
 			// Clicked outside the datetimepicker, hide it
@@ -1512,9 +1512,9 @@
 		},
 		headTemplate: '<thead>'+
 							'<tr>'+
-								'<th class="prev"><i class="icon-arrow-left"/></th>'+
+								'<th class="prev"><i class="glyphicon glyphicon-arrow-left"></i></th>' +
 								'<th colspan="5" class="switch"></th>'+
-								'<th class="next"><i class="icon-arrow-right"/></th>'+
+								'<th class="next"><i class="glyphicon glyphicon-arrow-right"></i></th>' +
 							'</tr>'+
 						'</thead>',
 		contTemplate: '<tbody><tr><td colspan="7"></td></tr></tbody>',
