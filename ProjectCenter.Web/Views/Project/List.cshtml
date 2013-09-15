@@ -147,10 +147,10 @@
                     <div id="edit" class="col-md-9">
                         <div class="row">
                             <div class="col-md-12">
-                                <ul id="myTab" class="nav nav-tabs">
+                                @*                                <ul id="myTab" class="nav nav-tabs">
                                     <li class="active"><a href="#info" data-toggle="tab">任务信息</a></li>
                                     <li class=""><a href="#comment" data-toggle="tab">评论</a></li>
-                                </ul>
+                                </ul>*@
                                 <div id="myTabContent" class="tab-content">
                                     <div class="tab-pane fade active in" id="info">
                                         <div data-bind="with: editItem" class="row margin-top-15">
@@ -159,7 +159,7 @@
                                             @{Html.RenderPartial("CommentPartialView");}
                                         </div>
 
-                                        @*<div class="row">
+                                        <div class="row">
                                             <div class="col-md-12">
                                                 <ul class="list-unstyled list-inline pull-right">
                                                     <li><a class="btn btn-small" href="#"><i class="icon-plus"></i>上传附件</a></li>
@@ -168,41 +168,41 @@
                                                 <h4>附件列表</h4>
 
                                             </div>
-                                        </div>*@
-                                    </div>
-                                    <div class="tab-pane fade" id="comment">
-                                        <div class="row">
-                                            <div class="col-md-10">
-                                            </div>
                                         </div>
-                                        <div class="row">
-                                            <div class="col-md-10">
-                                                <div class="pagination">
-                                                    <ul>
-                                                        <li class="disabled"><a href="#">&lt</a></li>
-                                                        <li class="active"><a href="#">1</a></li>
-                                                        <li><a href="#">2</a></li>
-                                                        <li><a href="#">3</a></li>
-                                                        <li><a href="#">4</a></li>
-                                                        <li><a href="#">5</a></li>
-                                                        <li><a href="#">...</a></li>
-                                                        <li><a href="#">&gt</a></li>
-                                                    </ul>
-                                                    <div class="pull-right">
-                                                        <span>共</span> <strong>120</strong> <span>条评论</span>
+                                        <div class="tab-pane fade" id="comment">
+                                            <div class="row">
+                                                <div class="col-md-10">
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-10">
+                                                    <div class="pagination">
+                                                        <ul>
+                                                            <li class="disabled"><a href="#">&lt</a></li>
+                                                            <li class="active"><a href="#">1</a></li>
+                                                            <li><a href="#">2</a></li>
+                                                            <li><a href="#">3</a></li>
+                                                            <li><a href="#">4</a></li>
+                                                            <li><a href="#">5</a></li>
+                                                            <li><a href="#">...</a></li>
+                                                            <li><a href="#">&gt</a></li>
+                                                        </ul>
+                                                        <div class="pull-right">
+                                                            <span>共</span> <strong>120</strong> <span>条评论</span>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-8">
-                                                <h5>发表评论：</h5>
-                                                <form class="form-horizontal">
-                                                    <div class="control-group">
-                                                        <textarea class="input-xxlarge" rows="5"></textarea>
-                                                    </div>
-                                                    <a class="btn btn-new btn-primary" href="#">提交评论</a>
-                                                </form>
+                                            <div class="row">
+                                                <div class="col-md-8">
+                                                    <h5>发表评论：</h5>
+                                                    <form class="form-horizontal">
+                                                        <div class="control-group">
+                                                            <textarea class="input-xxlarge" rows="5"></textarea>
+                                                        </div>
+                                                        <a class="btn btn-new btn-primary" href="#">提交评论</a>
+                                                    </form>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -214,94 +214,121 @@
             </div>
         </div>
     </div>
-</div>
-<script type="text/javascript">
+    <script type="text/javascript">
 
-    var projectListViewModel = function () {
-        var self = this;
-        var loadProjects = function () {
-            return undefined;
+        var projectEditViewModel = function (project) {
+            var self = this;
+            self.Type = ko.observable(project.Type),
+            self.Name = ko.observable(project.Name),
+            self.Consignor = ko.observable(project.Consignor),
+            self.StartTime = project.StartTime,
+            self.Deadline = ko.observable(project.Deadline),
+            self.Status = ko.observable(project.Status),
+            self.ManagerIds = ko.observable(project.ManagerIds),
+            self.ManagerNames = ko.observable(project.ManagerNames)
+            self.ParticipantIds = ko.observable(project.ParticipantIds),
+            self.ParticipantNames = ko.observable(project.ParticipantNames),
+            self.NeedFinish = ko.observable(project.NeedFinish),
+            self.CurrentProgress = ko.observable(project.CurrentProgress),
+            self.AdvancePlan = ko.observable(project.AdvancePlan),
+            self.Amount = ko.observable(project.Amount),
+            self.TypeOfPayment = ko.observable(project.TypeOfPayment),
+            self.NeedFinish = ko.observable(project.NeedFinish),
+            self.AmountReceivedStatus = ko.observable(project.AmountReceivedStatus),
+            self.AmountReceived = ko.observable(project.AmountReceived),
+            self.AmountRemained = ko.observable(project.AmountRemained),
+            self.InvoiceStatus = ko.observable(project.InvoiceStatus)
+
+        }
+
+        var projectListViewModel = function () {
+            var self = this;
+            var loadProjects = function () {
+                return undefined;
+            };
+            self.tempDatas = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+            self.filterLinks = [
+                new filterLinkViewModel("TaskType", "我的项目",
+                    [
+                        { value: "0", name: "我发布的" },
+                        { value: "1", name: "我负责的" },
+                        { value: "2", name: "我参与的" }
+                    ], ""),
+                new filterLinkViewModel("Status", "项目状态",
+                    [
+                        { value: "1", name: "进行中" },
+                        { value: "3", name: "已完成" },
+                        { value: "4", name: "已取消" },
+                        { value: "0", name: "发布待审" },
+                        { value: "2", name: "完成待审" }
+                    ], "1"),
+                new filterLinkViewModel("Deadline", "项目类型",
+                    [
+                        { value: "0", name: "纵向研究" },
+                        { value: "1", name: "横向研究" },
+                        { value: "2", name: "横向咨询" },
+                        { value: "3", name: "纵向工作" },
+                        { value: "4", name: "中心工作" }
+                    ], "1")];
+
+            self.editItem = ko.observable(new projectEditViewModel({
+                Type: 0,
+                Name: "Name",
+                Consignor: "Consignor",
+                StartTime: "2013-10-1",
+                Deadline: "2014-10-1",
+                Status: 2,
+                ManagerIds: "1,2,3,4,5",
+                ManagerNames: "用户1,用户2,用户3,用户4,用户5"
+            }));
+            self.list = ko.observableArray(loadProjects());
+            self.paginationInfo = ko.observable(new paginationInfo(1, 20, 0));
+            self.showProjectEditView = function () {
+                $("#list").hide();
+                $("#listToolbar").hide();
+                $("#edit").show();
+                $("#editToolbar").show();
+            };
+            self.showProjectListView = function () {
+                $("#list").show();
+                $("#listToolbar").show();
+                $("#edit").hide();
+                $("#editToolbar").hide();
+            };
         };
-        self.tempDatas = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-        self.filterLinks = ko.observableArray([
-            new filterLinkViewModel("TaskType", "我的项目",
-                [
-                    { value: "0", name: "我发布的" },
-                    { value: "1", name: "我负责的" },
-                    { value: "2", name: "我参与的" }
-                ], ""),
-            new filterLinkViewModel("Status", "项目状态",
-                [
-                    { value: "1", name: "进行中" },
-                    { value: "3", name: "已完成" },
-                    { value: "4", name: "已取消" },
-                    { value: "0", name: "发布待审" },
-                    { value: "2", name: "完成待审" }
-                ], "1"),
-            new filterLinkViewModel("Deadline", "项目类型",
-                [
-                    { value: "0", name: "纵向研究" },
-                    { value: "1", name: "横向研究" },
-                    { value: "2", name: "横向咨询" },
-                    { value: "3", name: "纵向工作" },
-                    { value: "4", name: "中心工作" }
-                ], "1")]);
-        self.users = [
-            { Id: "1", Name: "用户" },
-            { Id: "2", Name: "用户" },
-            { Id: "3", Name: "用户" },
-            { Id: "4", Name: "用户" },
-            { Id: "5", Name: "用户" },
-            { Id: "6", Name: "用户" },
-            { Id: "7", Name: "用户" },
-            { Id: "8", Name: "用户" },
-            { Id: "9", Name: "用户" },
-            { Id: "10", Name: "用户" },
-            { Id: "11", Name: "用户" },
-            { Id: "12", Name: "用户" },
-            { Id: "13", Name: "用户" },
-            { Id: "14", Name: "用户" }
-        ];
-        self.editItem = ko.observable({
-            Type: ko.observable(0),
-            Name: ko.observable("Name"),
-            Consignor: ko.observable("Consignor"),
-            StartTime: ko.observable("2013-10-1"),
-            Deadline: ko.observable("2014-10-1"),
-            Status: ko.observable(2),
-            ManagerIds: ko.observable("1,2,3,4,5")
+
+        $(function () {
+            var users = [
+                 { Id: "1", Name: "用户1" },
+                 { Id: "2", Name: "用户2" },
+                 { Id: "3", Name: "用户3" },
+                 { Id: "4", Name: "用户4" },
+                 { Id: "5", Name: "用户5" },
+                 { Id: "6", Name: "用户6" },
+                 { Id: "7", Name: "用户7" },
+                 { Id: "8", Name: "用户8" },
+                 { Id: "9", Name: "用户9" },
+                 { Id: "10", Name: "用户10" },
+                 { Id: "11", Name: "用户11" },
+                 { Id: "12", Name: "用户12" },
+                 { Id: "13", Name: "用户13" },
+                 { Id: "14", Name: "用户14" }
+            ];
+            $("#ManagerNames").userSelectBox({ users: users, bindValue: "ManagerIds" });
+            $("#ParticipantNames").userSelectBox({ users: users, bindValue: "ParticipantIds" });
+            //$('input').iCheck({
+            //    checkboxClass: 'icheckbox_minimal'
+            //});
+            $(".form_datetime").datetimepicker({
+                format: "yyyy-mm-dd",
+                autoclose: true,
+                pickerPosition: "bottom-left",
+                minView: "month",
+                language: "zh-CN",
+                todayBtn: true
+            });
+            $(".btn-action").tooltip();
+            ko.applyBindings(new projectListViewModel());
         });
-        self.list = ko.observableArray(loadProjects());
-        self.paginationInfo = ko.observable(new paginationInfo(1, 20, 0));
-        self.showProjectEditView = function () {
-            $("#list").hide();
-            $("#listToolbar").hide();
-            $("#edit").show();
-            $("#editToolbar").show();
-        };
-        self.showProjectListView = function () {
-            $("#list").show();
-            $("#listToolbar").show();
-            $("#edit").hide();
-            $("#editToolbar").hide();
-        };
-    };
 
-    $(function () {
-        $("#manager").userSelectBox();
-        //$('input').iCheck({
-        //    checkboxClass: 'icheckbox_minimal'
-        //});
-        $(".form_datetime").datetimepicker({
-            format: "yyyy-mm-dd",
-            autoclose: true,
-            pickerPosition: "bottom-left",
-            minView: "month",
-            language: "zh-CN",
-            todayBtn: true
-        });
-        $(".btn-action").tooltip();
-        ko.applyBindings(new projectListViewModel());
-    });
-
-</script>
+    </script>

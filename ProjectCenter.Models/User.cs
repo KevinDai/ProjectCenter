@@ -24,5 +24,11 @@ namespace ProjectCenter.Models
             get;
             set;
         }
+		
+		public string Passwrod
+        {
+            get;
+            set;
+        }
     }
 }

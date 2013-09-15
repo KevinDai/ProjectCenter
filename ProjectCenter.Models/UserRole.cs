@@ -7,11 +7,11 @@ namespace ProjectCenter.Models
 {
     public class UserRole
     {
-        public string Id
-        {
-            get;
-            set;
-        }
+        //public string Id
+        //{
+        //    get;
+        //    set;
+        //}
 
         public string UserId
         {

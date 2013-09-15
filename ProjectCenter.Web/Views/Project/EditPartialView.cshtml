@@ -92,50 +92,38 @@
                     <label class="col-md-2 control-label">
                         负责人：</label>
                     <div class="col-md-8">
+                        <input id="ManagerIds" data-bind="value: ManagerIds" type="hidden" />
+                        <input id="ManagerNames" data-bind="value: ManagerNames" class="form-control" type="text" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-2 control-label">
+                        参与人员：</label>
+                    <div class="col-md-8">
 
-                        <input id="manager" data-bind="value: ManagerIds" type="text" />
-
-                        @*  <div class="input-group">
-                            <div class="form-control"></div>
-                            <span class="input-group-btn">
-                                <a class="btn btn-default">
-                                    <span class="glyphicon glyphicon-chevron-down"></span>
-                                </a>
-                            </span>
-                        </div>
-                        <div class="panel panel-default panel-user-select">
-                            <div data-bind="foreach: $root.users" class="row">
-                                <div class="col-md-3">
-                                    <div class="checkbox">
-                                        <label>
-                                            <input data-bind="value: Id" type="checkbox">
-                                            <span data-bind="text: Name"></span>
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>*@
+                        <input id="ParticipantIds" data-bind="value: ParticipantIds" type="hidden" />
+                        <input id="ParticipantNames" data-bind="value: ParticipantIds" class="form-control" type="text" />
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-md-2 control-label">
                         需完成的材料：</label>
                     <div class="col-md-8">
-                        <textarea class="form-control" rows="4"></textarea>
+                        <textarea data-bind="value: NeedFinish" class="form-control" rows="4"></textarea>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-md-2 control-label">
-                        具体进展：</label>
+                        当前进展：</label>
                     <div class="col-md-8">
-                        <textarea class="form-control" rows="4"></textarea>
+                        <textarea data-bind="value: CurrentProgress" class="form-control" rows="4"></textarea>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-md-2 control-label">
                         推进计划：</label>
                     <div class="col-md-8">
-                        <textarea class="form-control" rows="4"></textarea>
+                        <textarea data-bind="value: AdvancePlan" class="form-control" rows="4"></textarea>
                     </div>
                 </div>
                 <div class="form-group">
@@ -143,7 +131,7 @@
                         项目金额：</label>
                     <div class="col-md-4">
                         <div class="input-group">
-                            <input class="form-control easyui-numberbox" data-options="precision:2,groupSeparator:','" type="text" value="">
+                            <input data-bind="value: Amount" class="form-control easyui-numberbox" data-options="precision:2,groupSeparator:','" type="text" value="">
                             <span class="input-group-addon">元
                             </span>
                         </div>
@@ -153,33 +141,33 @@
                     <label class="col-md-2 control-label" for="taskName">
                         付款方式：</label>
                     <div class="col-md-4">
-                        <input class="form-control" type="text" value="">
+                        <input data-bind="value: TypeOfPayment" class="form-control" type="text" value="">
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-md-2 control-label">
                         到款情况：</label>
                     <div class="col-md-4">
-                        <select class="form-control">
-                            <option>未到款</option>
-                            <option>已收前期款</option>
-                            <option>已全部到款</option>
+                        <select data-bind="value: AmountReceivedStatus" class="form-control">
+                            <option value="0">未到款</option>
+                            <option value="1">已收前期款</option>
+                            <option value="2">已全部到款</option>
                         </select>
                     </div>
-                    <div class="col-md-3">
+                    <div data-bind="if: AmountReceivedStatus() == '1'" class="col-md-3">
                         <div class="input-group">
                             <span class="input-group-addon">已收
                             </span>
-                            <input class="form-control easyui-numberbox" data-options="precision:2,groupSeparator:','" type="text" value="">
+                            <input data-bind="value: AmountReceived" class="form-control easyui-numberbox" data-options="precision:2,groupSeparator:','" type="text" value="">
                             <span class="input-group-addon">元
                             </span>
                         </div>
                     </div>
-                    <div class="col-md-3">
+                    <div data-bind="if: AmountReceivedStatus() == '1'" class="col-md-3">
                         <div class="input-group">
                             <span class="input-group-addon">还有
                             </span>
-                            <input class="form-control" type="text" value="">
+                            <input data-bind="value: AmountRemained" class="form-control" type="text" value="">
                             <span class="input-group-addon">元
                             </span>
                         </div>
@@ -189,10 +177,10 @@
                     <label class="col-md-2 control-label">
                         开票情况：</label>
                     <div class="col-md-4">
-                        <select class="form-control">
-                            <option>未开票</option>
-                            <option>已开票</option>
-                            <option>已出具到账证明</option>
+                        <select data-bind="value: InvoiceStatus" class="form-control">
+                            <option value="0">未开票</option>
+                            <option value="1">已开票</option>
+                            <option value="2">已出具到账证明</option>
                         </select>
                     </div>
                 </div>
@@ -200,40 +188,104 @@
         </div>
     </div>
 </div>
-
 <script type="text/ecmascript">
     (function ($) {
 
-        var UserSelectBox = function (element, selectedIds) {
+        var UserSelectBox = function (element, options) {
             var self = this;
-
+            self.options = options ? $.extend(true, {}, options) : {};
             self.element = $(element);
-            self.container = $('<div class="input-group"><div class="form-control"></div><span class="input-group-btn"><a class="btn btn-default"><span class="glyphicon glyphicon-chevron-down"></span></a></span></div>');
-            self.userlistPanel = $('<div class="panel panel-default panel-user-select" style="display: none;"><div data-bind="foreach: $root.users" class="row"><div class="col-md-3"><div class="checkbox"><label><input data-bind="value: Id" type="checkbox"><span data-bind="text: Name"></span></label></div></div></div></div>');
+            self.container = $("<div></div>");
+            self.inputContainer = $('<div class="input-group"></div>');
+            self.usersPanel = $('<div class="panel panel-default panel-user-select" style="display: none;"></div>');
+            self.mouseover = false;
             self.init = function () {
-                self.element.hide();
                 self.container.insertAfter(self.element);
-                self.userlistPanel.insertAfter(self.container);
+                self.container.append(self.inputContainer);
+                self.container.append(self.usersPanel);
 
-                self.setValue(selectedIds);
+                self.inputContainer.append(self.element);
+                if (!options.bindValue
+                    || (self.valueElement = $("#" + options.bindValue)).length == 0) {
+                    self.valueElement = $('<input type="hidden" />');
+                    self.inputContainer.append(self.valueElement);
+                }
+                self.inputContainer.append($('<span class="input-group-btn"></span>').append(
+                    $('<a class="btn btn-default"><span class="glyphicon glyphicon-chevron-down"></span></a>').click(function () {
+                        if ($(self.usersPanel).is(":visible")) {
+                            self.element.blur();
 
-                self.container.find("a").click(function () {
-                    if ($(this).find("span").hasClass("glyphicon-chevron-down")) {
-                        var value = self.element.val();
-                        if (value) {
-                            self.setValue(value.split(","));
+                            self.hide();
+                        } else {
+                            self.element.focus();
+                            self.show();
                         }
+                    })));
+                var usersRow = $('<div class="row">').appendTo(self.usersPanel);
+                for (var i = 0; i < options.users.length; i++) {
+                    usersRow.append('<div class="col-md-3"><div class="checkbox"><label><input value="' + options.users[i].Id + '" type="checkbox"><span>' + options.users[i].Name + '</span></label></div>')
+                }
+                self.usersPanel.find(":checkbox").click(function () {
+                    var ids = [];
+                    var names = [];
+                    self.usersPanel.find(":checkbox").each(function () {
+                        if (this.checked) {
+                            var $this = $(this);
+                            ids.push($this.val());
+                            names.push($this.next().text());
+                        }
+                    });
+                    self.valueElement.val(ids.join(","));
+                    self.element.val(names.join(","));
+                });
+                self.element.keydown(function () {
+                    return false;
+                });
+                self.element.focus(function () {
+                    if (!$(self.usersPanel).is(":visible")) {
+                        self.show();
                     }
+                });
+                self.element.blur(function (event) {
+                    if (self.mouseover) {
+                        self.element.focus();
+                    } else {
+                        self.hide();
+                    }
+                    return true;
+                });
 
-                    $(this).find("span").toggleClass("glyphicon-chevron-down glyphicon-chevron-up");
-                    self.userlistPanel.toggle();
+                self.container.mouseover(function () {
+                    self.mouseover = true;
+                });
+                self.container.mouseout(function () {
+                    self.mouseover = false;
                 });
 
             }
-            self.setValue = function (ids) {
-                self.clearValue();
+
+            self.show = function () {
+                self.clearChecked();
+
+                if (self.valueElement.val()) {
+                    var value = self.valueElement.val();
+                    if (value) {
+                        self.check(value.split(","));
+                    }
+                }
+
+                $(self.inputContainer).find(".glyphicon").removeClass("glyphicon-chevron-down").addClass("glyphicon-chevron-up");
+                self.usersPanel.show();
+            };
+            self.hide = function () {
+                $(self.inputContainer).find(".glyphicon").removeClass("glyphicon-chevron-up").addClass("glyphicon-chevron-down");
+                self.usersPanel.hide();
+            };
+
+            self.check = function (ids) {
+                self.clearChecked();
                 if (ids) {
-                    self.userlistPanel.find("input:checkbox").each(function () {
+                    self.usersPanel.find("input:checkbox").each(function () {
                         var $this = $(this);
                         for (var i = 0; i < ids.length; i++) {
                             if (ids[i] == $this.val()) {
@@ -244,17 +296,17 @@
                     });
                 }
             };
-            self.clearValue = function () {
-                self.userlistPanel.find("input:checkbox").each(function () {
+            self.clearChecked = function () {
+                self.usersPanel.find("input:checkbox").each(function () {
                     this.checked = false;
                 });
             };
             self.init();
         }
 
-        $.fn.userSelectBox = function () {
+        $.fn.userSelectBox = function (options) {
             this.each(function () {
-                new UserSelectBox(this);
+                new UserSelectBox(this, options);
             });
         }
 

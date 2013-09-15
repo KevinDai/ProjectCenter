@@ -59,6 +59,15 @@ namespace ProjectCenter.Models
         }
 
         /// <summary>
+        /// 项目状态
+        /// </summary>
+        public int Status
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
         /// 需完成材料
         /// </summary>
         public string NeedFinish
@@ -115,16 +124,7 @@ namespace ProjectCenter.Models
         /// <summary>
         /// 已收金额
         /// </summary>
-        public string AmountReceived
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// 项目状态
-        /// </summary>
-        public int Status
+        public double AmountReceived
         {
             get;
             set;

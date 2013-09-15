@@ -10,7 +10,7 @@ namespace ProjectCenter.Models.Mappings
     {
         public UserRoleMap()
         {
-            this.HasKey(ri => ri.Id);
+            //this.HasKey(ri => ri.Id);
 
             this.ToTable("UserRoles");
 
