@@ -18,7 +18,8 @@
     <script src="@Url.Content("~/Scripts/bootstrap-datetimepicker.js")" type="text/javascript"></script>
     <script src="@Url.Content("~/Scripts/locales/bootstrap-datetimepicker.zh-CN.js")" type="text/javascript"></script>
     <style>
-        body {
+        body
+        {
             padding-top: 90px;
         }
     </style>
@@ -84,14 +85,15 @@
             }
         };
 
-        var paginationInfo = function (pageIndex, pageSize, total) {
+        var pageListViewModel = function (pageList) {
             var self = this;
-            self.pageIndex = pageIndex;
-            self.pageSize = pageSize;
-            self.total = total;
-            self.maxPageIndex = total / pageSize;
-            self.startIndex = (pageIndex - 1) * pageSize + 1;
-            self.endIndex = pageIndex * pageSize > total ? total : pageIndex * pageSize;
+            self.data = pageList.List;
+            self.pageIndex = pageList.PageIndex;
+            self.pageSize = pageList.PageSize;
+            self.total = pageList.Total;
+            self.maxPageIndex = self.total / self.pageSize;
+            self.startIndex = (self.pageIndex - 1) * self.pageSize + 1;
+            self.endIndex = self.pageIndex * self.pageSize > self.total ? self.total : self.pageIndex * self.pageSize;
         };
 
     </script>

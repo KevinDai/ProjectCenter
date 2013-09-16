@@ -188,7 +188,153 @@
         </div>
     </div>
 </div>
+<div class="col-md-12">
+    <div class="panel panel-default table-panel">
+        <div class="panel-heading">
+            <ul class="list-unstyled list-inline pull-right list-panel-title">
+                <li><a href="#"><span class="glyphicon glyphicon-plus"></span>上传附件</a></li>
+                <li><a href="#"><span class="glyphicon glyphicon-download-alt"></span>下载全部</a></li>
+            </ul>
+            <h3 class="panel-title">附件列表</h3>
+        </div>
+        <table class="table attchment-table">
+            <colgroup>
+                <col style="width: 450px;">
+                <col style="width: 100px;">
+                <col style="width: 150px;">
+                <col style="width: 40px;">
+            </colgroup>
+            <tbody data-bind="foreach: Attachments">
+                <tr>
+                    <td>
+                        <a href="#"><span data-bind="text: Name"></span></a>
+                    </td>
+                    <td>
+                        <span data-bind="text: UploadUserName"></span>
+                    </td>
+                    <td>
+                        <span data-bind="text: UploadTime"></span>
+                    </td>
+                    <td>
+                        <a href="#"><span class="glyphicon glyphicon-remove"></span></a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="col-md-12">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <ul class="list-unstyled list-inline pull-right list-panel-title">
+                <li><a data-bind="click: addComment" href="#"><span class="glyphicon glyphicon-comment"></span>发表评论</a></li>
+            </ul>
+            <h3 class="panel-title">评论列表</h3>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <ul data-bind="foreach: $root.tempDatas" class="list-unstyled comment">
+                        <li><span class="comment-user">用户</span> <span class="comment-user">2013-8-20 9:00</span>
+                            <ul class="list-unstyled list-inline pull-right">
+                                <li><a class="comment-action-link" href="#">删除</a></li>
+                            </ul>
+                            <hr class="title-content-hr">
+                            <p class="comment-content">
+                                感谢分享~
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 comment-pagination">
+                    <ul class="pagination pagination-sm pull-right">
+                        <li><a href="#">&laquo;</a></li>
+                        <li><a href="#">1</a></li>
+                        <li><a href="#">2</a></li>
+                        <li><a href="#">3</a></li>
+                        <li><a href="#">4</a></li>
+                        <li><a href="#">5</a></li>
+                        <li><a href="#">&raquo;</a></li>
+                    </ul>
+                    <div class="pull-right"><span>第 </span><strong><span>1</span>-<span>10</span></strong><span> 条，</span><span>共 </span><strong>120</strong><span> 条评论</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="commentDialog" class="modal fade" data-backdrop="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">评论内容</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <textarea data-bind="value: EditCommentContent" class="form-control" rows="8"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <ul class="list-unstyle list-inline pull-right">
+                            <li>
+                                <button type="button" class="btn btn-primary btn-primary">提交评论</button>
+
+                            </li>
+                            <li>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
 <script type="text/ecmascript">
+
+    var projectEditViewModel = function (project) {
+        var self = this;
+        self.Type = ko.observable(project.Type),
+        self.Name = ko.observable(project.Name),
+        self.Consignor = ko.observable(project.Consignor),
+        self.StartTime = project.StartTime,
+        self.Deadline = ko.observable(project.Deadline),
+        self.Status = ko.observable(project.Status),
+        self.ManagerIds = ko.observable(project.ManagerIds),
+        self.ManagerNames = ko.observable(project.ManagerNames)
+        self.ParticipantIds = ko.observable(project.ParticipantIds),
+        self.ParticipantNames = ko.observable(project.ParticipantNames),
+        self.NeedFinish = ko.observable(project.NeedFinish),
+        self.CurrentProgress = ko.observable(project.CurrentProgress),
+        self.AdvancePlan = ko.observable(project.AdvancePlan),
+        self.Amount = ko.observable(project.Amount),
+        self.TypeOfPayment = ko.observable(project.TypeOfPayment),
+        self.NeedFinish = ko.observable(project.NeedFinish),
+        self.AmountReceivedStatus = ko.observable(project.AmountReceivedStatus),
+        self.AmountReceived = ko.observable(project.AmountReceived),
+        self.AmountRemained = ko.observable(project.AmountRemained),
+        self.InvoiceStatus = ko.observable(project.InvoiceStatus),
+        self.Attachments = ko.observableArray(project.Attachments)
+        self.CommentPageList = ko.observable(new pageListViewModel(project.CommentPageList));
+
+
+        self.EditCommentContent = ko.observableArray("");
+
+        self.addComment = function () {
+            $("#commentDialog").modal("show");
+        };
+    };
+
     (function ($) {
 
         var UserSelectBox = function (element, options) {

@@ -36,14 +36,14 @@ namespace ProjectCenter.Util.Query
             private set;
         }
 
-        /// <summary>
-        /// 分页页数
-        /// </summary>
-        public int PageCount
-        {
-            get;
-            private set;
-        }
+        ///// <summary>
+        ///// 分页页数
+        ///// </summary>
+        //public int PageCount
+        //{
+        //    get;
+        //    private set;
+        //}
 
         /// <summary>
         /// 当前页对象列表
@@ -71,12 +71,12 @@ namespace ProjectCenter.Util.Query
             PageIndex = pageIndex;
             PageSize = pageSize;
             TotalCount = totalCount;
-            PageCount =
-                TotalCount % PageIndex == 0
-                ?
-                TotalCount / PageIndex
-                :
-                TotalCount / PageIndex + 1;
+            //PageCount =
+            //    TotalCount % PageIndex == 0
+            //    ?
+            //    TotalCount / PageIndex
+            //    :
+            //    TotalCount / PageIndex + 1;
         }
 
         #endregion
