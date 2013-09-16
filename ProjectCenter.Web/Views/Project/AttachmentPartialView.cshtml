@@ -14,41 +14,19 @@
                 <col style="width: 150px;">
                 <col style="width: 40px;">
             </colgroup>
-            <tbody>
+            <tbody data-bind="foreach: Attachments">
                 <tr>
                     <td>
-                        <a href="#">咨询策划中心任务管理系统--需求分析.docx</a>
-                    </td>
-                    <td>上传用户
-                    </td>
-                    <td>2013-8-22 10:20
+                        <a href="#"><span data-bind="text: Name"></span></a>
                     </td>
                     <td>
-                        <a href="#"><i class="icon-remove"></i></a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <a href="#">咨询策划中心任务管理系统--需求分析.docx</a>
-                    </td>
-                    <td>上传用户
-                    </td>
-                    <td>2013-8-22 10:20
+                        <span data-bind="text: UploadUserName"></span>
                     </td>
                     <td>
-                        <a href="#"><i class="icon-remove"></i></a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <a href="#">咨询策划中心任务管理系统--需求分析.docx</a>
-                    </td>
-                    <td>上传用户
-                    </td>
-                    <td>2013-8-22 10:20
+                        <span data-bind="text: UploadTime"></span>
                     </td>
                     <td>
-                        <a href="#"><i class="icon-remove"></i></a>
+                        <a href="#"><span class="glyphicon glyphicon-remove"></span></a>
                     </td>
                 </tr>
             </tbody>
