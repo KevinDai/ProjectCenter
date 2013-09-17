@@ -10,7 +10,7 @@ namespace ProjectCenter.Services
 {
     public interface IProjectService
     {
-        PageList<Project> GetProjectPageList(ISpecification<Project> specs, SortDescriptor<Project>[] sort, int pageIndex, int pageSize);
+        PageList<Project> GetProjectPageList(ISpecification<Project> specs, SortDescriptor<Project>[] sorts, int pageIndex, int pageSize);
 
         Project GetProject(string projectId);
 

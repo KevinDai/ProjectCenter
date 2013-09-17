@@ -10,7 +10,13 @@ namespace ProjectCenter.Util.Query
     {
         #region Members
 
-        public Expression<Func<T, object>> SortKeySelector
+        //public Expression SortKeySelector
+        //{
+        //    get;
+        //    private set;
+        //}
+
+        public string Field
         {
             get;
             private set;
@@ -29,15 +35,15 @@ namespace ProjectCenter.Util.Query
         /// <summary>
         /// 构造函数，默认为升序排列
         /// </summary>
-        /// <param name="sortKeySelector"></param>
-        public SortDescriptor(Expression<Func<T, object>> sortKeySelector)
-            : this(sortKeySelector, ListSortDirection.Ascending)
+        /// <param name="field"></param>
+        public SortDescriptor(string field)
+            : this(field, ListSortDirection.Ascending)
         {
         }
 
-        public SortDescriptor(Expression<Func<T, object>> sortKeySelector, ListSortDirection sortDirection)
+        public SortDescriptor(string field, ListSortDirection sortDirection)
         {
-            SortKeySelector = sortKeySelector;
+            Field = field;
             SortDirection = sortDirection;
         }
 

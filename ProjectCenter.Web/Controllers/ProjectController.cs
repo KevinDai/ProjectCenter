@@ -75,13 +75,13 @@ namespace ProjectCenter.Web.Controllers
                             }
                             break;
                         case "Status":
-                            if (string.IsNullOrWhiteSpace(fieldFilter.Value))
+                            if (!string.IsNullOrWhiteSpace(fieldFilter.Value))
                             {
                                 temp = new StatusSpecification(Int32.Parse(fieldFilter.Value));
                             }
                             break;
                         case "Type":
-                            if (string.IsNullOrWhiteSpace(fieldFilter.Value))
+                            if (!string.IsNullOrWhiteSpace(fieldFilter.Value))
                             {
                                 temp = new TypeSpecification(Int32.Parse(fieldFilter.Value));
                             }
@@ -105,18 +105,19 @@ namespace ProjectCenter.Web.Controllers
             {
                 foreach (var sortField in queryFilter.SortFields)
                 {
-                    switch (sortField.Field)
-                    {
-                        case "Deadline":
-                            sort.Add(new SortDescriptor<Project>(p => p.Deadline));
-                            break;
-                    }
+                    sort.Add(new SortDescriptor<Project>(sortField.Field, sortField.IsAsc ? ListSortDirection.Ascending : ListSortDirection.Descending));
+                    //switch (sortField.Field)
+                    //{
+                    //    case "Deadline":
+                    //        sort.Add(new SortDescriptor<Project>(p => p.Deadline));
+                    //        break;
+                    //}
                 }
             }
 
             return sort.Count == 0
                 ?
-                new SortDescriptor<Project>[] { new SortDescriptor<Project>(p => p.Deadline) }
+                new SortDescriptor<Project>[] { new SortDescriptor<Project>("Deadline") }
                 :
                 sort.ToArray();
         }
@@ -133,7 +134,6 @@ namespace ProjectCenter.Web.Controllers
             return View();
         }
 
-        [HttpPost]
         public ActionResult LoadProjects(QueryFilter queryFilter)
         {
             if (queryFilter == null)

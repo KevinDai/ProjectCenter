@@ -55,16 +55,33 @@ namespace ProjectCenter.Services.Imp
 
         #region IProjectService接口实现
 
-        public PageList<Project> GetProjectPageList(ISpecification<Project> spec, SortDescriptor<Project>[] sort, int pageIndex, int pageSize)
+        public PageList<Project> GetProjectPageList(ISpecification<Project> spec, SortDescriptor<Project>[] sorts, int pageIndex, int pageSize)
         {
             var query = Projects as IQueryable<Project>;
             if (spec != null)
             {
                 query = query.Where(spec.SatisfiedBy());
             }
-            if (sort != null)
+            if (sorts != null)
             {
-                query = query.Sort(sort);
+                for (int i = sorts.Length - 1; i >= 0; i--)
+                {
+                    var sort = sorts[i];
+                    switch (sort.Field)
+                    {
+                        case "Deadline":
+                            if (sort.SortDirection == ListSortDirection.Ascending)
+                            {
+                                query = query.OrderBy(q => q.Deadline);
+                            }
+                            else
+                            {
+                                query = query.OrderByDescending(q => q.Deadline);
+                            }
+                            break;
+                    }
+                }
+                //query = query.Sort(sort);
             }
 
             return query.PageList(pageIndex, pageSize);

@@ -68,15 +68,15 @@
                         项目状态：</label>
                     <div class="col-md-4">
                         @{
-                            if (ViewBag.User.RightLevel == RightLevel.Common)
-                            {
+                            //if (ViewBag.UserInfo.RightLevel == RightLevel.Common)
+                            //{
                             <select data-bind="value: Status" class="form-control">
                                 <option value="0">发布待审</option>
                                 <option value="2">完成待审</option>
                             </select>
-                            }
-                            else
-                            {
+                            @*}*@
+                            //else
+                            //{
                             <select data-bind="value: Status" class="form-control">
                                 <option value="0">发布待审</option>
                                 <option value="1">发布已审核</option>

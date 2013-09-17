@@ -19,27 +19,31 @@ namespace ProjectCenter.Util.Query.Extensions
             return query;
         }
 
-        public static IQueryable<T> Sort<T>(this IQueryable<T> query, params SortDescriptor<T>[] sortDescriptors) where T : class
-        {
-            if (sortDescriptors != null && sortDescriptors.Any())
-            {
-                //反转排序说明对象列表
-                var list = sortDescriptors.Reverse();
-                foreach (var item in list)
-                {
-                    query = item.SortDirection == ListSortDirection.Ascending
-                        ?
-                        query.OrderBy(item.SortKeySelector)
-                        :
-                        query.OrderByDescending(item.SortKeySelector);
-                }
-            }
-            //else
-            //{
-            //query = query.OrderBy(e => e.Id);
-            //}
-            return query;
-        }
+        //public static IQueryable<T> Sort<T>(this IQueryable<T> query, params SortDescriptor<T>[] sortDescriptors) where T : class
+        //{
+        //    if (sortDescriptors != null && sortDescriptors.Any())
+        //    {
+        //        //反转排序说明对象列表
+        //        var list = sortDescriptors.Reverse();
+        //        foreach (var item in list)
+        //        {
+        //            query = item.SortDirection == ListSortDirection.Ascending
+        //                ?
+        //                typeof(System.Linq.Queryable).GetMethod("OrderBy", new Type[2]).Invoke(null, new object[] { query, item.SortKeySelector }) as IQueryable<T>
+        //                //typeof(IQueryable<T>).GetMethod("OrderBy").Invoke(query, new object[] { item.SortKeySelector }) as IQueryable<T> 
+        //                //query.OrderBy(item.SortKeySelector)
+        //                :
+        //                typeof(System.Linq.Queryable).GetMethod("OrderByDescending").Invoke(null, new object[] { query, item.SortKeySelector }) as IQueryable<T>;
+        //            //typeof(IQueryable<T>).GetMethod("OrderByDescending").Invoke(query, new object[] { item.SortKeySelector }) as IQueryable<T>;
+        //            //query.OrderByDescending(item.SortKeySelector);
+        //        }
+        //    }
+        //    //else
+        //    //{
+        //    //query = query.OrderBy(e => e.Id);
+        //    //}
+        //    return query;
+        //}
 
         public static IQueryable<T> Paginate<T>(this IQueryable<T> query, int pageIndex, int pageSize)
         {

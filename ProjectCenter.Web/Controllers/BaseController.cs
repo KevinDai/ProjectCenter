@@ -23,7 +23,7 @@ namespace ProjectCenter.Web.Controllers
             {
                 UserId = "test",
                 UserName = "测试用户",
-                RightLevel = RightLevel.Common
+                RightLevel = RightLevel.Administrator
             };
 
             ViewBag.UserInfo = UserInfo;

@@ -13,7 +13,7 @@
                         </div>
                     </div>
                     <div class="col-md-9">
-                        <div id="listToolbar" class="row" style="display: none">
+                        <div id="listToolbar" class="row">
                             <div class="col-md-6">
                                 <ul class="list-inline">
                                     <li>
@@ -49,7 +49,7 @@
                                 @{Html.RenderPartial("PaginationPartialView");}
                             </div>
                         </div>
-                        <div id="editToolbar" class="row">
+                        <div id="editToolbar" class="row" style="display: none">
                             <div class="col-md-6">
                                 <ul class="list-inline">
                                     <li>
@@ -101,7 +101,7 @@
                             </ul>
                         </div>
                     </div>
-                    <div id="list" class="col-md-9" style="display: none">
+                    <div id="list" class="col-md-9">
                         <div class="row">
                             <div class="col-md-12">
                                 <table class="table table-hover list-table ">
@@ -143,7 +143,7 @@
                             </div>
                         </div>
                     </div>
-                    <div id="edit" class="col-md-9">
+                    <div id="edit" class="col-md-9" style="display: none">
                         <div class="row">
                             <div class="col-md-12">
                                 @*                                <ul id="myTab" class="nav nav-tabs">
@@ -168,14 +168,9 @@
     </div>
 </div>
 <script type="text/javascript">
-
-
-
     var projectListViewModel = function () {
         var self = this;
-        var loadProjects = function () {
-            return undefined;
-        };
+        self.queryFilter = { FieldFilters: [], SortFields: [], PageIndex: 1, PageSize: 20 };
         self.tempDatas = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         self.filterLinks = [
             new filterLinkViewModel("RelationType", "我的项目",
@@ -223,7 +218,40 @@
                 Total: 100
             }
         }));
-        self.pageList = ko.observable(new pageListViewModel({ List: loadProjects(), PageIndex: 1, PageSize: 20, Total: 0 }));
+        self.query = function () {
+            var queryFilter = {};
+            queryFilter.FieldFilters = [];
+            queryFilter.SortFields = [];
+            for (var i = 0; i < self.filterLinks.length; i++) {
+                var filterLink = self.filterLinks[i];
+                queryFilter.FieldFilters.push({ Field: filterLink.field, Value: filterLink.value() });
+            }
+            queryFilter.PageIndex = 1;
+
+            $.ajax({
+                type: "POST",
+                contentType: "application/json",
+                url: "/Project/LoadProjects",
+                data: ko.toJSON({ queryFilter: queryFilter })
+            }).success(function () {
+                //alert("1");
+            }).error(function (error) {
+                //alert(error);
+            }).complete(function () {
+                //alert("3");
+            });
+
+            //$.post("/Project/LoadProjects", JSON.stringify(), function (message) {
+            //    alert("0");
+            //}, "json").success(function () {
+            //    alert("1");
+            //}).error(function () {
+            //    alert("2");
+            //}).complete(function () {
+            //    alert("3");
+            //});
+            self.queryFilter = queryFilter;
+        };
         self.showProjectEditView = function () {
             $("#list").hide();
             $("#listToolbar").hide();
@@ -236,6 +264,8 @@
             $("#edit").hide();
             $("#editToolbar").hide();
         };
+
+        self.pageList = ko.observable(new pageListViewModel({ List: self.query(), PageIndex: 1, PageSize: 20, Total: 0 }));
     };
 
     $(function () {
