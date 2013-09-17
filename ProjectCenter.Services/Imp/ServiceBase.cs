@@ -30,7 +30,7 @@ namespace ProjectCenter.Services.Imp
             DbContext.Entry<T>(entity).State = EntityState.Modified;
         }
 
-        public virtual void RemoveEntity<T, TId>(T entity) where T : class
+        public virtual void DeleteEntity<T>(T entity) where T : class
         {
             DbContext.Entry<T>(entity).State = EntityState.Deleted;
         }

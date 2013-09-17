@@ -60,23 +60,10 @@ namespace ProjectCenter.Util.Query
 
         public PageList(IEnumerable<T> list, int pageIndex, int pageSize, int totalCount)
         {
-            if (pageIndex <= 0)
-            {
-                throw new ArgumentException(
-                    "无效的分页页码",
-                    "pageIndex");
-            }
-
             List = list;
-            PageIndex = pageIndex;
             PageSize = pageSize;
             TotalCount = totalCount;
-            //PageCount =
-            //    TotalCount % PageIndex == 0
-            //    ?
-            //    TotalCount / PageIndex
-            //    :
-            //    TotalCount / PageIndex + 1;
+            PageIndex = pageIndex;
         }
 
         #endregion

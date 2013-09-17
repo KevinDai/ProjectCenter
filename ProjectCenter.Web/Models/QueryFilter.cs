@@ -1,49 +1,61 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Web;
 
-namespace ProjectCenter.Models
+namespace ProjectCenter.Web.Models
 {
-    public class Attachment
+    public class QueryFilter
     {
-        public string Id
+        public FieldFilter[] FieldFilters
         {
             get;
             set;
         }
 
-        public string ProjectId
+        public SortField[] SortFields
         {
             get;
             set;
         }
 
-        public string Name
+        public int PageIndex
         {
             get;
             set;
         }
 
-        public string Path
+        public int PageSize
+        {
+            get;
+            set;
+        }
+    }
+
+    public class FieldFilter
+    {
+        public string Field
         {
             get;
             set;
         }
 
-        public string UploadUserId
+        public string Value
+        {
+            get;
+            set;
+        }
+    }
+
+    public class SortField
+    {
+        public string Field
         {
             get;
             set;
         }
 
-        public string UploadUserName
-        {
-            get;
-            set;
-        }
-
-        public DateTime UploadTime
+        public bool IsAsc
         {
             get;
             set;

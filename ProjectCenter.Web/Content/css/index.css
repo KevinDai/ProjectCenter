@@ -322,9 +322,9 @@ body
     border-left: 3px solid #dd4b39;
 }*/
 
-.margin-top-15
+.margin-top-10
 {
-    margin-top: 15px;
+    margin-top: 10px;
 }
 
 .list-panel-title
@@ -379,9 +379,9 @@ body
         margin: 5px 10px;
     }
 
-.glyphicon
+.btn-glyphicon-content
 {
-    margin-right: 5px;
+    margin-left: 3px;
 }
 
 .modal-body

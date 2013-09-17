@@ -57,11 +57,10 @@
                                             <a data-bind="click: showProjectListView" data-toggle="tooltip" data-placement="bottom"
                                                 class="btn btn-default btn-action" title="返回"><span class="glyphicon glyphicon-arrow-left"></span></a>
                                         </div>
-                                        <div class="btn-group item-action">
-                                            <a class="btn btn-default btn-action" data-toggle="tooltip" data-placement="bottom"
-                                                title="保存"><span class="glyphicon glyphicon-ok"></span></a><a class="btn btn-default btn-action"
-                                                    data-toggle="tooltip" data-placement="bottom" title="删除"><span class="glyphicon glyphicon-trash"></span></a>
-                                        </div>
+                                        <a class="btn btn-default btn-action" data-toggle="tooltip" data-placement="bottom"
+                                            title="保存"><span class="glyphicon glyphicon-ok"></span></a>
+                                        <a class="btn btn-default btn-action"
+                                            data-toggle="tooltip" data-placement="bottom" title="删除"><span class="glyphicon glyphicon-trash"></span></a>
                                         @*<div class="btn-group item-action">
                                             <a class="btn dropdown-toggle btn-action" data-toggle="dropdown" title="标记"><i class="glyphicon glyphicon-tags">
                                             </i><span class="caret"></span></a>
@@ -153,7 +152,7 @@
                                 </ul>*@
                                 <div id="myTabContent" class="tab-content">
                                     <div class="tab-pane fade active in" id="info">
-                                        <div data-bind="with: editItem" class="row margin-top-15">
+                                        <div data-bind="with: editItem" class="row">
                                             @{Html.RenderPartial("EditPartialView");}
                                         </div>
 
@@ -179,7 +178,7 @@
         };
         self.tempDatas = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         self.filterLinks = [
-            new filterLinkViewModel("TaskType", "我的项目",
+            new filterLinkViewModel("RelationType", "我的项目",
                 [
                     { value: "0", name: "我发布的" },
                     { value: "1", name: "我负责的" },
@@ -193,7 +192,7 @@
                     { value: "0", name: "发布待审" },
                     { value: "2", name: "完成待审" }
                 ], "1"),
-            new filterLinkViewModel("Deadline", "项目类型",
+            new filterLinkViewModel("Type", "项目类型",
                 [
                     { value: "0", name: "纵向研究" },
                     { value: "1", name: "横向研究" },

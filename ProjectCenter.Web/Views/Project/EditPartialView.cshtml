@@ -100,7 +100,6 @@
                     <label class="col-md-2 control-label">
                         参与人员：</label>
                     <div class="col-md-8">
-
                         <input id="ParticipantIds" data-bind="value: ParticipantIds" type="hidden" />
                         <input id="ParticipantNames" data-bind="value: ParticipantIds" class="form-control" type="text" />
                     </div>
@@ -192,8 +191,8 @@
     <div class="panel panel-default table-panel">
         <div class="panel-heading">
             <ul class="list-unstyled list-inline pull-right list-panel-title">
-                <li><a href="#"><span class="glyphicon glyphicon-plus"></span>上传附件</a></li>
-                <li><a href="#"><span class="glyphicon glyphicon-download-alt"></span>下载全部</a></li>
+                <li><a href="#"><span class="glyphicon glyphicon-plus"></span><span class="btn-glyphicon-content">上传附件</span></a></li>
+                <li><a href="#"><span class="glyphicon glyphicon-download-alt"></span><span class="btn-glyphicon-content">下载全部</span></a></li>
             </ul>
             <h3 class="panel-title">附件列表</h3>
         </div>
@@ -227,7 +226,7 @@
     <div class="panel panel-default">
         <div class="panel-heading">
             <ul class="list-unstyled list-inline pull-right list-panel-title">
-                <li><a data-bind="click: addComment" href="#"><span class="glyphicon glyphicon-comment"></span>发表评论</a></li>
+                <li><a data-bind="click: addComment" href="#"><span class="glyphicon glyphicon-comment"></span><span class="btn-glyphicon-content">发表评论</span></a></li>
             </ul>
             <h3 class="panel-title">评论列表</h3>
         </div>
@@ -304,6 +303,7 @@
 
     var projectEditViewModel = function (project) {
         var self = this;
+        self.Id = ko.observable(project.Id),
         self.Type = ko.observable(project.Type),
         self.Name = ko.observable(project.Name),
         self.Consignor = ko.observable(project.Consignor),

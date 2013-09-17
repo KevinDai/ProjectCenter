@@ -44,6 +44,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EmitMapper">
+      <HintPath>..\packages\EmitMapper.1.0.0\lib\EmitMapper.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Web.WebPages" />
     <Reference Include="System.Web.Helpers" />
@@ -71,9 +74,13 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\NoteController.cs" />
     <Compile Include="Controllers\ProjectController.cs" />
+    <Compile Include="Extensions\MappingExtensions.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\JsonMessage.cs" />
+    <Compile Include="Models\ProjectViewModel.cs" />
+    <Compile Include="Models\QueryFilter.cs" />
     <Compile Include="Models\RightLevel.cs" />
     <Compile Include="Models\UserInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -173,8 +180,21 @@
     <Content Include="Views\Note\List.cshtml" />
     <Content Include="Views\Shared\PaginationPartialView.cshtml" />
     <Content Include="Views\Project\EditPartialView.cshtml" />
-    <Content Include="Views\Project\AttachmentPartialView.cshtml" />
-    <Content Include="Views\Project\CommentPartialView.cshtml" />
+    <Content Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ProjectCenter.Models\ProjectCenter.Models.csproj">
+      <Project>{10299441-bcd8-43ff-be9e-669f598dc5c7}</Project>
+      <Name>ProjectCenter.Models</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ProjectCenter.Services\ProjectCenter.Services.csproj">
+      <Project>{ce3369f2-1422-498a-a75b-08b0bcb43195}</Project>
+      <Name>ProjectCenter.Services</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ProjectCenter.Util\ProjectCenter.Util.csproj">
+      <Project>{c636dd03-0c94-44a4-b8fd-326af19413e1}</Project>
+      <Name>ProjectCenter.Util</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -9,16 +9,30 @@ namespace ProjectCenter.Web.Controllers
 {
     public abstract class BaseController : Controller
     {
+        protected UserInfo UserInfo
+        {
+            get;
+            set;
+        }
+
         protected override void OnAuthorization(AuthorizationContext filterContext)
         {
             base.OnAuthorization(filterContext);
 
-            ViewBag.User = new UserInfo()
+            UserInfo = new UserInfo()
             {
                 UserId = "test",
                 UserName = "测试用户",
                 RightLevel = RightLevel.Common
             };
+
+            ViewBag.UserInfo = UserInfo;
         }
+
+        protected ActionResult JsonMessageResult(object data)
+        {
+            return Json(new JsonMessage(data));
+        }
+
     }
 }
