@@ -57,8 +57,7 @@
                                             <a data-bind="click: showProjectListView" data-toggle="tooltip" data-placement="bottom"
                                                 class="btn btn-default btn-action" title="返回"><span class="glyphicon glyphicon-arrow-left"></span></a>
                                         </div>
-                                        <a class="btn btn-default btn-action" data-toggle="tooltip" data-placement="bottom"
-                                            title="保存"><span class="glyphicon glyphicon-ok"></span></a>
+                                        <a data-bind="click: saveProject" data-toggle="tooltip" data-placement="bottom" class="btn btn-default btn-action" title="保存"><span class="glyphicon glyphicon-ok"></span></a>
                                         <a class="btn btn-default btn-action"
                                             data-toggle="tooltip" data-placement="bottom" title="删除"><span class="glyphicon glyphicon-trash"></span></a>
                                         @*<div class="btn-group item-action">
@@ -152,7 +151,7 @@
                                 </ul>*@
                                 <div id="myTabContent" class="tab-content">
                                     <div class="tab-pane fade active in" id="info">
-                                        <div data-bind="with: editItem" class="row">
+                                        <div data-bind="with: editProject" class="row">
                                             @{Html.RenderPartial("EditPartialView");}
                                         </div>
 
@@ -196,15 +195,18 @@
                     { value: "4", name: "中心工作" }
                 ], "1")];
 
-        self.editItem = ko.observable(new projectEditViewModel({
+        self.editProject = ko.validatedObservable(new projectEditViewModel({
             Type: 0,
-            Name: "Name",
-            Consignor: "Consignor",
-            StartTime: "2013-10-1",
-            Deadline: "2014-10-1",
+            Name: "",
+            Consignor: "",
+            StartTime: "",
+            Deadline: "",
             Status: 2,
             ManagerIds: "1,2,3,4,5",
             ManagerNames: "用户1,用户2,用户3,用户4,用户5",
+            Amount: 0,
+            AmountReceived: 0,
+            AmountRemained: 0,
             Attachments: [
                 { Name: "咨询策划中心任务管理系统--需求分析.docx", UploadUserName: "用户1", UploadTime: "2013-8-1 12:10" },
                 { Name: "咨询策划中心任务管理系统--需求分析.docx", UploadUserName: "用户1", UploadTime: "2013-8-1 12:10" },
@@ -218,6 +220,10 @@
                 Total: 100
             }
         }));
+        self.saveProject = function () {
+            alert(self.editProject.errors());
+            //$("#projectForm").validate().form();
+        };
         self.query = function () {
             var queryFilter = {};
             queryFilter.FieldFilters = [];
@@ -269,6 +275,24 @@
     };
 
     $(function () {
+        ko.validation.init({
+            registerExtenders: true,
+            messagesOnModified: false,
+            errorsAsTitle: false,            // enables/disables showing of errors as title attribute of the target element.
+            errorsAsTitleOnModified: false, // shows the error when hovering the input field (decorateElement must be true)
+            messageTemplate: null,
+            insertMessages: false,           // automatically inserts validation messages as <span></span>
+            parseInputAttributes: true,    // parses the HTML5 validation attribute from a form element and adds that to the object
+            writeInputAttributes: false,    // adds HTML5 input validation attributes to form elements that ko observable's are bound to
+            decorateElement: true,         // false to keep backward compatibility
+            errorClass: null,               // single class for error message and element
+            errorElementClass: 'error',  // class to decorate error element
+            errorMessageClass: 'validationMessage',  // class to decorate error message
+            grouping: {
+                deep: true,        //by default grouping is shallow
+                observable: true    //and using observables
+            }
+        });
         var users = [
              { Id: "1", Name: "用户1" },
              { Id: "2", Name: "用户2" },
@@ -287,9 +311,17 @@
         ];
         $("#ManagerNames").userSelectBox({ users: users, bindValue: "ManagerIds" });
         $("#ParticipantNames").userSelectBox({ users: users, bindValue: "ParticipantIds" });
-        //$('input').iCheck({
-        //    checkboxClass: 'icheckbox_minimal'
+
+        //$("#projectForm").validate({
+        //    errorPlacement: function (error, element) {
+        //    },
+        //    invalidHandler: function () {
+        //        return true;
+        //    }
         //});
+        $('input').iCheck({
+            checkboxClass: 'icheckbox_minimal'
+        });
         $(".form_datetime").datetimepicker({
             format: "yyyy-mm-dd",
             autoclose: true,

@@ -15,6 +15,7 @@ namespace ProjectCenter.Models
             Configuration.AutoDetectChangesEnabled = false;
             Configuration.LazyLoadingEnabled = false;
             Configuration.ProxyCreationEnabled = false;
+
         }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)

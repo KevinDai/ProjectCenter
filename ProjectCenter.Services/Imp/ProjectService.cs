@@ -64,24 +64,24 @@ namespace ProjectCenter.Services.Imp
             }
             if (sorts != null)
             {
-                for (int i = sorts.Length - 1; i >= 0; i--)
-                {
-                    var sort = sorts[i];
-                    switch (sort.Field)
-                    {
-                        case "Deadline":
-                            if (sort.SortDirection == ListSortDirection.Ascending)
-                            {
-                                query = query.OrderBy(q => q.Deadline);
-                            }
-                            else
-                            {
-                                query = query.OrderByDescending(q => q.Deadline);
-                            }
-                            break;
-                    }
-                }
-                //query = query.Sort(sort);
+                //for (int i = sorts.Length - 1; i >= 0; i--)
+                //{
+                //    var sort = sorts[i];
+                //    switch (sort.Field)
+                //    {
+                //        case "Deadline":
+                //            if (sort.SortDirection == ListSortDirection.Ascending)
+                //            {
+                //                query = query.OrderBy(q => q.Deadline);
+                //            }
+                //            else
+                //            {
+                //                query = query.OrderByDescending(q => q.Deadline);
+                //            }
+                //            break;
+                //    }
+                //}
+                query = query.Sort(sorts);
             }
 
             return query.PageList(pageIndex, pageSize);

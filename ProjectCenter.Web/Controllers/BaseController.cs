@@ -23,10 +23,22 @@ namespace ProjectCenter.Web.Controllers
             {
                 UserId = "test",
                 UserName = "测试用户",
-                RightLevel = RightLevel.Administrator
+                IsProjectAdmin = false,
+                IsSystemAdmin = true
             };
 
+        }
+
+        protected override void OnActionExecuted(ActionExecutedContext filterContext)
+        {
+            base.OnActionExecuted(filterContext);
+
             ViewBag.UserInfo = UserInfo;
+            //if (filterContext.Result is ViewResult)
+            //{
+            //    var result = filterContext.Result as ViewResult;
+            //    result.mo
+            //}
         }
 
         protected ActionResult JsonMessageResult(object data)

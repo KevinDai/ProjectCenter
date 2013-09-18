@@ -52,7 +52,7 @@ namespace ProjectCenter.Web.Controllers
                             if (string.IsNullOrWhiteSpace(fieldFilter.Value))
                             {
                                 //如果非管理员级别，增加默认的过滤条件，只能查看与自己相关的项目
-                                if (UserInfo.RightLevel != RightLevel.Administrator)
+                                if (UserInfo.IsProjectAdmin)
                                 {
                                     temp = new OrSpecification<Project>(new CreatorIdSpecification(UserInfo.UserId), new ManagerIdsSpecification(UserInfo.UserId));
                                     temp = new OrSpecification<Project>(temp, new ParticipantIdsSpecification(UserInfo.UserId));
@@ -96,7 +96,7 @@ namespace ProjectCenter.Web.Controllers
             return spec;
         }
 
-        public SortDescriptor<Project>[] BuildProjectSortDescriptor(QueryFilter queryFilter)
+        private SortDescriptor<Project>[] BuildProjectSortDescriptor(QueryFilter queryFilter)
         {
             List<SortDescriptor<Project>> sort = new List<SortDescriptor<Project>>();
             if (queryFilter != null
@@ -105,19 +105,20 @@ namespace ProjectCenter.Web.Controllers
             {
                 foreach (var sortField in queryFilter.SortFields)
                 {
-                    sort.Add(new SortDescriptor<Project>(sortField.Field, sortField.IsAsc ? ListSortDirection.Ascending : ListSortDirection.Descending));
-                    //switch (sortField.Field)
-                    //{
-                    //    case "Deadline":
-                    //        sort.Add(new SortDescriptor<Project>(p => p.Deadline));
-                    //        break;
-                    //}
+                    //sort.Add(new SortDescriptor<Project>(sortField.Field, sortField.IsAsc ? ListSortDirection.Ascending : ListSortDirection.Descending));
+                    switch (sortField.Field)
+                    {
+                        case "Deadline":
+                            sort.Add(SortDescriptor<Project>.CreateSortDescriptor(p => p.Deadline));
+                            break;
+                    }
                 }
             }
 
             return sort.Count == 0
                 ?
-                new SortDescriptor<Project>[] { new SortDescriptor<Project>("Deadline") }
+                new SortDescriptor<Project>[] { SortDescriptor<Project>.CreateSortDescriptor(p => p.Deadline) }
+                //new SortDescriptor<Project>[] { new SortDescriptor<Project>("Deadline") }
                 :
                 sort.ToArray();
         }
@@ -159,7 +160,7 @@ namespace ProjectCenter.Web.Controllers
                 throw new BusinessException("指定的项目不存在");
             }
 
-            var model = new ProjectViewModel(project);
+            var model = new ProjectEditViewModel(project);
             model.Attachments = ProjectService.GetProjectAttachments(projectId);
             model.CommentPageList = ProjectService.GetProjectCommentPageList(projectId, 1, 20);
 

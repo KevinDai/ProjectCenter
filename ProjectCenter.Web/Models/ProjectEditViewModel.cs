@@ -9,9 +9,9 @@ using ProjectCenter.Util;
 
 namespace ProjectCenter.Web.Models
 {
-    public class ProjectViewModel : Project
+    public class ProjectEditViewModel : Project
     {
-        public ProjectViewModel(Project project)
+        public ProjectEditViewModel(Project project)
         {
             Preconditions.CheckNotNull(project, "project");
 

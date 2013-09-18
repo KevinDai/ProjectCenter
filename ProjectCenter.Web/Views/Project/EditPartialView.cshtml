@@ -4,13 +4,12 @@
             <h3 class="panel-title">基本信息</h3>
         </div>
         <div class="panel-body">
-            <form class="form-horizontal">
+            <form id="projectForm" class="form-horizontal">
                 <div class="form-group">
                     <label class="col-md-2 control-label">
                         项目类型：</label>
                     <div class="col-md-4">
                         <select data-bind="value: Type" class="form-control">
-                            <option value=""></option>
                             <option value="0">纵向研究</option>
                             <option value="1">横向研究</option>
                             <option value="2">横向咨询</option>
@@ -23,14 +22,14 @@
                     <label class="col-md-2 control-label">
                         项目名称：</label>
                     <div class="col-md-8">
-                        <input data-bind="value: Name" class="form-control" type="text" id="taskName">
+                        <input data-bind="value: Name" class="form-control required" type="text">
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-md-2 control-label">
                         委托单位：</label>
                     <div class="col-md-8">
-                        <input data-bind="value: Consignor" class="form-control" id="description" type="text">
+                        <input data-bind="value: Consignor" class="form-control required" id="description" type="text">
                     </div>
                 </div>
                 <div class="form-group">
@@ -38,7 +37,7 @@
                         开始时间：</label>
                     <div class="col-md-4">
                         <div class="input-group date form_datetime">
-                            <input data-bind="value: StartTime" class="form-control" type="text" value="">
+                            <input data-bind="value: StartTime" class="form-control required" type="text" value="">
                             <span class="input-group-addon">
                                 <span class="glyphicon glyphicon-remove"></span>
                             </span>
@@ -53,7 +52,7 @@
                         截止时间：</label>
                     <div class="col-md-4">
                         <div class="input-group date form_datetime">
-                            <input data-bind="value: Deadline" class="form-control" type="text" value="">
+                            <input data-bind="value: Deadline" class="form-control required" type="text" value="">
                             <span class="input-group-addon">
                                 <span class="glyphicon glyphicon-remove"></span>
                             </span>
@@ -67,16 +66,15 @@
                     <label class="col-md-2 control-label">
                         项目状态：</label>
                     <div class="col-md-4">
-                        @{
-                            //if (ViewBag.UserInfo.RightLevel == RightLevel.Common)
-                            //{
+                        @if (ViewBag.UserInfo.IsProjectAdmin)
+                        {
                             <select data-bind="value: Status" class="form-control">
                                 <option value="0">发布待审</option>
                                 <option value="2">完成待审</option>
                             </select>
-                            @*}*@
-                            //else
-                            //{
+                        }
+                        else
+                        {
                             <select data-bind="value: Status" class="form-control">
                                 <option value="0">发布待审</option>
                                 <option value="1">发布已审核</option>
@@ -84,26 +82,28 @@
                                 <option value="3">完成已审核</option>
                                 <option value="4">已取消</option>
                             </select>
-                            }
                         }
                     </div>
                 </div>
-                <div class="form-group">
-                    <label class="col-md-2 control-label">
-                        负责人：</label>
-                    <div class="col-md-8">
-                        <input id="ManagerIds" data-bind="value: ManagerIds" type="hidden" />
-                        <input id="ManagerNames" data-bind="value: ManagerNames" class="form-control" type="text" />
+                @if (ViewBag.UserInfo.IsProjectAdmin)
+                {
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">
+                            负责人：</label>
+                        <div class="col-md-8">
+                            <input id="ManagerIds" data-bind="value: ManagerIds" type="hidden" />
+                            <input id="ManagerNames" data-bind="value: ManagerNames" class="form-control" type="text" />
+                        </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-md-2 control-label">
-                        参与人员：</label>
-                    <div class="col-md-8">
-                        <input id="ParticipantIds" data-bind="value: ParticipantIds" type="hidden" />
-                        <input id="ParticipantNames" data-bind="value: ParticipantIds" class="form-control" type="text" />
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">
+                            参与人员：</label>
+                        <div class="col-md-8">
+                            <input id="ParticipantIds" data-bind="value: ParticipantIds" type="hidden" />
+                            <input id="ParticipantNames" data-bind="value: ParticipantIds" class="form-control" type="text" />
+                        </div>
                     </div>
-                </div>
+                }
                 <div class="form-group">
                     <label class="col-md-2 control-label">
                         需完成的材料：</label>
@@ -130,7 +130,7 @@
                         项目金额：</label>
                     <div class="col-md-4">
                         <div class="input-group">
-                            <input data-bind="value: Amount" class="form-control easyui-numberbox" data-options="precision:2,groupSeparator:','" type="text" value="">
+                            <input data-bind="value: FormattedAmount" class="form-control" type="text" value="">
                             <span class="input-group-addon">元
                             </span>
                         </div>
@@ -153,21 +153,17 @@
                             <option value="2">已全部到款</option>
                         </select>
                     </div>
-                    <div data-bind="if: AmountReceivedStatus() == '1'" class="col-md-3">
+                    <div data-bind="visible: AmountReceivedStatus() == '1'" class="col-md-3">
                         <div class="input-group">
+                            <input data-bind="value: FormattedAmountReceived" class="form-control" type="text" value="">
                             <span class="input-group-addon">已收
-                            </span>
-                            <input data-bind="value: AmountReceived" class="form-control easyui-numberbox" data-options="precision:2,groupSeparator:','" type="text" value="">
-                            <span class="input-group-addon">元
                             </span>
                         </div>
                     </div>
-                    <div data-bind="if: AmountReceivedStatus() == '1'" class="col-md-3">
+                    <div data-bind="visible: AmountReceivedStatus() == '1'" class="col-md-3">
                         <div class="input-group">
-                            <span class="input-group-addon">还有
-                            </span>
-                            <input data-bind="value: AmountRemained" class="form-control" type="text" value="">
-                            <span class="input-group-addon">元
+                            <input data-bind="value: AmountRemained" class="form-control" type="text" value="" readonly="readonly">
+                            <span class="input-group-addon">剩余
                             </span>
                         </div>
                     </div>
@@ -302,12 +298,24 @@
 <script type="text/ecmascript">
 
     var projectEditViewModel = function (project) {
-        var self = this;
+        var self = this,
+            priceFormatted = function (field) {
+                return ko.computed({
+                    read: function () {
+                        return self[field]().toFixed(2);
+                    },
+                    write: function (value) {
+                        value = parseFloat(value.replace(/[^\.\d]/g, ""));
+                        self[field](isNaN(value) ? 0 : value); // Write to underlying storage
+                    },
+                    owner: this
+                });
+            };
         self.Id = ko.observable(project.Id),
         self.Type = ko.observable(project.Type),
-        self.Name = ko.observable(project.Name),
-        self.Consignor = ko.observable(project.Consignor),
-        self.StartTime = project.StartTime,
+        self.Name = ko.observable(project.Name).extend({ required: true }),
+        self.Consignor = ko.observable(project.Consignor).extend({ required: true }),
+        self.StartTime = ko.observable(project.StartTime),
         self.Deadline = ko.observable(project.Deadline),
         self.Status = ko.observable(project.Status),
         self.ManagerIds = ko.observable(project.ManagerIds),
@@ -318,16 +326,19 @@
         self.CurrentProgress = ko.observable(project.CurrentProgress),
         self.AdvancePlan = ko.observable(project.AdvancePlan),
         self.Amount = ko.observable(project.Amount),
+        self.FormattedAmount = priceFormatted("Amount");
         self.TypeOfPayment = ko.observable(project.TypeOfPayment),
         self.NeedFinish = ko.observable(project.NeedFinish),
         self.AmountReceivedStatus = ko.observable(project.AmountReceivedStatus),
         self.AmountReceived = ko.observable(project.AmountReceived),
-        self.AmountRemained = ko.observable(project.AmountRemained),
+        self.FormattedAmountReceived = priceFormatted("AmountReceived");
+        self.AmountRemained = ko.computed(function () {
+            var result = self.Amount() - self.AmountReceived();
+            return result.toFixed(2)
+        }),
         self.InvoiceStatus = ko.observable(project.InvoiceStatus),
         self.Attachments = ko.observableArray(project.Attachments)
         self.CommentPageList = ko.observable(new pageListViewModel(project.CommentPageList));
-
-
         self.EditCommentContent = ko.observableArray("");
 
         self.addComment = function () {

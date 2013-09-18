@@ -79,9 +79,8 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\JsonMessage.cs" />
-    <Compile Include="Models\ProjectViewModel.cs" />
+    <Compile Include="Models\ProjectEditViewModel.cs" />
     <Compile Include="Models\QueryFilter.cs" />
-    <Compile Include="Models\RightLevel.cs" />
     <Compile Include="Models\UserInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

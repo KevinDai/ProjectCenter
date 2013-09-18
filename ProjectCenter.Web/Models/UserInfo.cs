@@ -19,7 +19,13 @@ namespace ProjectCenter.Web.Models
             set;
         }
 
-        public RightLevel RightLevel
+        public bool IsProjectAdmin
+        {
+            get;
+            set;
+        }
+
+        public bool IsSystemAdmin
         {
             get;
             set;

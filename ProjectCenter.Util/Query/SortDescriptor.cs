@@ -10,17 +10,23 @@ namespace ProjectCenter.Util.Query
     {
         #region Members
 
-        //public Expression SortKeySelector
-        //{
-        //    get;
-        //    private set;
-        //}
-
-        public string Field
+        public Type KeyType
         {
             get;
             private set;
         }
+
+        public Expression SortKeySelector
+        {
+            get;
+            private set;
+        }
+
+        //public string Field
+        //{
+        //    get;
+        //    private set;
+        //}
 
         public ListSortDirection SortDirection
         {
@@ -32,21 +38,37 @@ namespace ProjectCenter.Util.Query
 
         #region Constructor
 
-        /// <summary>
-        /// 构造函数，默认为升序排列
-        /// </summary>
-        /// <param name="field"></param>
-        public SortDescriptor(string field)
-            : this(field, ListSortDirection.Ascending)
+        ///// <summary>
+        ///// 构造函数，默认为升序排列
+        ///// </summary>
+        ///// <param name="field"></param>
+        //public SortDescriptor(string field)
+        //    : this(field, ListSortDirection.Ascending)
+        //{
+        //}
+
+        //public SortDescriptor(string field, ListSortDirection sortDirection)
+        //{
+        //    Field = field;
+        //    SortDirection = sortDirection;
+        //}
+
+        private SortDescriptor()
         {
         }
 
-        public SortDescriptor(string field, ListSortDirection sortDirection)
-        {
-            Field = field;
-            SortDirection = sortDirection;
-        }
+        //public SortDescriptor(Expression<Func<T, TValue>> exp)
+        //{
+        //}
 
         #endregion
+
+        public static SortDescriptor<T> CreateSortDescriptor<TValue>(Expression<Func<T, TValue>> exp, ListSortDirection sortDirection = ListSortDirection.Ascending)
+        {
+            var sort = new SortDescriptor<T>();
+            sort.KeyType = typeof(TValue);
+            sort.SortKeySelector = exp;
+            return sort;
+        }
     }
 }
