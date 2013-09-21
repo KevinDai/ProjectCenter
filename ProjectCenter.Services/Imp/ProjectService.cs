@@ -64,23 +64,6 @@ namespace ProjectCenter.Services.Imp
             }
             if (sorts != null)
             {
-                //for (int i = sorts.Length - 1; i >= 0; i--)
-                //{
-                //    var sort = sorts[i];
-                //    switch (sort.Field)
-                //    {
-                //        case "Deadline":
-                //            if (sort.SortDirection == ListSortDirection.Ascending)
-                //            {
-                //                query = query.OrderBy(q => q.Deadline);
-                //            }
-                //            else
-                //            {
-                //                query = query.OrderByDescending(q => q.Deadline);
-                //            }
-                //            break;
-                //    }
-                //}
                 query = query.Sort(sorts);
             }
 
@@ -92,21 +75,22 @@ namespace ProjectCenter.Services.Imp
             return Projects.Find(projectId);
         }
 
-        public Project AddProject(Project project, string[] attachmentIds)
+        public Project AddProject(Project project)
         {
             project.Id = Guid.NewGuid().ToString();
             project.CreateTime = DateTime.Now;
-
+            project.ManagerIds = project.ManagerIds ?? string.Empty;
+            project.ParticipantIds = project.ParticipantIds ?? string.Empty;
             AddEntity(project);
 
-            if (attachmentIds != null && attachmentIds.Any())
-            {
-                var attachments = Attachments.Where(q => attachmentIds.Contains(q.Id)).ToArray();
-                foreach (var item in attachments)
-                {
-                    item.ProjectId = project.Id;
-                }
-            }
+            //if (attachmentIds != null && attachmentIds.Any())
+            //{
+            //    var attachments = Attachments.Where(q => attachmentIds.Contains(q.Id)).ToArray();
+            //    foreach (var item in attachments)
+            //    {
+            //        item.ProjectId = project.Id;
+            //    }
+            //}
             SaveChanges();
             return project;
         }
@@ -121,6 +105,20 @@ namespace ProjectCenter.Services.Imp
             return Comments.Where(c => c.ProjectId == projectId)
                 .OrderByDescending(q => q.CreateTime)
                 .PageList(pageIndex, pageSize);
+        }
+
+        public void CheckProjects(string[] projectIds, ProjectStatus status)
+        {
+            if (projectIds != null && projectIds.Any())
+            {
+                var projects = Projects.Where(p => projectIds.Contains(p.Id)).ToArray();
+                foreach (var item in projects)
+                {
+                    item.Status = (int)status;
+                    UpdateEntity(item);
+                }
+                SaveChanges();
+            }
         }
 
         public Project UpdateProject(Project project)

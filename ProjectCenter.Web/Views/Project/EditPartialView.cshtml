@@ -66,14 +66,7 @@
                     <label class="col-md-2 control-label">
                         项目状态：</label>
                     <div class="col-md-4">
-                        @if (ViewBag.UserInfo.IsProjectAdmin)
-                        {
-                            <select data-bind="value: Status" class="form-control">
-                                <option value="0">发布待审</option>
-                                <option value="2">完成待审</option>
-                            </select>
-                        }
-                        else
+                        @if (ViewBag.UserInfo.RightDetail.EnableCheckProject)
                         {
                             <select data-bind="value: Status" class="form-control">
                                 <option value="0">发布待审</option>
@@ -83,9 +76,16 @@
                                 <option value="4">已取消</option>
                             </select>
                         }
+                        else
+                        {
+                            <select data-bind="value: Status" class="form-control">
+                                <option value="0">发布待审</option>
+                                <option value="2">完成待审</option>
+                            </select>
+                        }
                     </div>
                 </div>
-                @if (ViewBag.UserInfo.IsProjectAdmin)
+                @if (ViewBag.UserInfo.RightDetail.EnableSetProjectUser)
                 {
                     <div class="form-group">
                         <label class="col-md-2 control-label">
@@ -100,7 +100,7 @@
                             参与人员：</label>
                         <div class="col-md-8">
                             <input id="ParticipantIds" data-bind="value: ParticipantIds" type="hidden" />
-                            <input id="ParticipantNames" data-bind="value: ParticipantIds" class="form-control" type="text" />
+                            <input id="ParticipantNames" data-bind="value: ParticipantNames" class="form-control" type="text" />
                         </div>
                     </div>
                 }
@@ -183,7 +183,7 @@
         </div>
     </div>
 </div>
-<div class="col-md-12">
+<div data-bind="visible: Id" class="col-md-12">
     <div class="panel panel-default table-panel">
         <div class="panel-heading">
             <ul class="list-unstyled list-inline pull-right list-panel-title">
@@ -218,25 +218,29 @@
         </table>
     </div>
 </div>
-<div class="col-md-12">
-    <div class="panel panel-default">
+<div data-bind="visible: Id" class="col-md-12">
+    <div data-bind="with: CommentPageList" class="panel panel-default">
         <div class="panel-heading">
             <ul class="list-unstyled list-inline pull-right list-panel-title">
-                <li><a data-bind="click: addComment" href="#"><span class="glyphicon glyphicon-comment"></span><span class="btn-glyphicon-content">发表评论</span></a></li>
+                <li><a data-bind="click: $parent.refrushComments" href="#"><span class="glyphicon glyphicon-refresh"></span><span class="btn-glyphicon-content">刷新</span></a></li>
+                <li><a data-bind="click: $parent.addComment" href="#"><span class="glyphicon glyphicon-comment"></span><span class="btn-glyphicon-content">发表评论</span></a></li>
             </ul>
             <h3 class="panel-title">评论列表</h3>
         </div>
         <div class="panel-body">
             <div class="row">
                 <div class="col-md-12">
-                    <ul data-bind="foreach: $root.tempDatas" class="list-unstyled comment">
-                        <li><span class="comment-user">用户</span> <span class="comment-user">2013-8-20 9:00</span>
+                    <ul data-bind="foreach: List" class="list-unstyled comment">
+                        <li><span data-bind="text: CreatorName" class="comment-user">用户</span> <span data-bind="text: CreateTime" class="comment-user"></span>
+
                             <ul class="list-unstyled list-inline pull-right">
-                                <li><a class="comment-action-link" href="#">删除</a></li>
+                                @if (ViewBag.UserInfo.RightDetail.EnbaleDeleteProject)
+                                {
+                                    <li><a data-bind="click: $parents[1].deleteComment" class="comment-action-link" href="#">删除</a></li>
+                                }
                             </ul>
                             <hr class="title-content-hr">
-                            <p class="comment-content">
-                                感谢分享~
+                            <p data-bind="text: Content" class="comment-content">
                             </p>
                         </li>
                     </ul>
@@ -245,17 +249,57 @@
             <div class="row">
                 <div class="col-md-12 comment-pagination">
                     <ul class="pagination pagination-sm pull-right">
-                        <li><a href="#">&laquo;</a></li>
-                        <li><a href="#">1</a></li>
-                        <li><a href="#">2</a></li>
-                        <li><a href="#">3</a></li>
-                        <li><a href="#">4</a></li>
-                        <li><a href="#">5</a></li>
-                        <li><a href="#">&raquo;</a></li>
+                        <li data-bind="css: PageIndex() > 1 ? undefined : 'disabled'"><a data-bind="click: $parent.prePageComments" href="#"><span class="glyphicon glyphicon-chevron-left"></span></a></li>
+                        <li data-bind="css: PageIndex() < MaxPageIndex() ? undefined : 'disabled'"><a href="#" data-bind="click: $parent.nextPageComments"><span class="glyphicon glyphicon-chevron-right"></span></a></li>
                     </ul>
-                    <div class="pull-right"><span>第 </span><strong><span>1</span>-<span>10</span></strong><span> 条，</span><span>共 </span><strong>120</strong><span> 条评论</span></div>
+
+                    <div class="pull-right">
+                        <span data-bind="if: Total() > 0">第 <strong><span data-bind="text: StartIndex"></span>-<span data-bind="text: EndIndex"></span></strong> 条，</span><span>共 <strong data-bind="text: Total"></strong>条评论 </span>
+                    </div>
                 </div>
             </div>
+        </div>
+    </div>
+</div>
+
+<div id="attachmentDialog" class="modal fade" data-backdrop="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" style="font-weight: bold;">选择附件</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form id="attachmentFrom" class="form-horizontal">
+                            <input data-bind="value: Id" name="ProjectId" type="hidden" />
+                            <div class="form-group">
+                                <input type="file" class="form-control" />
+                                @*<textarea data-bind="value: EditCommentContent, valueUpdate: 'afterkeydown'" class="form-control" rows="8"></textarea>*@
+                            </div>
+                            <div class="form-group">
+                                <input type="file" class="form-control" />
+                                @*<textarea data-bind="value: EditCommentContent, valueUpdate: 'afterkeydown'" class="form-control" rows="8"></textarea>*@
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <ul class="list-unstyle list-inline pull-right">
+                            <li>
+                                <button data-bind="click: saveComment, attr: {'disabled': EditCommentContent() ? undefined : 'disabled'}" type="button" class="btn btn-primary btn-primary">提交评论</button>
+
+                            </li>
+                            <li>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 </div>
@@ -265,13 +309,13 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">评论内容</h4>
+                <h4 class="modal-title" style="font-weight: bold;">评论内容</h4>
             </div>
             <div class="modal-body">
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <textarea data-bind="value: EditCommentContent" class="form-control" rows="8"></textarea>
+                            <textarea data-bind="value: EditCommentContent, valueUpdate: 'afterkeydown'" class="form-control" rows="8"></textarea>
                         </div>
                     </div>
                 </div>
@@ -279,7 +323,7 @@
                     <div class="col-md-12">
                         <ul class="list-unstyle list-inline pull-right">
                             <li>
-                                <button type="button" class="btn btn-primary btn-primary">提交评论</button>
+                                <button data-bind="click: saveComment, attr: {'disabled': EditCommentContent() ? undefined : 'disabled'}" type="button" class="btn btn-primary btn-primary">提交评论</button>
 
                             </li>
                             <li>
@@ -302,170 +346,123 @@
             priceFormatted = function (field) {
                 return ko.computed({
                     read: function () {
-                        return self[field]().toFixed(2);
+                        return self[field]() ? self[field]().toFixed(2) : (0).toFixed(2);
                     },
                     write: function (value) {
                         value = parseFloat(value.replace(/[^\.\d]/g, ""));
                         self[field](isNaN(value) ? 0 : value); // Write to underlying storage
                     },
-                    owner: this
+                    owner: self
                 });
+            },
+            formattedDateStr = function (datetime) {
+                return datetime ? datetime.replace(/\//g, '-').split(" ")[0] : datetime;
             };
-        self.Id = ko.observable(project.Id),
-        self.Type = ko.observable(project.Type),
-        self.Name = ko.observable(project.Name).extend({ required: true }),
-        self.Consignor = ko.observable(project.Consignor).extend({ required: true }),
-        self.StartTime = ko.observable(project.StartTime),
-        self.Deadline = ko.observable(project.Deadline),
-        self.Status = ko.observable(project.Status),
-        self.ManagerIds = ko.observable(project.ManagerIds),
-        self.ManagerNames = ko.observable(project.ManagerNames)
-        self.ParticipantIds = ko.observable(project.ParticipantIds),
-        self.ParticipantNames = ko.observable(project.ParticipantNames),
-        self.NeedFinish = ko.observable(project.NeedFinish),
-        self.CurrentProgress = ko.observable(project.CurrentProgress),
-        self.AdvancePlan = ko.observable(project.AdvancePlan),
-        self.Amount = ko.observable(project.Amount),
+        self.Id = ko.observable();
+        self.Type = ko.observable();
+        self.Name = ko.observable();
+        self.Consignor = ko.observable();
+        self.StartTime = ko.observable();
+        self.Deadline = ko.observable();
+        self.Status = ko.observable();
+        self.ManagerIds = ko.observable();
+        self.ManagerNames = ko.observable();
+        self.ParticipantIds = ko.observable();
+        self.ParticipantNames = ko.observable();
+        self.NeedFinish = ko.observable();
+        self.CurrentProgress = ko.observable();
+        self.AdvancePlan = ko.observable();
+        self.Amount = ko.observable();
         self.FormattedAmount = priceFormatted("Amount");
-        self.TypeOfPayment = ko.observable(project.TypeOfPayment),
-        self.NeedFinish = ko.observable(project.NeedFinish),
-        self.AmountReceivedStatus = ko.observable(project.AmountReceivedStatus),
-        self.AmountReceived = ko.observable(project.AmountReceived),
+        self.TypeOfPayment = ko.observable();
+        self.NeedFinish = ko.observable();
+        self.AmountReceivedStatus = ko.observable();
+        self.AmountReceived = ko.observable();
         self.FormattedAmountReceived = priceFormatted("AmountReceived");
         self.AmountRemained = ko.computed(function () {
             var result = self.Amount() - self.AmountReceived();
             return result.toFixed(2)
-        }),
-        self.InvoiceStatus = ko.observable(project.InvoiceStatus),
-        self.Attachments = ko.observableArray(project.Attachments)
-        self.CommentPageList = ko.observable(new pageListViewModel(project.CommentPageList));
+        });
+        self.InvoiceStatus = ko.observable();
+        self.Attachments = ko.observableArray();
+        self.CommentPageList = new pageListViewModel();
         self.EditCommentContent = ko.observableArray("");
 
         self.addComment = function () {
+            self.EditCommentContent("");
             $("#commentDialog").modal("show");
         };
+        self.deleteComment = function (comment) {
+            debugger;
+            request("/Project/DeleteComment", { commentId: comment.Id }, function () {
+                self.refrushComments();
+            });
+        };
+        self.saveComment = function () {
+            request("/Project/AddComment", { projectId: self.Id(), content: self.EditCommentContent() }, function () {
+                $("#commentDialog").modal("hide");
+                self.refrushComments();
+            });
+        };
+        self.addAttachment = function () {
+            self.EditCommentContent("");
+            $("#commentDialog").modal("show");
+        };
+        self.saveAttachment = function () {
+            request("/Project/AddComment", { projectId: self.Id(), content: self.EditCommentContent() }, function () {
+            });
+        };
+
+        self.refrushComments = function () {
+            request("/Project/LoadComments", {
+                projectId: self.Id(),
+                pageIndex: self.CommentPageList.PageIndex(),
+                pageSize: self.CommentPageList.PageSize()
+            }, function (result) {
+                self.CommentPageList.update(result);
+            });
+        };
+        self.nextPageComments = function () {
+            var pageIndex = self.CommentPageList.PageIndex();
+            if (pageIndex < self.CommentPageList.MaxPageIndex()) {
+                self.CommentPageList.PageIndex(pageIndex + 1);
+                self.refrushComments();
+            }
+        };
+        self.prePageComments = function () {
+            var pageIndex = self.CommentPageList.PageIndex();
+            if (pageIndex > 1) {
+                self.CommentPageList.PageIndex(pageIndex - 1);
+                self.refrushComments();
+            }
+        };
+        self.update = function (project, onlyBaseInfo) {
+            self.Id(project.Id);
+            self.Type(project.Type);
+            self.Name(project.Name);
+            self.Consignor(project.Consignor);
+            self.StartTime(formattedDateStr(project.StartTime));
+            self.Deadline(formattedDateStr(project.Deadline));
+            self.Status(project.Status);
+            self.ManagerIds(project.ManagerIds);
+            self.ManagerNames(project.ManagerNames);
+            self.ParticipantIds(project.ParticipantIds);
+            self.ParticipantNames(project.ParticipantNames);
+            self.NeedFinish(project.NeedFinish);
+            self.CurrentProgress(project.CurrentProgress);
+            self.AdvancePlan(project.AdvancePlan);
+            self.Amount(project.Amount);
+            self.TypeOfPayment(project.TypeOfPayment);
+            self.NeedFinish(project.NeedFinish);
+            self.AmountReceivedStatus(project.AmountReceivedStatus);
+            self.AmountReceived(project.AmountReceived);
+            self.InvoiceStatus(project.InvoiceStatus);
+            if (!onlyBaseInfo) {
+                self.Attachments(project.Attachments);
+                self.CommentPageList.update(project.CommentPageList);
+            }
+        };
+        self.update(project);
     };
 
-    (function ($) {
-
-        var UserSelectBox = function (element, options) {
-            var self = this;
-            self.options = options ? $.extend(true, {}, options) : {};
-            self.element = $(element);
-            self.container = $("<div></div>");
-            self.inputContainer = $('<div class="input-group"></div>');
-            self.usersPanel = $('<div class="panel panel-default panel-user-select" style="display: none;"></div>');
-            self.mouseover = false;
-            self.init = function () {
-                self.container.insertAfter(self.element);
-                self.container.append(self.inputContainer);
-                self.container.append(self.usersPanel);
-
-                self.inputContainer.append(self.element);
-                if (!options.bindValue
-                    || (self.valueElement = $("#" + options.bindValue)).length == 0) {
-                    self.valueElement = $('<input type="hidden" />');
-                    self.inputContainer.append(self.valueElement);
-                }
-                self.inputContainer.append($('<span class="input-group-btn"></span>').append(
-                    $('<a class="btn btn-default"><span class="glyphicon glyphicon-chevron-down"></span></a>').click(function () {
-                        if ($(self.usersPanel).is(":visible")) {
-                            self.element.blur();
-
-                            self.hide();
-                        } else {
-                            self.element.focus();
-                            self.show();
-                        }
-                    })));
-                var usersRow = $('<div class="row">').appendTo(self.usersPanel);
-                for (var i = 0; i < options.users.length; i++) {
-                    usersRow.append('<div class="col-md-3"><div class="checkbox"><label><input value="' + options.users[i].Id + '" type="checkbox"><span>' + options.users[i].Name + '</span></label></div>')
-                }
-                self.usersPanel.find(":checkbox").click(function () {
-                    var ids = [];
-                    var names = [];
-                    self.usersPanel.find(":checkbox").each(function () {
-                        if (this.checked) {
-                            var $this = $(this);
-                            ids.push($this.val());
-                            names.push($this.next().text());
-                        }
-                    });
-                    self.valueElement.val(ids.join(","));
-                    self.element.val(names.join(","));
-                });
-                self.element.keydown(function () {
-                    return false;
-                });
-                self.element.focus(function () {
-                    if (!$(self.usersPanel).is(":visible")) {
-                        self.show();
-                    }
-                });
-                self.element.blur(function (event) {
-                    if (self.mouseover) {
-                        self.element.focus();
-                    } else {
-                        self.hide();
-                    }
-                    return true;
-                });
-
-                self.container.mouseover(function () {
-                    self.mouseover = true;
-                });
-                self.container.mouseout(function () {
-                    self.mouseover = false;
-                });
-
-            }
-
-            self.show = function () {
-                self.clearChecked();
-
-                if (self.valueElement.val()) {
-                    var value = self.valueElement.val();
-                    if (value) {
-                        self.check(value.split(","));
-                    }
-                }
-
-                $(self.inputContainer).find(".glyphicon").removeClass("glyphicon-chevron-down").addClass("glyphicon-chevron-up");
-                self.usersPanel.show();
-            };
-            self.hide = function () {
-                $(self.inputContainer).find(".glyphicon").removeClass("glyphicon-chevron-up").addClass("glyphicon-chevron-down");
-                self.usersPanel.hide();
-            };
-
-            self.check = function (ids) {
-                self.clearChecked();
-                if (ids) {
-                    self.usersPanel.find("input:checkbox").each(function () {
-                        var $this = $(this);
-                        for (var i = 0; i < ids.length; i++) {
-                            if (ids[i] == $this.val()) {
-                                this.checked = true;
-                                break;
-                            }
-                        }
-                    });
-                }
-            };
-            self.clearChecked = function () {
-                self.usersPanel.find("input:checkbox").each(function () {
-                    this.checked = false;
-                });
-            };
-            self.init();
-        }
-
-        $.fn.userSelectBox = function (options) {
-            this.each(function () {
-                new UserSelectBox(this, options);
-            });
-        }
-
-    })(jQuery);
 </script>

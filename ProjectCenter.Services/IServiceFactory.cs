@@ -8,6 +8,6 @@ namespace ProjectCenter.Services
     public interface IServiceFactory
     {
         IProjectService CreateProjectService();
-
+        IUserService CreateUserService();
     }
 }

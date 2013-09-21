@@ -1,14 +1,36 @@
-﻿using ProjectCenter.Web.Models;
+﻿using ProjectCenter.Services;
+using ProjectCenter.Util.Exceptions;
+using ProjectCenter.Web.ActionResults;
+using ProjectCenter.Web.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Script.Serialization;
 
 namespace ProjectCenter.Web.Controllers
 {
+    [Authorize]
     public abstract class BaseController : Controller
     {
+        private IUserService _userService;
+        public IUserService UserService
+        {
+            get
+            {
+                if (_userService == null)
+                {
+                    _userService = ServiceFactory.Instance.CreateUserService();
+                }
+                return _userService;
+            }
+            set
+            {
+                _userService = value;
+            }
+        }
+
         protected UserInfo UserInfo
         {
             get;
@@ -19,13 +41,17 @@ namespace ProjectCenter.Web.Controllers
         {
             base.OnAuthorization(filterContext);
 
-            UserInfo = new UserInfo()
+            if (User.Identity.IsAuthenticated)
             {
-                UserId = "test",
-                UserName = "测试用户",
-                IsProjectAdmin = false,
-                IsSystemAdmin = true
-            };
+                var user = UserService.GetUserById(User.Identity.Name);
+                UserInfo = new UserInfo()
+                {
+                    UserId = user.Id,
+                    UserName = user.Name,
+                    RightDetail = new RightDetail(user.RightLevel)
+                };
+
+            }
 
         }
 
@@ -34,16 +60,49 @@ namespace ProjectCenter.Web.Controllers
             base.OnActionExecuted(filterContext);
 
             ViewBag.UserInfo = UserInfo;
-            //if (filterContext.Result is ViewResult)
-            //{
-            //    var result = filterContext.Result as ViewResult;
-            //    result.mo
-            //}
         }
+
+        protected override void OnException(ExceptionContext filterContext)
+        {
+            if (filterContext.Exception is BusinessException)
+            {
+                filterContext.Result = new CommonJsonResult()
+                {
+                    Data = new JsonMessage()
+                    {
+                        Status = (int)MessageStatus.BusinessException,
+                        Message = filterContext.Exception.Message
+                    }
+                };
+                filterContext.ExceptionHandled = true;
+            }
+            else
+            {
+                base.OnException(filterContext);
+            }
+        }
+
+        //protected override void Execute(System.Web.Routing.RequestContext requestContext)
+        //{
+        //    try
+        //    {
+        //        base.Execute(requestContext);
+        //    }
+        //    catch (BusinessException ex)
+        //    {
+        //    }
+        //    catch (Exception)
+        //    {
+        //        throw;
+        //    }
+        //}
 
         protected ActionResult JsonMessageResult(object data)
         {
-            return Json(new JsonMessage(data));
+            return new CommonJsonResult()
+                {
+                    Data = new JsonMessage(data)
+                };
         }
 
     }

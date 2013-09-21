@@ -30,5 +30,14 @@ namespace ProjectCenter.Models
             get;
             set;
         }
+
+        /// <summary>
+        /// 权限级别（从高到低）：1、2、3
+        /// </summary>
+        public int RightLevel
+        {
+            get;
+            set;
+        }
     }
 }

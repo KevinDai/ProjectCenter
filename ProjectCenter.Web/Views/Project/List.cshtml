@@ -1,5 +1,6 @@
 ﻿@{
     Layout = "~/Views/Shared/_Layout.cshtml";
+    IEnumerable<ItemSelectViewModel> users = ViewBag.Users;
 }
 <div class="row">
     <div class="col-md-12">
@@ -8,7 +9,7 @@
                 <div class="row">
                     <div class="col-md-3">
                         <div class="btn-group">
-                            <button data-bind="click: showProjectEditView" class="btn btn-danger btn-new">
+                            <button data-bind="click: add" class="btn btn-danger btn-new">
                                 发布任务</button>
                         </div>
                     </div>
@@ -17,31 +18,35 @@
                             <div class="col-md-6">
                                 <ul class="list-inline">
                                     <li>
-                                        <div class="btn-group">
-                                            <a href="#" class="btn btn-default btn-action dropdown-toggle" data-toggle="dropdown">
-                                                <div class="btn-checkbox">
-                                                    <input type="checkbox">
-                                                </div>
-                                                <span class="caret"></span></a>
-                                            <ul class="dropdown-menu">
-                                                <li><a href="#">全选</a></li>
-                                                <li><a href="#">全不选</a></li>
-                                            </ul>
-                                        </div>
-                                        <div class="btn-group item-action">
-                                            <a class="btn btn-default btn-action" data-toggle="tooltip" data-placement="bottom"
-                                                title="删除"><span class="glyphicon glyphicon-trash"></span></a>
-                                        </div>
-                                        <div class="btn-group item-action">
-                                            <a class="btn btn-default dropdown-toggle btn-action" data-toggle="dropdown"><span
-                                                class="glyphicon glyphicon-tags"></span><span class="caret caret-right"></span>
-                                            </a>
-                                            <ul class="dropdown-menu">
-                                                <li><a href="#">标记为完成</a></li>
-                                                <li><a href="#">标记为取消</a></li>
-                                            </ul>
-                                        </div>
-                                        <a class="btn btn-default btn-action" data-toggle="tooltip" data-placement="bottom"
+                                        @if (ViewBag.UserInfo.RightDetail.EnableCheckProject)
+                                        {
+                                            <div class="btn-group">
+                                                <a href="#" class="btn btn-default dropdown-toggle btn-action" data-toggle="dropdown">
+                                                    <input data-bind="checked: AllChecked, click: function(){ return true; }, clickBubble: false" type="checkbox">
+                                                    <span class="caret caret-righ"></span></a>
+                                                <ul class="dropdown-menu">
+                                                    <li><a data-bind="click: changeItemsChecked.bind($data, true)" href="#">全选</a></li>
+                                                    <li><a data-bind="click: changeItemsChecked.bind($data, false)" href="#">全不选</a></li>
+                                                </ul>
+                                            </div>@*
+
+                                            <div data-bind="visible: AnyItemSelected" class="btn-group item-action">
+                                                <a class="btn btn-default btn-action" data-toggle="tooltip" data-placement="bottom"
+                                                    title="删除"><span class="glyphicon glyphicon-trash"></span></a>
+                                            </div>*@
+                                            <div data-bind="visible: AnyItemSelected" class="btn-group item-action">
+                                                <a class="btn btn-default dropdown-toggle btn-action" data-toggle="dropdown"><span
+                                                    class="glyphicon glyphicon-tags"></span><span class="caret caret-right"></span>
+                                                </a>
+                                                <ul class="dropdown-menu">
+                                                    <li><a data-bind="click: check.bind($data, 1)" href="#">标记为发布已审核</a></li>
+                                                    <li><a data-bind="click: check.bind($data, 3)" href="#">标记为完成已审核</a></li>
+                                                    <li><a data-bind="click: check.bind($data, 4)" href="#">标记为已取消</a></li>
+                                                </ul>
+                                            </div>
+                                        }
+
+                                        <a data-bind="visible: pageList.Total() > 0" class="btn btn-default btn-action" data-toggle="tooltip" data-placement="bottom"
                                             title="下载"><span class="glyphicon glyphicon-download-alt"></span></a></li>
                                 </ul>
                             </div>
@@ -54,12 +59,12 @@
                                 <ul class="list-inline">
                                     <li>
                                         <div class="btn-group">
-                                            <a data-bind="click: showProjectListView" data-toggle="tooltip" data-placement="bottom"
+                                            <a data-bind="click: back" data-toggle="tooltip" data-placement="bottom"
                                                 class="btn btn-default btn-action" title="返回"><span class="glyphicon glyphicon-arrow-left"></span></a>
                                         </div>
-                                        <a data-bind="click: saveProject" data-toggle="tooltip" data-placement="bottom" class="btn btn-default btn-action" title="保存"><span class="glyphicon glyphicon-ok"></span></a>
-                                        <a class="btn btn-default btn-action"
-                                            data-toggle="tooltip" data-placement="bottom" title="删除"><span class="glyphicon glyphicon-trash"></span></a>
+                                        <a data-bind="click: save" data-toggle="tooltip" data-placement="bottom" class="btn btn-default btn-action" title="保存"><span class="glyphicon glyphicon-ok"></span></a>
+                                        @*                                        <a class="btn btn-default btn-action"
+                                            data-toggle="tooltip" data-placement="bottom" title="删除"><span class="glyphicon glyphicon-trash"></span></a>*@
                                         @*<div class="btn-group item-action">
                                             <a class="btn dropdown-toggle btn-action" data-toggle="dropdown" title="标记"><i class="glyphicon glyphicon-tags">
                                             </i><span class="caret"></span></a>
@@ -74,6 +79,51 @@
                     </div>
                 </div>
                 <hr class="toolbar-hr">
+                @*             <div class="row">
+                    <div class="col-md-10">
+                        <form class="form-horizontal" role="form">
+                            <div class="form-group">
+                                <label class="col-md-2 control-label">项目名称</label>
+                                <div class="col-md-6">
+                                    <input type="email" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-2 control-label">
+                                    截止时间</label>
+                                <div class="col-md-4">
+                                    <div class="input-group date form_datetime">
+                                        <input data-bind="value: Deadline" class="form-control required" type="text" value="">
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </span>
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+                                    </div>
+                                </div>
+                                <label class="col-md-1 control-label">至</label>
+                                <div class="col-md-4">
+                                    <div class="input-group date form_datetime">
+                                        <input data-bind="value: Deadline" class="form-control required" type="text" value="">
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </span>
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group pull-right">
+                            <button class="btn btn-default btn-action btn-primary">查询</button>
+                        </div>
+                    </div>
+                </div>
+                <hr class="toolbar-hr">*@
             </div>
         </div>
         <div class="row">
@@ -103,42 +153,102 @@
                     <div id="list" class="col-md-9">
                         <div class="row">
                             <div class="col-md-12">
-                                <table class="table table-hover list-table ">
-                                    <colgroup>
-                                        <col style="width: 50px;">
-                                        <col style="width: 120px;">
-                                        <col style="width: 350px;">
-                                        <col style="width: 200px;">
-                                    </colgroup>
-                                    <!--<thead>
-                <tr>
-                    <th></th>
-                    <th>截止时间</th>
-                    <th>项目名称</th>
-                    <th style="text-align: center;">负责人</th>
-                </tr>
-                </thead>-->
-                                    <tbody data-bind="foreach: pageList.data">
-                                        <tr data-bind="click: $root.showProjectEditView">
-                                            <td>
-                                                <input type="checkbox">
-                                            </td>
-                                            <td>
-                                                <span data-bind="html: daySpanHtml"></span>
-                                                <br>
-                                                <small data-bind="text: deadline" class="muted"></small>
-                                            </td>
-                                            <td>
-                                                <h5 data-bind="text: taskName" style="font-weight: bold"></h5>
-                                            </td>
-                                            <td>
-                                                <div style="text-align: center;">
-                                                    <span data-bind="text: personInCharge"></span>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                @if (ViewBag.UserInfo.RightDetail.EnbaleDeleteProject)
+                                {
+                                    <table class="table table-hover list-table ">
+                                        <colgroup>
+                                            <col style="width: 40px;">
+                                            <col style="width: 200px;">
+                                            <col style="width: 120px;">
+                                            <col style="width: 200px;">
+                                            <col style="width: 190px;">
+                                        </colgroup>
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th>项目名称</th>
+                                                <th>负责人</th>
+                                                <th>参与人</th>
+                                                <th>项目状态</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody data-bind="foreach: pageList.List">
+                                            <tr data-bind="css: EnableViewDetail ? undefined : 'warning'">
+                                                <td>
+                                                    <div class="checkbox">
+                                                        <label>
+                                                            <input data-bind="checked: Checked" type="checkbox">
+                                                        </label>
+                                                    </div>
+                                                </td>
+                                                <td data-bind="click: $root.edit">
+                                                    <span data-bind="text: Name"></span>
+                                                </td>
+                                                <td data-bind="click: $root.edit">
+                                                    <div>
+                                                        <span data-bind="text: ManagerNames"></span>
+                                                    </div>
+                                                </td>
+                                                <td data-bind="click: $root.showProjectEditView">
+                                                    <div>
+                                                        <span data-bind="text: ParticipantNames"></span>
+                                                    </div>
+                                                </td>
+                                                <td data-bind="click: $root.edit">
+                                                    <span data-bind="html: DaySpanHtml"></span>
+                                                    <br />
+                                                    <small data-bind="text: StartTime" class="muted"></small>-
+                                                <small data-bind="text: Deadline" class="muted"></small>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                }
+                                else
+                                {
+                                    <table class="table table-hover list-table ">
+                                        <colgroup>
+
+                                            <col style="width: 200px;">
+                                            <col style="width: 120px;">
+                                            <col style="width: 200px;">
+                                            <col style="width: 190px;">
+                                        </colgroup>
+                                        <thead>
+                                            <tr>
+                                                <th>项目名称</th>
+                                                <th>负责人</th>
+                                                <th>参与人</th>
+                                                <th>项目状态</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody data-bind="foreach: pageList.List">
+                                            <tr data-bind="css: EnableViewDetail ? undefined : 'warning'">
+                                                <td data-bind="click: $root.edit">
+                                                    <h5 data-bind="text: Name"></h5>
+                                                </td>
+
+                                                <td data-bind="click: $root.edit">
+                                                    <div>
+                                                        <span data-bind="text: ManagerNames"></span>
+                                                    </div>
+                                                </td>
+                                                <td data-bind="click: $root.edit">
+                                                    <div>
+                                                        <span data-bind="text: ParticipantNames"></span>
+                                                    </div>
+                                                </td>
+                                                <td data-bind="click: $root.edit">
+                                                    <span data-bind="html: DaySpanHtml"></span>
+                                                    <br />
+                                                    <small data-bind="text: StartTime" class="muted"></small>-
+                                                <small data-bind="text: Deadline" class="muted"></small>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                }
+
                             </div>
                         </div>
                     </div>
@@ -151,11 +261,9 @@
                                 </ul>*@
                                 <div id="myTabContent" class="tab-content">
                                     <div class="tab-pane fade active in" id="info">
-                                        <div data-bind="with: editProject" class="row">
+                                        <div data-bind="with: projectEdit" class="row">
                                             @{Html.RenderPartial("EditPartialView");}
                                         </div>
-
-
                                     </div>
                                 </div>
                             </div>
@@ -166,149 +274,279 @@
         </div>
     </div>
 </div>
+
 <script type="text/javascript">
+
+    function formatDateString(date) {
+        return date.getFullYear() + "年" + (date.getMonth() + 1) + "月" + date.getDate() + "日";
+    }
+
+    var projectListItemViewModel = function (project) {
+        var self = this,
+            init = function (project) {
+                project.StartTime = new Date(Date.parse(project.StartTime));
+                project.Deadline = new Date(Date.parse(project.Deadline));
+
+                self.Checked = ko.observable(false);
+                self.Id = project.Id;
+                self.Name = project.Name;
+                self.StartTime = formatDateString(project.StartTime);
+                self.Deadline = formatDateString(project.Deadline);
+                self.ManagerNames = project.ManagerNames;
+                self.ParticipantNames = project.ParticipantNames;
+                //self.creator = project.Creator;
+                //self.createTime = formatDateString(project.CreateTime);
+                self.Status = project.Status;
+                self.DaySpanHtml = projectDaySpanHtml(project);
+                self.EnableViewDetail = project.EnableViewDetail;
+            },
+
+            projectDaySpanHtml = function (project) {
+                var result = "",
+                    statusName = "";
+                switch (project.Status) {
+                    case 0:
+                        statusName = "发布待审";
+                        break;
+                    case 1:
+                        statusName = "进行中";
+                        break;
+                    case 2:
+                        statusName = "完成待审";
+                        break;
+                    case 3:
+                        statusName = "已完成";
+                        break;
+                    case 4:
+                        statusName = "已取消";
+                        break;
+                }
+                result = '<small class="text-info">' + statusName + '</small>';
+
+                if (project.Status != 3 && project.Status != 4) {
+                    var daySpan = parseInt((project.Deadline - new Date()) / 1000 / 60 / 60 / 24),
+                        daySpanStr = daySpan,
+                        daySpanClass,
+                        prefix = "";
+                    if (daySpan < 0) {
+                        daySpanStr = -daySpan;
+                        daySpanClass = "timespan-expired";
+                        prefix = "<small>过期</small>";
+                    }
+                    else if (daySpan == 0) {
+                        daySpanStr = "今"
+                        daySpanClass = "timespan-day";
+                    } else {
+                        prefix = "<small>剩余</small>";
+                        if (daySpan <= 3) {
+                            daySpanClass = "timespan-day";
+                        } else if (daySpan <= 7) {
+                            daySpanClass = "timespan-week";
+                        } else if (daySpan <= 30) {
+                            daySpanClass = "timespan-month";
+                        } else {
+                            daySpanClass = "timespan";
+                        }
+                    }
+                    result = prefix + '<span class="' + daySpanClass + '">' + daySpanStr + '</span><small>天</small>' + ' ' + result;
+                }
+                return result;
+            };
+        init(project);
+        return self;
+    };
+
     var projectListViewModel = function () {
-        var self = this;
-        self.queryFilter = { FieldFilters: [], SortFields: [], PageIndex: 1, PageSize: 20 };
-        self.tempDatas = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-        self.filterLinks = [
-            new filterLinkViewModel("RelationType", "我的项目",
-                [
-                    { value: "0", name: "我发布的" },
-                    { value: "1", name: "我负责的" },
-                    { value: "2", name: "我参与的" }
-                ], ""),
-            new filterLinkViewModel("Status", "项目状态",
-                [
-                    { value: "1", name: "进行中" },
-                    { value: "3", name: "已完成" },
-                    { value: "4", name: "已取消" },
-                    { value: "0", name: "发布待审" },
-                    { value: "2", name: "完成待审" }
-                ], "1"),
-            new filterLinkViewModel("Type", "项目类型",
-                [
-                    { value: "0", name: "纵向研究" },
-                    { value: "1", name: "横向研究" },
-                    { value: "2", name: "横向咨询" },
-                    { value: "3", name: "纵向工作" },
-                    { value: "4", name: "中心工作" }
-                ], "1")];
+        var self = this,
+            init = function () {
+                self.queryFilter = { FieldFilters: [], SortFields: [], PageIndex: 1, PageSize: 20 };
+                self.pageList = new pageListViewModel();
+                self.projectEdit = new projectEditViewModel({});
+                self.AnyItemSelected = ko.computed(function () {
+                    var items = self.pageList.List();
+                    for (var i = 0; i < items.length; i++) {
+                        if (items[i].Checked()) {
+                            return true;
+                        }
+                    }
+                    return false;
+                });
 
-        self.editProject = ko.validatedObservable(new projectEditViewModel({
-            Type: 0,
-            Name: "",
-            Consignor: "",
-            StartTime: "",
-            Deadline: "",
-            Status: 2,
-            ManagerIds: "1,2,3,4,5",
-            ManagerNames: "用户1,用户2,用户3,用户4,用户5",
-            Amount: 0,
-            AmountReceived: 0,
-            AmountRemained: 0,
-            Attachments: [
-                { Name: "咨询策划中心任务管理系统--需求分析.docx", UploadUserName: "用户1", UploadTime: "2013-8-1 12:10" },
-                { Name: "咨询策划中心任务管理系统--需求分析.docx", UploadUserName: "用户1", UploadTime: "2013-8-1 12:10" },
-                { Name: "咨询策划中心任务管理系统--需求分析.docx", UploadUserName: "用户1", UploadTime: "2013-8-1 12:10" },
-                { Name: "咨询策划中心任务管理系统--需求分析.docx", UploadUserName: "用户1", UploadTime: "2013-8-1 12:10" }
-            ],
-            CommentPageList: {
-                List: [],
-                PageIndex: 1,
-                PageSize: 10,
-                Total: 100
-            }
-        }));
-        self.saveProject = function () {
-            alert(self.editProject.errors());
-            //$("#projectForm").validate().form();
-        };
-        self.query = function () {
-            var queryFilter = {};
-            queryFilter.FieldFilters = [];
-            queryFilter.SortFields = [];
-            for (var i = 0; i < self.filterLinks.length; i++) {
-                var filterLink = self.filterLinks[i];
-                queryFilter.FieldFilters.push({ Field: filterLink.field, Value: filterLink.value() });
-            }
-            queryFilter.PageIndex = 1;
+                self.query = function () {
+                    query(true);
+                    showProjectListView();
+                };
+                self.refrush = function () {
+                    query();
+                };
+                self.nextPage = function () {
+                    var pageIndex = self.pageList.nextPage();
+                    if (pageIndex != -1) {
+                        self.queryFilter.PageIndex = pageIndex;
+                        query();
+                    }
+                };
+                self.prePage = function () {
+                    var pageIndex = self.pageList.prePage();
+                    if (pageIndex != -1) {
+                        self.queryFilter.PageIndex = pageIndex;
+                        query();
+                    }
+                };
+                self.back = function () {
+                    query();
+                    showProjectListView();
+                };
+                self.add = function () {
+                    self.projectEdit.update({});
+                    showProjectEditView();
+                };
+                self.save = function () {
+                    request("/Project/EditProject", { project: self.projectEdit }, function (result) {
+                        self.projectEdit.update(result, true);
+                        showMessage("保存成功");
+                    });
+                };
+                self.edit = function (data) {
+                    if(data.EnableViewDetail){
+                        request("/Project/GetProject", { projectId: data.Id }, function (result) {
+                            self.projectEdit.update(result);
+                            showProjectEditView();
+                        });
+                    }else{
+                        showErrorMessage("无该项目的查看权限");
+                    }
 
-            $.ajax({
-                type: "POST",
-                contentType: "application/json",
-                url: "/Project/LoadProjects",
-                data: ko.toJSON({ queryFilter: queryFilter })
-            }).success(function () {
-                //alert("1");
-            }).error(function (error) {
-                //alert(error);
-            }).complete(function () {
-                //alert("3");
-            });
+                };
+                self.check = function (status) {
+                    var projectIds = [];
+                    var projects = self.pageList.List();
+                    for (var i = 0; i < projects.length; i++) {
+                        if (projects[i].Checked()) {
+                            projectIds.push(projects[i].Id);
+                        }
+                    }
+                    request("/Project/CheckProjects", { projectIds: projectIds, status: status }, function () {
+                        self.refrush();
+                        showMessage("操作成功");
+                    });
+                };
+                self.changeItemsChecked = function (checked) {
+                    var items = self.pageList.List();
+                    for (var i = 0; i < items.length; i++) {
+                        items[i].Checked(checked);
+                    }
+                };
 
-            //$.post("/Project/LoadProjects", JSON.stringify(), function (message) {
-            //    alert("0");
-            //}, "json").success(function () {
-            //    alert("1");
-            //}).error(function () {
-            //    alert("2");
-            //}).complete(function () {
-            //    alert("3");
-            //});
-            self.queryFilter = queryFilter;
-        };
-        self.showProjectEditView = function () {
-            $("#list").hide();
-            $("#listToolbar").hide();
-            $("#edit").show();
-            $("#editToolbar").show();
-        };
-        self.showProjectListView = function () {
-            $("#list").show();
-            $("#listToolbar").show();
-            $("#edit").hide();
-            $("#editToolbar").hide();
-        };
+                self.AllChecked = ko.computed({
+                    read: function () {
+                        if (self.pageList.List().length > 0) {
+                            var items = self.pageList.List();
+                            for (var i = 0; i < items.length; i++) {
+                                if (!items[i].Checked()) {
+                                    return false;
+                                }
+                            }
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    },
+                    write: function (value) {
+                        self.changeItemsChecked(value);
+                    },
+                    owner: self
+                });
 
-        self.pageList = ko.observable(new pageListViewModel({ List: self.query(), PageIndex: 1, PageSize: 20, Total: 0 }));
+                self.filterLinks = [
+                    new filterLinkViewModel("RelationType", "我的项目",
+                        [
+                            { value: "0", name: "我发布的" },
+                            { value: "1", name: "我负责的" },
+                            { value: "2", name: "我参与的" }
+                        ], "", self.query),
+                    new filterLinkViewModel("Status", "项目状态",
+                        [
+                            { value: "1", name: "进行中" },
+                            { value: "3", name: "已完成" },
+                            { value: "4", name: "已取消" },
+                            { value: "0", name: "发布待审" },
+                            { value: "2", name: "完成待审" }
+                        ], "1", self.query),
+                    new filterLinkViewModel("Type", "项目类型",
+                        [
+                            { value: "0", name: "纵向研究" },
+                            { value: "1", name: "横向研究" },
+                            { value: "2", name: "横向咨询" },
+                            { value: "3", name: "纵向工作" },
+                            { value: "4", name: "中心工作" }
+                        ], "", self.query)
+                ];
+
+                query(true);
+            },
+            updatePageList = function (pageList) {
+                pageList.List = $.map(pageList.List, function (item) {
+                    return new projectListItemViewModel(item);
+                });
+                self.pageList.update(pageList);
+            },
+            query = function (updateQueryFilter) {
+                if (updateQueryFilter) {
+                    var queryFilter = self.queryFilter;
+                    queryFilter.FieldFilters = [];
+                    queryFilter.SortFields = [];
+                    for (var i = 0; i < self.filterLinks.length; i++) {
+                        var filterLink = self.filterLinks[i];
+                        queryFilter.FieldFilters.push({ Field: filterLink.field, Value: filterLink.value() });
+                    }
+                    queryFilter.PageIndex = 1;
+                    self.queryFilter = queryFilter;
+                }
+
+                request("/Project/LoadProjects", { queryFilter: self.queryFilter }, function (result) {
+                    updatePageList(result);
+                });
+
+            },
+            showProjectEditView = function () {
+                $("#list").hide();
+                $("#listToolbar").hide();
+                $("#edit").show();
+                $("#editToolbar").show();
+                window.scrollTo(0, 0);
+            },
+            showProjectListView = function () {
+                $("#list").show();
+                $("#listToolbar").show();
+                $("#edit").hide();
+                $("#editToolbar").hide();
+                window.scrollTo(0, 0);
+            };
+
+        init();
     };
 
     $(function () {
-        ko.validation.init({
-            registerExtenders: true,
-            messagesOnModified: false,
-            errorsAsTitle: false,            // enables/disables showing of errors as title attribute of the target element.
-            errorsAsTitleOnModified: false, // shows the error when hovering the input field (decorateElement must be true)
-            messageTemplate: null,
-            insertMessages: false,           // automatically inserts validation messages as <span></span>
-            parseInputAttributes: true,    // parses the HTML5 validation attribute from a form element and adds that to the object
-            writeInputAttributes: false,    // adds HTML5 input validation attributes to form elements that ko observable's are bound to
-            decorateElement: true,         // false to keep backward compatibility
-            errorClass: null,               // single class for error message and element
-            errorElementClass: 'error',  // class to decorate error element
-            errorMessageClass: 'validationMessage',  // class to decorate error message
-            grouping: {
-                deep: true,        //by default grouping is shallow
-                observable: true    //and using observables
-            }
-        });
-        var users = [
-             { Id: "1", Name: "用户1" },
-             { Id: "2", Name: "用户2" },
-             { Id: "3", Name: "用户3" },
-             { Id: "4", Name: "用户4" },
-             { Id: "5", Name: "用户5" },
-             { Id: "6", Name: "用户6" },
-             { Id: "7", Name: "用户7" },
-             { Id: "8", Name: "用户8" },
-             { Id: "9", Name: "用户9" },
-             { Id: "10", Name: "用户10" },
-             { Id: "11", Name: "用户11" },
-             { Id: "12", Name: "用户12" },
-             { Id: "13", Name: "用户13" },
-             { Id: "14", Name: "用户14" }
-        ];
+        //ko.validation.init({
+        //    registerExtenders: true,
+        //    messagesOnModified: false,
+        //    errorsAsTitle: false,            // enables/disables showing of errors as title attribute of the target element.
+        //    errorsAsTitleOnModified: false, // shows the error when hovering the input field (decorateElement must be true)
+        //    messageTemplate: null,
+        //    insertMessages: false,           // automatically inserts validation messages as <span></span>
+        //    parseInputAttributes: true,    // parses the HTML5 validation attribute from a form element and adds that to the object
+        //    writeInputAttributes: false,    // adds HTML5 input validation attributes to form elements that ko observable's are bound to
+        //    decorateElement: true,         // false to keep backward compatibility
+        //    errorClass: null,               // single class for error message and element
+        //    errorElementClass: 'error',  // class to decorate error element
+        //    errorMessageClass: 'validationMessage',  // class to decorate error message
+        //    grouping: {
+        //        deep: true,        //by default grouping is shallow
+        //        observable: true    //and using observables
+        //    }
+        //});
+        var users = @Html.ToJsonString(users);
         $("#ManagerNames").userSelectBox({ users: users, bindValue: "ManagerIds" });
         $("#ParticipantNames").userSelectBox({ users: users, bindValue: "ParticipantIds" });
 
@@ -319,9 +557,9 @@
         //        return true;
         //    }
         //});
-        $('input').iCheck({
-            checkboxClass: 'icheckbox_minimal'
-        });
+        //$('#listToolbar input').iCheck({
+        //    checkboxClass: 'icheckbox_minimal'
+        //});
         $(".form_datetime").datetimepicker({
             format: "yyyy-mm-dd",
             autoclose: true,

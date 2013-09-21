@@ -5,25 +5,23 @@ using System.Web;
 
 namespace ProjectCenter.Web.Models
 {
-    public class UserInfo
+    public class ItemSelectViewModel
     {
-        public string UserId
+        public ItemSelectViewModel(string value, string text)
+        {
+            Value = value;
+            Text = text;
+        }
+
+        public string Value
         {
             get;
             set;
         }
-
-        public string UserName
+        public string Text
         {
             get;
             set;
         }
-
-        public RightDetail RightDetail
-        {
-            get;
-            set;
-        }
-
     }
 }

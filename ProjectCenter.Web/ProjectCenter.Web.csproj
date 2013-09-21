@@ -47,6 +47,9 @@
     <Reference Include="EmitMapper">
       <HintPath>..\packages\EmitMapper.1.0.0\lib\EmitMapper.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\..\..\Desktop\JsonNet\Bin\Net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Web.WebPages" />
     <Reference Include="System.Web.Helpers" />
@@ -71,6 +74,9 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActionResults\CommonJsonResult.cs" />
+    <Content Include="Content\css\logon.css" />
+    <Compile Include="Controllers\AuthenticateController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\NoteController.cs" />
     <Compile Include="Controllers\ProjectController.cs" />
@@ -78,9 +84,14 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="HtmlHelpers\HtmlHelperExtensions.cs" />
     <Compile Include="Models\JsonMessage.cs" />
+    <Compile Include="Models\LoginViewModel.cs" />
     <Compile Include="Models\ProjectEditViewModel.cs" />
+    <Compile Include="Models\ProjectListItemViewModel.cs" />
+    <Compile Include="Models\ItemSelectViewModel.cs" />
     <Compile Include="Models\QueryFilter.cs" />
+    <Compile Include="Models\RightDetail.cs" />
     <Compile Include="Models\UserInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -115,6 +126,8 @@
     <Content Include="Content\css\easyui\icons\tip.png" />
     <Content Include="Content\css\easyui\icons\undo.png" />
     <Content Include="Content\css\index.css" />
+    <Content Include="Content\css\messenger-theme-block.css" />
+    <Content Include="Content\css\messenger.css" />
     <Content Include="Content\css\minimal.css" />
     <Content Include="Content\css\todc-bootstrap.css" />
     <Content Include="Content\fonts\glyphicons-halflings-regular.svg" />
@@ -144,11 +157,15 @@
     <Content Include="Scripts\bootstrap-datetimepicker.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\common.js" />
     <Content Include="Scripts\jquery-1.7.1.js" />
     <Content Include="Scripts\jquery.easyui.min.js" />
     <Content Include="Scripts\jquery.icheck.js" />
     <Content Include="Scripts\knockout-2.3.0.js" />
+    <Content Include="Scripts\knockout.mapping.js" />
     <Content Include="Scripts\locales\bootstrap-datetimepicker.zh-CN.js" />
+    <Content Include="Scripts\messenger.js" />
+    <Content Include="Scripts\messenger.min.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -180,6 +197,8 @@
     <Content Include="Views\Shared\PaginationPartialView.cshtml" />
     <Content Include="Views\Project\EditPartialView.cshtml" />
     <Content Include="packages.config" />
+    <Content Include="Views\Authenticate\Login.cshtml" />
+    <None Include="Properties\PublishProfiles\ProjectCenter.pubxml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ProjectCenter.Models\ProjectCenter.Models.csproj">

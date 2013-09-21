@@ -48,8 +48,10 @@
     <Compile Include="Constants.cs" />
     <Compile Include="Imp\ServiceBase.cs" />
     <Compile Include="Imp\ProjectService.cs" />
+    <Compile Include="Imp\UserService.cs" />
     <Compile Include="IProjectService.cs" />
     <Compile Include="IServiceFactory.cs" />
+    <Compile Include="IUserService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceFactory.cs" />
     <Compile Include="Specifications\Projects\CreatorIdSpecification.cs" />

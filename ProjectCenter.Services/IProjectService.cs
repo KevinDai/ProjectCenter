@@ -18,7 +18,9 @@ namespace ProjectCenter.Services
 
         PageList<Comment> GetProjectCommentPageList(string projectId, int pageIndex, int pageSize);
 
-        Project AddProject(Project project, string[] attachmentIds);
+        Project AddProject(Project project);
+
+        void CheckProjects(string[] projectIds, ProjectStatus status);
 
         Project UpdateProject(Project project);
 

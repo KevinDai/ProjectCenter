@@ -1,0 +1,27 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>项目管理系统登录</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="@Url.Content("~/Content/css/bootstrap.min.css")" rel="stylesheet" media="screen">
+    <link href="@Url.Content("~/Content/css/logon.css")" rel="stylesheet" media="screen">
+</head>
+<body>
+    <div class="container">
+        @*<h2 class="form-signin-heading">用户登录</h2>*@
+
+
+        @using (Html.BeginForm("Login", "Authenticate", FormMethod.Post, new { @class = "form-signin" }))
+        {
+            <input name="name" type="text" class="form-control" placeholder="账号" autofocus />
+            <input name="password" type="password" class="form-control" placeholder="密码" />
+            <button class="btn btn-lg btn-primary btn-block" type="submit">登 录</button>
+        }
+    </div>
+</body>
+</html>

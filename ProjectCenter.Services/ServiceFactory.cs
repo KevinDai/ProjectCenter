@@ -22,6 +22,7 @@ namespace ProjectCenter.Services
 
         protected ServiceFactory()
         {
+            UserService.InitializeCache(GetDbContext());
         }
 
         protected virtual DbContext GetDbContext()
@@ -32,6 +33,11 @@ namespace ProjectCenter.Services
         public IProjectService CreateProjectService()
         {
             return new ProjectService(GetDbContext());
+        }
+
+        public IUserService CreateUserService()
+        {
+            return new UserService(GetDbContext());
         }
     }
 }

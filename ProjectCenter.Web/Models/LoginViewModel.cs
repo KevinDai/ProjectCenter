@@ -1,19 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Web;
 
-namespace ProjectCenter.Models
+namespace ProjectCenter.Web.Models
 {
-    public class Role
+    public class LoginViewModel
     {
-        public string Id
+        public string LoginName
         {
             get;
             set;
         }
 
-        public string Name
+        public string Message
         {
             get;
             set;

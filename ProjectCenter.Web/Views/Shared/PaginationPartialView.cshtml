@@ -1,13 +1,12 @@
 ﻿<ul class="pull-right list-inline">
-    <li><span data-bind="if: total > 0">第 <strong><span data-bind="text: startIndex"></span>
-        -<span data-bind="text: endIndex"></span></strong> 项，</span><span>共 <strong data-bind="text: total">
-        </strong> 项 </span></li>
+    <li><span data-bind="if: Total() > 0">第&nbsp;<strong><span data-bind="text: StartIndex"></span>&nbsp;-&nbsp;
+    <span data-bind="text: EndIndex"></span></strong>&nbsp;项，</span><span>共&nbsp;<strong data-bind="text: Total"></strong>&nbsp;项&nbsp;</span></li>
     <li>
         <div class="btn-group">
-            <a data-bind="css: pageIndex == 1 ? 'btn btn-default disabled' : 'btn btn-default'"><span class="glyphicon glyphicon-chevron-left"></span></a>
-            <a data-bind="css: pageIndex >= maxPageIndex ? 'btn btn-default disabled' : 'btn btn-default'"><span class="glyphicon glyphicon-chevron-right"></span></a>
+            <a data-bind="click: $root.prePage, attr: {disabled: PageIndex() > 1 ? undefined : 'disabled'}" class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"></span></a>
+            <a data-bind="click: $root.nextPage, css: PageIndex() < MaxPageIndex() ? undefined : 'disabled'" class="btn btn-default"><span class="glyphicon glyphicon-chevron-right"></span></a>
         </div>
-        <a class="btn btn-default"><span class="glyphicon glyphicon-refresh"></span></a>
+        <a data-bind="click: $root.refrush" class="btn btn-default"><span class="glyphicon glyphicon-refresh"></span></a>
         <a class="btn btn-default"><span class="glyphicon glyphicon-search"></span></a>
     </li>
 </ul>

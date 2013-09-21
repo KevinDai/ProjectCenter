@@ -21,7 +21,7 @@ namespace ProjectCenter.Util.Query
         /// <summary>
         /// 对象总数
         /// </summary>
-        public int TotalCount
+        public int Total
         {
             get;
             private set;
@@ -62,7 +62,7 @@ namespace ProjectCenter.Util.Query
         {
             List = list;
             PageSize = pageSize;
-            TotalCount = totalCount;
+            Total = totalCount;
             PageIndex = pageIndex;
         }
 
