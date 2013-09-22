@@ -135,7 +135,7 @@ namespace ProjectCenter.Web.Controllers
         [HttpGet]
         public ActionResult List()
         {
-            ViewBag.Users = UserService.GetAllUser().Select(u => new ItemSelectViewModel(u.Id, u.Name)).ToArray();
+            ViewBag.Users = GetUsers().Select(u => new ItemSelectViewModel(u.Id, u.Name)).ToArray();
             return View();
         }
 
@@ -168,7 +168,7 @@ namespace ProjectCenter.Web.Controllers
                 throw new BusinessException("指定的项目不存在");
             }
 
-            var model = new ProjectEditViewModel(project);
+            var model = new ProjectEditViewModel(project, UserInfo);
             model.Attachments = ProjectService.GetProjectAttachments(projectId);
             model.CommentPageList = ProjectService.GetProjectCommentPageList(projectId, 1, 20);
 
@@ -212,7 +212,7 @@ namespace ProjectCenter.Web.Controllers
                 project = ProjectService.UpdateProject(entity);
             }
 
-            return JsonMessageResult(new ProjectEditViewModel(project));
+            return JsonMessageResult(project);
         }
 
         public ActionResult DeleteProject(string projectId)

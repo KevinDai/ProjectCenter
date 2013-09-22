@@ -12,6 +12,7 @@ namespace ProjectCenter.Web.Models
         {
             EnableViewList = rightLevel < 4;
             EnableViewDetail = rightLevel < 3;
+            EnableEditProject = rightLevel < 2;
             EnableCheckProject = rightLevel < 2;
             EnableSetProjectUser = rightLevel < 2;
             EnbaleDeleteProject = rightLevel < 2;
@@ -30,6 +31,12 @@ namespace ProjectCenter.Web.Models
         }
 
         public bool EnableCheckProject
+        {
+            get;
+            set;
+        }
+
+        public bool EnableEditProject
         {
             get;
             set;

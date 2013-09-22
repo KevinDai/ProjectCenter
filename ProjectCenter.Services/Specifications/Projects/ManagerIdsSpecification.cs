@@ -17,6 +17,8 @@ namespace ProjectCenter.Services.Specifications.Projects
             set;
         }
 
+
+
         public ManagerIdsSpecification(string userId)
         {
             Preconditions.CheckNotBlank(userId, "userId");
@@ -26,7 +28,7 @@ namespace ProjectCenter.Services.Specifications.Projects
 
         public override Expression<Func<Project, bool>> SatisfiedBy()
         {
-            Expression<Func<Project, bool>> func = p => p.ManagerIds.Contains(Value);
+            Expression<Func<Project, bool>> func = p => p.ManagerIds.Contains(Value) || p.ManagerIds.Contains(Constants.AllUserId);
             return func;
         }
     }

@@ -51,6 +51,22 @@ namespace ProjectCenter.Services.Imp
             return Comments.Where(c => c.ProjectId == projectId).ToArray();
         }
 
+        private void ProjectValidSet(Project project)
+        {
+            project.ManagerIds = project.ManagerIds ?? string.Empty;
+            project.ParticipantIds = project.ParticipantIds ?? string.Empty;
+            var amountReceivedStatus = (AmountReceivedStatus)project.AmountReceivedStatus;
+            switch (amountReceivedStatus)
+            {
+                case AmountReceivedStatus.None:
+                    project.AmountReceived = 0;
+                    break;
+                case AmountReceivedStatus.All:
+                    project.AmountReceived = project.Amount;
+                    break;
+            }
+        }
+
         #endregion
 
         #region IProjectService接口实现
@@ -79,8 +95,9 @@ namespace ProjectCenter.Services.Imp
         {
             project.Id = Guid.NewGuid().ToString();
             project.CreateTime = DateTime.Now;
-            project.ManagerIds = project.ManagerIds ?? string.Empty;
-            project.ParticipantIds = project.ParticipantIds ?? string.Empty;
+
+            ProjectValidSet(project);
+
             AddEntity(project);
 
             //if (attachmentIds != null && attachmentIds.Any())
@@ -123,6 +140,8 @@ namespace ProjectCenter.Services.Imp
 
         public Project UpdateProject(Project project)
         {
+            ProjectValidSet(project);
+
             UpdateEntity(project);
 
             SaveChanges();

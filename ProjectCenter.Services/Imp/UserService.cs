@@ -19,36 +19,38 @@ namespace ProjectCenter.Services.Imp
                 return DbContext.Set<User>();
             }
         }
-        public static IEnumerable<User> _usersCache;
-        public static IDictionary<string, User> _usersDicByLoginName = new Dictionary<string, User>();
-        public static IDictionary<string, User> _usersDicById = new Dictionary<string, User>();
+        //public static IEnumerable<User> _usersCache;
+        //public static IDictionary<string, User> _usersDicByLoginName = new Dictionary<string, User>();
+        //public static IDictionary<string, User> _usersDicById = new Dictionary<string, User>();
 
         public UserService(DbContext dbContext)
             : base(dbContext)
         {
         }
 
-        public static void InitializeCache(DbContext dbContext)
-        {
-            _usersCache = dbContext.Set<User>().OrderBy(u => u.RightLevel).ToArray();
-            foreach (var user in _usersCache)
-            {
-                _usersDicByLoginName.Add(user.LoginName, user);
-                _usersDicById.Add(user.Id, user);
-            }
-        }
+        //public static void InitializeCache(DbContext dbContext)
+        //{
+        //    _usersCache = dbContext.Set<User>().OrderBy(u => u.RightLevel).ToArray();
+        //    foreach (var user in _usersCache)
+        //    {
+        //        _usersDicByLoginName.Add(user.LoginName, user);
+        //        _usersDicById.Add(user.Id, user);
+        //    }
+        //}
 
         public User GetUserById(string userId)
         {
-            User user = null;
-            _usersDicById.TryGetValue(userId, out user);
-            return user;
+
+            return Users.Find(userId);
+            //User user = null;
+            //_usersDicById.TryGetValue(userId, out user);
+            //return user;
         }
 
         public User Login(string loginName, string password)
         {
-            User user = null;
-            if (!_usersDicByLoginName.TryGetValue(loginName, out user))
+            User user = Users.FirstOrDefault(u => u.LoginName == loginName);
+            if (user == null)
             {
                 throw new BusinessException("不存在该登录名的用户");
             }
@@ -72,7 +74,7 @@ namespace ProjectCenter.Services.Imp
 
         public IEnumerable<User> GetAllUser()
         {
-            return _usersCache;
+            return Users.OrderBy(u => u.RightLevel).ToArray();
         }
     }
 }

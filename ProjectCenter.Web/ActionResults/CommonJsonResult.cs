@@ -107,7 +107,7 @@ namespace ProjectCenter.Web.ActionResults
 
             public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
             {
-                writer.WriteValue(((DateTime)value).ToString("yyyy-MM-dd HH:mm:ss"));
+                writer.WriteValue(((DateTime)value).ToString("yyyy/MM/dd HH:mm:ss"));
             }
         }
     }

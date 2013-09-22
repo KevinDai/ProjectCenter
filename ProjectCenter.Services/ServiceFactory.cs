@@ -22,7 +22,6 @@ namespace ProjectCenter.Services
 
         protected ServiceFactory()
         {
-            UserService.InitializeCache(GetDbContext());
         }
 
         protected virtual DbContext GetDbContext()

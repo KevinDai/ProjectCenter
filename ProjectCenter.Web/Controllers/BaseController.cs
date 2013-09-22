@@ -1,4 +1,6 @@
-﻿using ProjectCenter.Services;
+﻿using ProjectCenter.Models;
+using ProjectCenter.Services;
+using ProjectCenter.Util;
 using ProjectCenter.Util.Exceptions;
 using ProjectCenter.Web.ActionResults;
 using ProjectCenter.Web.Models;
@@ -14,6 +16,9 @@ namespace ProjectCenter.Web.Controllers
     [Authorize]
     public abstract class BaseController : Controller
     {
+        private const string UsersCacheKey = "Users";
+        private const string UserCachePrefix = "User_";
+
         private IUserService _userService;
         public IUserService UserService
         {
@@ -43,7 +48,7 @@ namespace ProjectCenter.Web.Controllers
 
             if (User.Identity.IsAuthenticated)
             {
-                var user = UserService.GetUserById(User.Identity.Name);
+                var user = GetUser(User.Identity.Name);
                 UserInfo = new UserInfo()
                 {
                     UserId = user.Id,
@@ -53,6 +58,32 @@ namespace ProjectCenter.Web.Controllers
 
             }
 
+        }
+
+        protected User GetUser(string userId)
+        {
+            var cacheKey = UserCachePrefix + userId;
+            var user = Cache.Instance.Get(cacheKey) as User;
+            if (user == null)
+            {
+                user = UserService.GetUserById(User.Identity.Name);
+                if (user != null)
+                {
+                    Cache.Instance.Set(cacheKey, user, 60);
+                }
+            }
+            return user;
+        }
+
+        protected IEnumerable<User> GetUsers()
+        {
+            var users = Cache.Instance.Get(UsersCacheKey) as IEnumerable<User>;
+            if (users == null)
+            {
+                users = UserService.GetAllUser();
+                Cache.Instance.Set(UsersCacheKey, users, 30);
+            }
+            return users;
         }
 
         protected override void OnActionExecuted(ActionExecutedContext filterContext)

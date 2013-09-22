@@ -7,6 +7,9 @@ namespace ProjectCenter.Services
 {
     public static class Constants
     {
-        public const string UserIdPrefix = "&";
+        public static readonly string UserIdPrefix = "&";
+
+        public static readonly string AllUserId = UserIdPrefix + "all";
+
     }
 }

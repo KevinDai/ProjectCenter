@@ -26,7 +26,7 @@ namespace ProjectCenter.Services.Specifications.Projects
 
         public override Expression<Func<Project, bool>> SatisfiedBy()
         {
-            Expression<Func<Project, bool>> func = p => p.ParticipantIds.Contains(Value);
+            Expression<Func<Project, bool>> func = p => p.ParticipantIds.Contains(Value) || p.ParticipantIds.Contains(Constants.AllUserId);
             return func;
         }
     }

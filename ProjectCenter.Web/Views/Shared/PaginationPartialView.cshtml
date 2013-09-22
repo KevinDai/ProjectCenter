@@ -4,7 +4,7 @@
     <li>
         <div class="btn-group">
             <a data-bind="click: $root.prePage, attr: {disabled: PageIndex() > 1 ? undefined : 'disabled'}" class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"></span></a>
-            <a data-bind="click: $root.nextPage, css: PageIndex() < MaxPageIndex() ? undefined : 'disabled'" class="btn btn-default"><span class="glyphicon glyphicon-chevron-right"></span></a>
+            <a data-bind="click: $root.nextPage, attr: {disabled: PageIndex() < MaxPageIndex() ? undefined : 'disabled'}" class="btn btn-default"><span class="glyphicon glyphicon-chevron-right"></span></a>
         </div>
         <a data-bind="click: $root.refrush" class="btn btn-default"><span class="glyphicon glyphicon-refresh"></span></a>
         <a class="btn btn-default"><span class="glyphicon glyphicon-search"></span></a>

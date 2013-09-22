@@ -160,7 +160,7 @@
                 self.inputContainer.append(self.valueElement);
             }
             self.inputContainer.append($('<span class="input-group-btn"></span>').append(
-                $('<a class="btn btn-default"><span class="glyphicon glyphicon-chevron-down"></span></a>').click(function () {
+                $('<a class="btn btn-default" href="javascript:void(0);"><span class="glyphicon glyphicon-chevron-down"></span></a>').click(function () {
                     if ($(self.usersPanel).is(":visible")) {
                         self.element.blur();
                         self.hide();
