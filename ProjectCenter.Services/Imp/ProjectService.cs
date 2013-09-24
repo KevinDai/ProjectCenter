@@ -114,7 +114,7 @@ namespace ProjectCenter.Services.Imp
 
         public IEnumerable<Attachment> GetProjectAttachments(string projectId)
         {
-            return Attachments.Where(q => q.ProjectId == projectId).ToArray();
+            return Attachments.Where(q => q.ProjectId == projectId).OrderBy(q => q.UploadTime).ToArray();
         }
 
         public PageList<Comment> GetProjectCommentPageList(string projectId, int pageIndex, int pageSize)
@@ -173,7 +173,7 @@ namespace ProjectCenter.Services.Imp
             attachment.Id = Guid.NewGuid().ToString();
             attachment.UploadTime = DateTime.Now;
 
-            AddAttachment(attachment);
+            AddEntity(attachment);
 
             SaveChanges();
 

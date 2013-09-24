@@ -8,6 +8,7 @@ using ProjectCenter.Util.Query.Specification;
 using ProjectCenter.Web.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -16,6 +17,7 @@ namespace ProjectCenter.Web.Controllers
 {
     public class ProjectController : BaseController
     {
+        private const string AttachmentFolder = "Attachments";
 
         private IProjectService _projectService;
         public IProjectService ProjectService
@@ -126,6 +128,26 @@ namespace ProjectCenter.Web.Controllers
                 sort.ToArray();
         }
 
+        private string GetAttachmentPath(string projectId, string fileName)
+        {
+
+            var folder = Server.MapPath(string.Format("{0}\\{1}", AttachmentFolder, projectId));
+            if (!Directory.Exists(folder))
+            {
+                Directory.CreateDirectory(folder);
+            }
+            var filePath = folder + "\\" + fileName;
+            var i = 1;
+            while (System.IO.File.Exists(filePath))
+            {
+                var index = fileName.LastIndexOf('.');
+                var temp = fileName.Insert(index - 1, (i).ToString());
+                filePath = Server.MapPath(string.Format("{0}\\{1}\\{2}", AttachmentFolder, projectId, temp));
+                i++;
+            }
+            return filePath;
+        }
+
         #endregion
 
         #region 操作
@@ -189,6 +211,28 @@ namespace ProjectCenter.Web.Controllers
         }
 
         [HttpPost]
+        public ActionResult SendFinishCheck(string projectId)
+        {
+            var project = ProjectService.GetProject(projectId);
+            if (project == null)
+            {
+                throw new BusinessException("指定的项目不存在");
+            }
+            if (!new ManagerIdsSpecification(UserInfo.UserId).SatisfiedBy().Compile()(project))
+            {
+                throw new BusinessException("无提交完成待审的操作权限");
+            }
+            if (project.Status != (int)ProjectStatus.PublishedAndChecked)
+            {
+                throw new BusinessException("指定的项目的当前状态不能提交完成待审");
+            }
+
+            ProjectService.CheckProjects(new string[] { projectId }, ProjectStatus.CompletedWaitCheck);
+
+            return JsonMessageResult((int)ProjectStatus.CompletedWaitCheck);
+        }
+
+        [HttpPost]
         public ActionResult AddProject(Project project, string[] attachmentIds)
         {
             return JsonMessageResult(null);
@@ -212,7 +256,7 @@ namespace ProjectCenter.Web.Controllers
                 project = ProjectService.UpdateProject(entity);
             }
 
-            return JsonMessageResult(project);
+            return JsonMessageResult(new ProjectEditViewModel(project, UserInfo));
         }
 
         public ActionResult DeleteProject(string projectId)
@@ -233,10 +277,30 @@ namespace ProjectCenter.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult AddAttachment(string projectId)
+        public ActionResult AddAttachment()
         {
+            var projectId = Request.Params["projectId"];
+            HttpPostedFileBase file = Request.Files["Filedata"];
+            var path = GetAttachmentPath(projectId, file.FileName);
+            file.SaveAs(path);
+
+            var attachment = new Attachment();
+            attachment.Name = file.FileName;
+            attachment.Path = path;
+            attachment.ProjectId = projectId;
+            attachment.UploadUserId = UserInfo.UserId;
+            attachment.UploadUserName = UserInfo.UserName;
+            ProjectService.AddAttachment(attachment);
+
             return JsonMessageResult(null);
         }
+
+        public ActionResult LoadAttachments(string projectId)
+        {
+            var comments = ProjectService.GetProjectAttachments(projectId);
+            return JsonMessageResult(comments);
+        }
+
 
         [HttpPost]
         public ActionResult AddComment(string projectId, string content)

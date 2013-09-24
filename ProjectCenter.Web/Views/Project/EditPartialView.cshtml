@@ -1,4 +1,7 @@
-﻿<div class="col-md-12">
+﻿@{
+    IEnumerable<ItemSelectViewModel> users = ViewBag.Users;
+}
+<div class="col-md-12">
     <div class="panel panel-default">
         <div class="panel-heading">
             <h3 class="panel-title">基本信息</h3>
@@ -9,7 +12,7 @@
                     <label class="col-md-2 control-label">
                         项目类型：</label>
                     <div class="col-md-4">
-                        <select data-bind="value: Type" class="form-control">
+                        <select data-bind="value: Type, enable: EnableEditProject" class="form-control">
                             <option value="0">纵向研究</option>
                             <option value="1">横向研究</option>
                             <option value="2">横向咨询</option>
@@ -22,26 +25,26 @@
                     <label class="col-md-2 control-label">
                         项目名称：</label>
                     <div class="col-md-8">
-                        <input data-bind="value: Name" class="form-control required" type="text">
+                        <input data-bind="value: Name, enable: EnableEditProject" class="form-control" type="text">
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-md-2 control-label">
                         委托单位：</label>
                     <div class="col-md-8">
-                        <input data-bind="value: Consignor" class="form-control required" id="description" type="text">
+                        <input data-bind="value: Consignor, enable: EnableEditProject" class="form-control" id="description" type="text">
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-md-2 control-label">
                         开始时间：</label>
                     <div class="col-md-4">
-                        <div class="input-group date form_datetime">
-                            <input data-bind="value: StartTime" class="form-control required" type="text" value="">
-                            <span class="input-group-addon">
+                        <div id="StartTime" class="input-group date form_datetime">
+                            <input data-bind="value: StartTime, enable: EnableEditProject" class="form-control" type="text" value="">
+                            <span data-bind="visible: EnableEditProject" class="input-group-addon">
                                 <span class="glyphicon glyphicon-remove"></span>
                             </span>
-                            <span class="input-group-addon">
+                            <span data-bind="visible: EnableEditProject" class="input-group-addon">
                                 <span class="glyphicon glyphicon-calendar"></span>
                             </span>
                         </div>
@@ -51,12 +54,12 @@
                     <label class="col-md-2 control-label">
                         截止时间：</label>
                     <div class="col-md-4">
-                        <div class="input-group date form_datetime">
-                            <input data-bind="value: Deadline" class="form-control required" type="text" value="">
-                            <span class="input-group-addon">
+                        <div id="Deadline" class="input-group date form_datetime">
+                            <input data-bind="value: Deadline, enable: EnableEditProject" class="form-control required" type="text" value="">
+                            <span data-bind="visible: EnableEditProject" class="input-group-addon">
                                 <span class="glyphicon glyphicon-remove"></span>
                             </span>
-                            <span class="input-group-addon">
+                            <span data-bind="visible: EnableEditProject" class="input-group-addon">
                                 <span class="glyphicon glyphicon-calendar"></span>
                             </span>
                         </div>
@@ -78,51 +81,53 @@
                         }
                         else
                         {
-                            <select data-bind="value: Status" class="form-control">
+                            <select data-bind="value: Status" class="form-control" disabled="disabled">
                                 <option value="0">发布待审</option>
+                                <option value="1">发布已审核</option>
                                 <option value="2">完成待审</option>
+                                <option value="3">完成已审核</option>
+                                <option value="4">已取消</option>
                             </select>
                         }
                     </div>
                 </div>
-                @if (ViewBag.UserInfo.RightDetail.EnableSetProjectUser)
-                {
-                    <div class="form-group">
-                        <label class="col-md-2 control-label">
-                            负责人：</label>
-                        <div class="col-md-8">
-                            <input id="ManagerIds" data-bind="value: ManagerIds" type="hidden" />
-                            <input id="ManagerNames" data-bind="value: ManagerNames" class="form-control" type="text" />
-                        </div>
+                <div class="form-group">
+                    <label class="col-md-2 control-label">
+                        负责人：</label>
+                    <div class="col-md-8">
+                        <input id="ManagerIds" data-bind="value: ManagerIds" type="hidden" />
+                        <input id="ManagerNames" data-bind="value: ManagerNames" class="form-control" type="text" 
+                        @(ViewBag.UserInfo.RightDetail.EnableSetProjectUser ? "" : "disabled='disabled'") />
                     </div>
-                    <div class="form-group">
-                        <label class="col-md-2 control-label">
-                            参与人员：</label>
-                        <div class="col-md-8">
-                            <input id="ParticipantIds" data-bind="value: ParticipantIds" type="hidden" />
-                            <input id="ParticipantNames" data-bind="value: ParticipantNames" class="form-control" type="text" />
-                        </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-2 control-label">
+                        参与人员：</label>
+                    <div class="col-md-8">
+                        <input id="ParticipantIds" data-bind="value: ParticipantIds" type="hidden" />
+                        <input id="ParticipantNames" data-bind="value: ParticipantNames" class="form-control" type="text" 
+                        @(ViewBag.UserInfo.RightDetail.EnableSetProjectUser ? "" : "disabled='disabled'") />
                     </div>
-                }
+                </div>
                 <div class="form-group">
                     <label class="col-md-2 control-label">
                         需完成的材料：</label>
                     <div class="col-md-8">
-                        <textarea data-bind="value: NeedFinish" class="form-control" rows="4"></textarea>
+                        <textarea data-bind="value: NeedFinish, enable: EnableEditProject" class="form-control" rows="4"></textarea>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-md-2 control-label">
                         当前进展：</label>
                     <div class="col-md-8">
-                        <textarea data-bind="value: CurrentProgress" class="form-control" rows="4"></textarea>
+                        <textarea data-bind="value: CurrentProgress, enable: EnableEditProject" class="form-control" rows="4"></textarea>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-md-2 control-label">
                         推进计划：</label>
                     <div class="col-md-8">
-                        <textarea data-bind="value: AdvancePlan" class="form-control" rows="4"></textarea>
+                        <textarea data-bind="value: AdvancePlan, enable: EnableEditProject" class="form-control" rows="4"></textarea>
                     </div>
                 </div>
                 <div class="form-group">
@@ -130,7 +135,7 @@
                         项目金额：</label>
                     <div class="col-md-4">
                         <div class="input-group">
-                            <input data-bind="value: FormattedAmount" class="form-control" type="text" value="">
+                            <input data-bind="value: FormattedAmount, enable: EnableEditProject" class="form-control" type="text" value="">
                             <span class="input-group-addon">元
                             </span>
                         </div>
@@ -140,14 +145,14 @@
                     <label class="col-md-2 control-label" for="taskName">
                         付款方式：</label>
                     <div class="col-md-4">
-                        <input data-bind="value: TypeOfPayment" class="form-control" type="text" value="">
+                        <input data-bind="value: TypeOfPayment, enable: EnableEditProject" class="form-control" type="text" value="">
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-md-2 control-label">
                         到款情况：</label>
                     <div class="col-md-4">
-                        <select data-bind="value: AmountReceivedStatus" class="form-control">
+                        <select data-bind="value: AmountReceivedStatus, enable: EnableEditProject" class="form-control">
                             <option value="0">未到款</option>
                             <option value="1">已收前期款</option>
                             <option value="2">已全部到款</option>
@@ -155,7 +160,7 @@
                     </div>
                     <div data-bind="visible: AmountReceivedStatus() == '1'" class="col-md-3">
                         <div class="input-group">
-                            <input data-bind="value: FormattedAmountReceived" class="form-control" type="text" value="">
+                            <input data-bind="value: FormattedAmountReceived, enable: EnableEditProject" class="form-control" type="text" value="">
                             <span class="input-group-addon">已收
                             </span>
                         </div>
@@ -172,7 +177,7 @@
                     <label class="col-md-2 control-label">
                         开票情况：</label>
                     <div class="col-md-4">
-                        <select data-bind="value: InvoiceStatus" class="form-control">
+                        <select data-bind="value: InvoiceStatus, enable: EnableEditProject" class="form-control">
                             <option value="0">未开票</option>
                             <option value="1">已开票</option>
                             <option value="2">已出具到账证明</option>
@@ -187,7 +192,7 @@
     <div class="panel panel-default table-panel">
         <div class="panel-heading">
             <ul class="list-unstyled list-inline pull-right list-panel-title">
-                <li><a href="#"><span class="glyphicon glyphicon-plus"></span><span class="btn-glyphicon-content">上传附件</span></a></li>
+                <li data-bind="visible: EnableEditProject"><a data-bind="click: addAttachment" href="#"><span class="glyphicon glyphicon-plus"></span><span class="btn-glyphicon-content">上传附件</span></a></li>
                 <li><a href="#"><span class="glyphicon glyphicon-download-alt"></span><span class="btn-glyphicon-content">下载全部</span></a></li>
             </ul>
             <h3 class="panel-title">附件列表</h3>
@@ -223,7 +228,7 @@
         <div class="panel-heading">
             <ul class="list-unstyled list-inline pull-right list-panel-title">
                 <li><a data-bind="click: $parent.refrushComments" href="#"><span class="glyphicon glyphicon-refresh"></span><span class="btn-glyphicon-content">刷新</span></a></li>
-                <li><a data-bind="click: $parent.addComment" href="#"><span class="glyphicon glyphicon-comment"></span><span class="btn-glyphicon-content">发表评论</span></a></li>
+                <li data-bind="visible: $parent.EnableEditProject"><a data-bind="click: $parent.addComment" href="#"><span class="glyphicon glyphicon-comment"></span><span class="btn-glyphicon-content">发表评论</span></a></li>
             </ul>
             <h3 class="panel-title">评论列表</h3>
         </div>
@@ -249,13 +254,16 @@
             <div class="row">
                 <div class="col-md-12 comment-pagination">
                     <ul class="pagination pagination-sm pull-right">
+                        <li>
+                            <span>
+                                <span data-bind="if: Total() > 0">第&nbsp;<strong><span data-bind="text: StartIndex"></span>&nbsp;-&nbsp;<span data-bind="text: EndIndex"></span></strong>&nbsp;条，</span><span>共&nbsp;<strong data-bind="text: Total"></strong>&nbsp;条评论</span>
+                            </span>
+                        </li>
                         <li data-bind="css: PageIndex() > 1 ? undefined : 'disabled'"><a data-bind="click: $parent.prePageComments" href="#"><span class="glyphicon glyphicon-chevron-left"></span></a></li>
                         <li data-bind="css: PageIndex() < MaxPageIndex() ? undefined : 'disabled'"><a href="#" data-bind="click: $parent.nextPageComments"><span class="glyphicon glyphicon-chevron-right"></span></a></li>
                     </ul>
 
-                    <div class="pull-right">
-                        <span data-bind="if: Total() > 0">第 <strong><span data-bind="text: StartIndex"></span>-<span data-bind="text: EndIndex"></span></strong> 条，</span><span>共 <strong data-bind="text: Total"></strong>条评论 </span>
-                    </div>
+
                 </div>
             </div>
         </div>
@@ -270,22 +278,17 @@
                 <h4 class="modal-title" style="font-weight: bold;">选择附件</h4>
             </div>
             <div class="modal-body">
-                <div class="row">
+                <div class="row" style="min-height: 200px;">
                     <div class="col-md-12">
-                        <form id="attachmentFrom" class="form-horizontal">
-                            <input data-bind="value: Id" name="ProjectId" type="hidden" />
-                            <div class="form-group">
-                                <input type="file" class="form-control" />
-                                @*<textarea data-bind="value: EditCommentContent, valueUpdate: 'afterkeydown'" class="form-control" rows="8"></textarea>*@
-                            </div>
-                            <div class="form-group">
-                                <input type="file" class="form-control" />
-                                @*<textarea data-bind="value: EditCommentContent, valueUpdate: 'afterkeydown'" class="form-control" rows="8"></textarea>*@
-                            </div>
-                        </form>
+                        @*   <form id="attachmentFrom" class="form-horizontal">
+                        </form>*@
+                        <button data-bind="click: startUploadAttachment" class="btn btn-primary">上传文件</button>
+                        <button data-bind="click: cancelUploadAttachment" class="btn btn-warning">取消上传</button>
+                        <input id="file_upload" name="file_upload" type="file">
+                        <div id="queueUpload"></div>
                     </div>
                 </div>
-                <div class="row">
+                @* <div class="row">
                     <div class="col-md-12">
                         <ul class="list-unstyle list-inline pull-right">
                             <li>
@@ -297,7 +300,7 @@
                             </li>
                         </ul>
                     </div>
-                </div>
+                </div>*@
             </div>
 
         </div>
@@ -358,12 +361,23 @@
             formattedDateStr = function (datetime) {
                 return datetime ? datetime.replace(/\//g, '-').split(" ")[0] : datetime;
             };
+        self.EnableEditProject = ko.observable(false);
+        self.EnableSetCompleteCheck = ko.observable(false);
         self.Id = ko.observable();
         self.Type = ko.observable();
-        self.Name = ko.observable();
-        self.Consignor = ko.observable();
-        self.StartTime = ko.observable();
-        self.Deadline = ko.observable();
+        self.Name = ko.observable("").extend({ required: true });
+        self.Consignor = ko.observable("").extend({ required: true });
+        self.StartTime = ko.observable("").extend({ required: true });
+        self.Deadline = ko.observable("").extend({ required: true });
+
+        self.StartTime.subscribe(function(newValue) {
+            $("#Deadline").datetimepicker("setStartDate",newValue);
+        });
+
+        self.Deadline.subscribe(function(newValue) {
+            $("#StartTime").datetimepicker("setEndDate",newValue);
+        });
+
         self.Status = ko.observable();
         self.ManagerIds = ko.observable();
         self.ManagerNames = ko.observable();
@@ -406,11 +420,16 @@
         };
         self.addAttachment = function () {
             self.EditCommentContent("");
-            $("#commentDialog").modal("show");
+            $("#attachmentDialog").modal("show");
         };
-        self.saveAttachment = function () {
-            request("/Project/AddComment", { projectId: self.Id(), content: self.EditCommentContent() }, function () {
-            });
+        self.startUploadAttachment = function () {
+            $("#file_upload").uploadify("settings", 'formData', {'projectId': self.Id()});
+            $('#file_upload').uploadify('upload','*')
+            //request("/Project/AddComment", { projectId: self.Id(), content: self.EditCommentContent() }, function () {
+            //$("#attachmentDialog").modal("hide");
+            //});
+        };
+        self.cancelUploadAttachment = function(){
         };
 
         self.refrushComments = function () {
@@ -436,7 +455,15 @@
                 self.refrushComments();
             }
         };
+        self.sendFinishCheck = function(){
+            request("/Project/SendFinishCheck", { projectId: self.Id()}, function (result) {
+                self.Status(result);
+                showMessage("操作成功");
+            });
+        };
         self.update = function (project, onlyBaseInfo) {
+            self.EnableEditProject(project.EnableEditProject);
+            self.EnableSetCompleteCheck(project.EnableSetCompleteCheck);
             self.Id(project.Id);
             self.Type(project.Type);
             self.Name(project.Name);
@@ -465,4 +492,33 @@
         self.update(project);
     };
 
+    $(function() {
+        $('#file_upload').uploadify({
+            'formData': {'projectId': '1111'},
+            'fileSizeLimit': '5MB',
+            'uploadLimit': 100,
+            'removeCompleted': true,
+            'queueID': 'queueUpload',
+            'swf': '/Scripts/uploadify.swf',
+            'auto': false,
+            'multi': true,
+            'buttonClass': 'btn btn-success',
+            'buttonText': '选择文件',
+            'uploader': '/Project/AddAttachment',
+            'onQueueComplete': function(queueData){
+                alert("1");
+            }
+        });
+        $(".uploadify-button,.uploadify").removeAttr("style");
+    });
 </script>
+@if (ViewBag.UserInfo.RightDetail.EnableSetProjectUser)
+{
+    <script type="text/javascript">
+        $(function () {
+            var users = @Html.ToJsonString(users);
+            $("#ManagerNames").userSelectBox({ users: users, bindValue: "ManagerIds" });
+            $("#ParticipantNames").userSelectBox({ users: users, bindValue: "ParticipantIds" });
+        });
+    </script>
+}

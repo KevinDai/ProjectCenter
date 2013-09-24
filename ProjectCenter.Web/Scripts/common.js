@@ -1,5 +1,24 @@
 ﻿(function ($) {
 
+    ko.validation.init({
+        registerExtenders: true,
+        messagesOnModified: false,
+        errorsAsTitle: false,            // enables/disables showing of errors as title attribute of the target element.
+        errorsAsTitleOnModified: false, // shows the error when hovering the input field (decorateElement must be true)
+        messageTemplate: null,
+        insertMessages: false,           // automatically inserts validation messages as <span></span>
+        parseInputAttributes: false,    // parses the HTML5 validation attribute from a form element and adds that to the object
+        writeInputAttributes: false,    // adds HTML5 input validation attributes to form elements that ko observable's are bound to
+        decorateElement: true,         // false to keep backward compatibility
+        errorClass: null,               // single class for error message and element
+        errorElementClass: 'error',  // class to decorate error element
+        errorMessageClass: 'validationMessage',  // class to decorate error message
+        grouping: {
+            deep: true,        //by default grouping is shallow
+            observable: true    //and using observables
+        }
+    });
+
     $._messengerDefaults = {
         parentLocations: ['html'],
         extraClasses: 'messenger-fixed messenger-theme-block messenger-on-top'
@@ -77,6 +96,7 @@
             url: url,
             data: ko.toJSON(data) /*JSON.stringify()*/
         }).success(function (postResult) {
+            hideALlMessage();
             if (postResult && postResult.Status == 0) {
                 callback(postResult.Data);
             } else {

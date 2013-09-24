@@ -18,13 +18,21 @@ namespace ProjectCenter.Web.Models
 
             project.Map(this);
 
-            EnableSave = userInfo.RightDetail.EnableEditProject
+            var isManager = new ManagerIdsSpecification(userInfo.UserId).SatisfiedBy().Compile()(project);
+            EnableSetCompleteCheck = isManager && (project.Status == (int)ProjectStatus.PublishedAndChecked);
+            EnableEditProject = userInfo.RightDetail.EnableEditProject
+                || isManager
                 || project.CreatorId == userInfo.UserId
-                || new ManagerIdsSpecification(userInfo.UserId).SatisfiedBy().Compile()(project)
                 || new ParticipantIdsSpecification(userInfo.UserId).SatisfiedBy().Compile()(project);
         }
 
-        public bool EnableSave
+        public bool EnableEditProject
+        {
+            get;
+            set;
+        }
+
+        public bool EnableSetCompleteCheck
         {
             get;
             set;

@@ -18,7 +18,12 @@
 
         @using (Html.BeginForm("Login", "Authenticate", FormMethod.Post, new { @class = "form-signin" }))
         {
+            <label class="control-label">
+                用户名：</label>
+@*<label>用户名：</label>*@
             <input name="name" type="text" class="form-control" placeholder="账号" autofocus />
+            <label class="control-label" style="margin-top: 10px;">
+                密码：</label>
             <input name="password" type="password" class="form-control" placeholder="密码" />
             <button class="btn btn-lg btn-primary btn-block" type="submit">登 录</button>
         }
