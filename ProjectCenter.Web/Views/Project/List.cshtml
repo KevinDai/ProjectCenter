@@ -1,5 +1,6 @@
 ﻿@{
     Layout = "~/Views/Shared/_Layout.cshtml";
+    IEnumerable<ItemSelectViewModel> users = ViewBag.Users;
 }
 <div class="row">
     <div class="col-md-12">
@@ -280,11 +281,206 @@
     </div>
 </div>
 
+@if (ViewBag.UserInfo.RightDetail.EnableSetProjectUser)
+{
+    <script type="text/javascript">
+        $(function () {
+            var users = @Html.ToJsonString(users);
+            $("#ManagerNames").userSelectBox({ users: users, bindValue: "ManagerIds" });
+            $("#ParticipantNames").userSelectBox({ users: users, bindValue: "ParticipantIds" });
+        });
+    </script>
+}
+
 <script type="text/javascript">
 
     function formatDateString(date) {
         return date.getFullYear() + "年" + (date.getMonth() + 1) + "月" + date.getDate() + "日";
     }
+
+    var projectEditViewModel = function (project) {
+        var self = this,
+            priceFormatted = function (field) {
+                return ko.computed({
+                    read: function () {
+                        return self[field]() ? self[field]().toFixed(2) : (0).toFixed(2);
+                    },
+                    write: function (value) {
+                        value = parseFloat(value.replace(/[^\.\d]/g, ""));
+                        self[field](isNaN(value) ? 0 : value); // Write to underlying storage
+                    },
+                    owner: self
+                });
+            },
+            formattedDateStr = function (datetime) {
+                return datetime ? datetime.replace(/\//g, '-').split(" ")[0] : datetime;
+            };
+        self.EnableEditProject = ko.observable(false);
+        self.EnableSetCompleteCheck = ko.observable(false);
+        self.Id = ko.observable();
+        self.Type = ko.observable();
+        self.Name = ko.observable("").extend({ required: true });
+        self.Consignor = ko.observable("").extend({ required: true });
+        self.StartTime = ko.observable("").extend({ required: true });
+        self.StartTime.subscribe(function(newValue) {
+            $("#Deadline").datetimepicker("setStartDate",newValue);
+        });
+        self.Deadline = ko.observable("").extend({ required: true });
+        self.Deadline.subscribe(function(newValue) {
+            $("#StartTime").datetimepicker("setEndDate",newValue);
+        });
+
+        self.Status = ko.observable();
+        self.ManagerIds = ko.observable();
+        self.ManagerNames = ko.observable();
+        self.ParticipantIds = ko.observable();
+        self.ParticipantNames = ko.observable();
+        self.NeedFinish = ko.observable();
+        self.CurrentProgress = ko.observable();
+        self.AdvancePlan = ko.observable();
+        self.Amount = ko.observable();
+        self.FormattedAmount = priceFormatted("Amount");
+        self.TypeOfPayment = ko.observable();
+        self.NeedFinish = ko.observable();
+        self.AmountReceivedStatus = ko.observable();
+        self.AmountReceived = ko.observable();
+        self.FormattedAmountReceived = priceFormatted("AmountReceived");
+        self.AmountRemained = ko.computed(function () {
+            var result = self.Amount() - self.AmountReceived();
+            return result.toFixed(2)
+        });
+        self.InvoiceStatus = ko.observable();
+        self.Attachments = ko.observableArray();
+        self.CommentPageList = new pageListViewModel();
+        self.EditCommentContent = ko.observableArray("");
+
+        self.addAttachment = function () {
+            self.EditCommentContent("");
+            $("#attachmentDialog").modal("show");
+        };
+        self.startUploadAttachment = function () {
+            $("#file_upload").uploadify("settings", 'formData', {'projectId': self.Id()});
+            $('#file_upload').uploadify('upload','*')
+            //request("/Project/AddComment", { projectId: self.Id(), content: self.EditCommentContent() }, function () {
+            //$("#attachmentDialog").modal("hide");
+            //});
+        };
+        self.cancelUploadAttachment = function(){
+            $('#file_upload').uploadify('cancel','*');
+            $('#file_upload').uploadify('stop')
+        };
+        self.deleteAttachment = function(attachment){
+            request("/Project/DeleteAttachment", { attachmentId: attachment.Id }, function () {
+                self.refrushAttachments();
+            });
+        };
+        self.refrushAttachments= function(){
+            request("/Project/LoadAttachments", {
+                projectId: self.Id()
+            }, function (result) {
+                self.Attachments(result);
+            });
+        };
+        self.addComment = function () {
+            self.EditCommentContent("");
+            $("#commentDialog").modal("show");
+        };
+        self.deleteComment = function (comment) {
+            request("/Project/DeleteComment", { commentId: comment.Id }, function () {
+                self.refrushComments();
+            });
+        };
+        self.saveComment = function () {
+            request("/Project/AddComment", { projectId: self.Id(), content: self.EditCommentContent() }, function () {
+                $("#commentDialog").modal("hide");
+                self.refrushComments();
+            });
+        };
+        self.refrushComments = function () {
+            request("/Project/LoadComments", {
+                projectId: self.Id(),
+                pageIndex: self.CommentPageList.PageIndex(),
+                pageSize: self.CommentPageList.PageSize()
+            }, function (result) {
+                self.CommentPageList.update(result);
+            });
+        };
+        self.nextPageComments = function () {
+            var pageIndex = self.CommentPageList.PageIndex();
+            if (pageIndex < self.CommentPageList.MaxPageIndex()) {
+                self.CommentPageList.PageIndex(pageIndex + 1);
+                self.refrushComments();
+            }
+        };
+        self.prePageComments = function () {
+            var pageIndex = self.CommentPageList.PageIndex();
+            if (pageIndex > 1) {
+                self.CommentPageList.PageIndex(pageIndex - 1);
+                self.refrushComments();
+            }
+        };
+        self.sendFinishCheck = function(){
+            request("/Project/SendFinishCheck", { projectId: self.Id()}, function (result) {
+                self.Status(result);
+                showMessage("操作成功");
+            });
+        };
+        self.update = function (project, onlyBaseInfo) {
+            self.EnableEditProject(project.EnableEditProject);
+            self.EnableSetCompleteCheck(project.EnableSetCompleteCheck);
+            self.Id(project.Id);
+            self.Type(project.Type);
+            self.Name(project.Name);
+            self.Consignor(project.Consignor);
+            self.StartTime(formattedDateStr(project.StartTime));
+            self.Deadline(formattedDateStr(project.Deadline));
+            self.Status(project.Status);
+            self.ManagerIds(project.ManagerIds);
+            self.ManagerNames(project.ManagerNames);
+            self.ParticipantIds(project.ParticipantIds);
+            self.ParticipantNames(project.ParticipantNames);
+            self.NeedFinish(project.NeedFinish);
+            self.CurrentProgress(project.CurrentProgress);
+            self.AdvancePlan(project.AdvancePlan);
+            self.Amount(project.Amount);
+            self.TypeOfPayment(project.TypeOfPayment);
+            self.NeedFinish(project.NeedFinish);
+            self.AmountReceivedStatus(project.AmountReceivedStatus);
+            self.AmountReceived(project.AmountReceived);
+            self.InvoiceStatus(project.InvoiceStatus);
+            if (!onlyBaseInfo) {
+                self.Attachments(project.Attachments);
+                self.CommentPageList.update(project.CommentPageList);
+            }
+        };
+
+        $("#StartTime,#Deadline").datetimepicker({
+            format: "yyyy-mm-dd",
+            autoclose: true,
+            pickerPosition: "bottom-left",
+            minView: "month",
+            language: "zh-CN"
+        });
+        $('#file_upload').uploadify({
+            'formData': {'projectId': ''},
+            'fileSizeLimit': '5MB',
+            'uploadLimit': 100,
+            'removeCompleted': true,
+            'queueID': 'queueUpload',
+            'swf': '/Scripts/uploadify.swf',
+            'auto': false,
+            'multi': true,
+            'buttonClass': 'btn btn-success',
+            'buttonText': '选择文件',
+            'uploader': '/Project/AddAttachment',
+            'onQueueComplete': function(queueData){
+                self.refrushAttachments();
+            }
+        });
+        $(".uploadify-button,.uploadify").removeAttr("style");
+
+        self.update(project);
+    };
 
     var projectListItemViewModel = function (project) {
         var self = this,
@@ -536,15 +732,10 @@
     };
 
     $(function () {
-        $(".form_datetime").datetimepicker({
-            format: "yyyy-mm-dd",
-            autoclose: true,
-            pickerPosition: "bottom-left",
-            minView: "month",
-            language: "zh-CN"
-        });
-    $(".btn-action").tooltip();
-    ko.applyBindings(new projectListViewModel());
+
+        $(".btn-action").tooltip();
+
+        ko.applyBindings(new projectListViewModel());
     });
 
 </script>

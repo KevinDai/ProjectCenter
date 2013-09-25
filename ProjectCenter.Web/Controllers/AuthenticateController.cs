@@ -48,7 +48,7 @@ namespace ProjectCenter.Web.Controllers
                 var user = UserService.Login(name, password);
                 if (user != null)
                 {
-                    FormsAuthentication.SetAuthCookie(user.Id, true);
+                    FormsAuthentication.SetAuthCookie(user.Id, false);
                     if (!string.IsNullOrEmpty(returnUrl))
                     {
                         return new RedirectResult(returnUrl);

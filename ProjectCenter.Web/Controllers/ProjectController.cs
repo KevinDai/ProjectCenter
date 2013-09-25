@@ -131,7 +131,7 @@ namespace ProjectCenter.Web.Controllers
         private string GetAttachmentPath(string projectId, string fileName)
         {
 
-            var folder = Server.MapPath(string.Format("{0}\\{1}", AttachmentFolder, projectId));
+            var folder = Server.MapPath(string.Format("\\{0}\\{1}", AttachmentFolder, projectId));
             if (!Directory.Exists(folder))
             {
                 Directory.CreateDirectory(folder);
@@ -141,8 +141,8 @@ namespace ProjectCenter.Web.Controllers
             while (System.IO.File.Exists(filePath))
             {
                 var index = fileName.LastIndexOf('.');
-                var temp = fileName.Insert(index - 1, (i).ToString());
-                filePath = Server.MapPath(string.Format("{0}\\{1}\\{2}", AttachmentFolder, projectId, temp));
+                var temp = fileName.Insert(index, (i).ToString());
+                filePath = Server.MapPath(string.Format("\\{0}\\{1}\\{2}", AttachmentFolder, projectId, temp));
                 i++;
             }
             return filePath;
@@ -301,6 +301,27 @@ namespace ProjectCenter.Web.Controllers
             return JsonMessageResult(comments);
         }
 
+        public ActionResult DeleteAttachment(string attachmentId)
+        {
+            var attachment = ProjectService.GetAttachment(attachmentId);
+            if (attachment == null)
+            {
+                throw new BusinessException("操作的附件不存");
+            }
+            if (!UserInfo.RightDetail.EnbaleDeleteProject)
+            {
+                throw new BusinessException("无删除操作权限");
+            }
+
+            ProjectService.DeleteAttachment(attachment);
+
+            if (System.IO.File.Exists(attachment.Path))
+            {
+                System.IO.File.Delete(attachment.Path);
+            }
+
+            return JsonMessageResult(null);
+        }
 
         [HttpPost]
         public ActionResult AddComment(string projectId, string content)

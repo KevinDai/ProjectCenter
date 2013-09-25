@@ -59,7 +59,7 @@
             <nav class="navbar navbar-default nav-system-header" role="navigation">
                 <div class="container">
                     <ul class="nav navbar-nav navbar-right">
-                        <li class="@(ViewContext.RouteData.Values["Controller"].ToString() == "Project" ? "active" : "")">@Html.ActionLink("任务清单", "List", "Project")</li>
+                        <li class="@(ViewContext.RouteData.Values["Controller"].ToString() == "Project" ? "active" : "")">@Html.ActionLink("项目清单", "List", "Project")</li>
                         <li class="@(ViewContext.RouteData.Values["Controller"].ToString() == "Note" ? "active" : "")">@Html.ActionLink("工作日志", "List", "Note")</li>
                         <!--<li>
                     <div class="btn-group">
@@ -71,8 +71,8 @@
                 </li>-->
                     </ul>
                     <div class="navbar-header">
-                        <span class="navbar-brand text-primary" style="color: #428bca; font-size: 23px">广东省科学技术情报研究所咨询策划中心项目管理系统</span>
-                        @*<span class="navbar-brand">Project Name</span>*@
+                        @*<span class="navbar-brand text-primary" style="color: #428bca; font-size: 23px">广东省科学技术情报研究所咨询策划中心项目管理系统</span>*@
+                        <span class="navbar-brand">Project Name</span>
                     </div>
                 </div>
             </nav>
