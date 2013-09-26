@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  For more information on how to configure your ASP.NET application, please visit
+  http://go.microsoft.com/fwlink/?LinkId=152368
+  -->
+<configuration>
+  <appSettings>
+    <add key="ClientValidationEnabled" value="true" />
+    <add key="UnobtrusiveJavaScriptEnabled" value="true" />
+    <add key="Mola.FrameWork7.Container.Assembly" value="Mola.FrameWork7.Container" />
+    <add key="Mola.FrameWork7.Container.Type" value="Mola.FrameWork7.Container.UnityIocContainer" />
+    <add key="Mola.FrameWork7.Container.Path" value="bin" />
+    <add key="Mola.FrameWork7.Logger.AppLogEnabled" value="true" />
+    <add key="Mola.FrameWork7.Culture.Name" value="ZH-CN" />
+    <add key="Mola.FrameWork7.Debug" value="false" />
+    <add key="Mola.FrameWork7.Region" value="GZ001" />
+  </appSettings>
+  
+  <connectionStrings>
+    <add name="Mola.FrameWork7.Config.ConfigDB" connectionString="server=;uid=;pwd=;database=MBS7_Config;" providerName="System.Data.SqlClient" />
+  </connectionStrings>
+
+  <system.web>
+   <caching>
+      <outputCacheSettings>
+        <outputCacheProfiles>
+          <add name="ViewCache" location="Any" duration="120" varyByParam="none" />
+        </outputCacheProfiles>
+      </outputCacheSettings>
+    </caching>
+
+    <compilation debug="true" targetFramework="4.0">    
+      <assemblies>
+        <add assembly="System.Web.Abstractions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35" />
+        <add assembly="System.Web.Helpers, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35" />
+        <add assembly="System.Web.Routing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35" />
+        <add assembly="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35" />
+        <add assembly="System.Web.WebPages, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35" />
+      </assemblies>
+    </compilation>
+
+    <authentication mode="Forms">
+      <forms name="Mola.FrameWork7_Sso" protection="All" loginUrl="~/SSO/Account/LogOn" timeout="60" cookieless="UseCookies" domain=".moonbasa.com" enableCrossAppRedirects="false" />
+    </authentication>
+
+    <customErrors mode="Off" />
+
+    <sessionState mode="Custom" customProvider="MemcacheSessionProvider" cookieless="false" timeout="60" cookieName="Mola.FrameWork7_SessionId">
+      <providers>
+        <add name="MemcacheSessionProvider" type="Mola.ERP7.Core.SessionStateProvider.MemcacheSessionStateProvider,Mola.ERP7.Core" />
+      </providers>
+    </sessionState>
+
+    <machineKey validationKey="3FF1E929BC0534950B0920A7B59FA698BD02DFE8" decryptionKey="280450BB36319B474C996B506A95AEDF9B51211B1D2B7A77" decryption="3DES" validation="SHA1" />
+    
+    <pages validateRequest="false" enableEventValidation="false">
+      <namespaces>
+        <add namespace="System.Web.Helpers" />
+        <add namespace="System.Web.Mvc" />
+        <add namespace="System.Web.Mvc.Ajax" />
+        <add namespace="System.Web.Mvc.Html" />
+        <add namespace="System.Web.Routing" />
+        <add namespace="System.Web.WebPages" />
+      </namespaces>
+    </pages>
+
+    <globalization requestEncoding="utf-8" responseEncoding="utf-8" />
+    <httpRuntime executionTimeout="3600" maxRequestLength="20480"/> 
+  </system.web>
+
+  <system.webServer>
+        <defaultDocument>
+            <files>
+                <clear />
+                <add value="login.html" />
+                <add value="index.html" />
+            </files>
+        </defaultDocument>
+  </system.webServer>
+
+  <runtime>   
+    <assemblyBinding xmlns="urn:schemas-microsoft-com:asm.v1">
+      <dependentAssembly>
+        <assemblyIdentity name="System.Web.Mvc" publicKeyToken="31bf3856ad364e35" />
+        <bindingRedirect oldVersion="1.0.0.0-2.0.0.0" newVersion="3.0.0.0" />
+   <probing privatePath="bin"/>
+      </dependentAssembly>
+    </assemblyBinding>
+  </runtime>
+</configuration>

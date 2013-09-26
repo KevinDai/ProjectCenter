@@ -1,5 +1,7 @@
-﻿using System;
+﻿using ProjectCenter.Web.Controllers;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -34,6 +36,13 @@ namespace ProjectCenter.Web
             AreaRegistration.RegisterAllAreas();
             RegisterGlobalFilters(GlobalFilters.Filters);
             RegisterRoutes(RouteTable.Routes);
+
+            //创建附件下载缓存目录
+            var folder = Server.MapPath(ProjectController.AttachmentsTempFolder);
+            if (!Directory.Exists(folder))
+            {
+                Directory.CreateDirectory(folder);
+            }
         }
     }
 }

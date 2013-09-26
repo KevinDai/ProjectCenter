@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using ICSharpCode.SharpZipLib.Zip;
+using Newtonsoft.Json;
 using ProjectCenter.Models;
 using ProjectCenter.Services;
 using ProjectCenter.Services.Specifications.Projects;
@@ -17,7 +18,8 @@ namespace ProjectCenter.Web.Controllers
 {
     public class ProjectController : BaseController
     {
-        private const string AttachmentFolder = "Attachments";
+        public const string AttachmentFolder = "\\Attachments";
+        public const string AttachmentsTempFolder = "\\AttachmentsTemp";
 
         private IProjectService _projectService;
         public IProjectService ProjectService
@@ -131,7 +133,7 @@ namespace ProjectCenter.Web.Controllers
         private string GetAttachmentPath(string projectId, string fileName)
         {
 
-            var folder = Server.MapPath(string.Format("\\{0}\\{1}", AttachmentFolder, projectId));
+            var folder = Server.MapPath(string.Format("{0}\\{1}", AttachmentFolder, projectId));
             if (!Directory.Exists(folder))
             {
                 Directory.CreateDirectory(folder);
@@ -142,7 +144,7 @@ namespace ProjectCenter.Web.Controllers
             {
                 var index = fileName.LastIndexOf('.');
                 var temp = fileName.Insert(index, (i).ToString());
-                filePath = Server.MapPath(string.Format("\\{0}\\{1}\\{2}", AttachmentFolder, projectId, temp));
+                filePath = Server.MapPath(string.Format("{0}\\{1}\\{2}", AttachmentFolder, projectId, temp));
                 i++;
             }
             return filePath;
@@ -277,7 +279,7 @@ namespace ProjectCenter.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult AddAttachment()
+        public ActionResult UploadAttachment()
         {
             var projectId = Request.Params["projectId"];
             HttpPostedFileBase file = Request.Files["Filedata"];
@@ -297,9 +299,54 @@ namespace ProjectCenter.Web.Controllers
 
         public ActionResult LoadAttachments(string projectId)
         {
-            var comments = ProjectService.GetProjectAttachments(projectId);
-            return JsonMessageResult(comments);
+            var attachments = ProjectService.GetProjectAttachments(projectId);
+            return JsonMessageResult(attachments);
         }
+
+        public ActionResult DownloadAttachment(string id)
+        {
+            var attachment = ProjectService.GetAttachment(id);
+            if (attachment == null || !System.IO.File.Exists(attachment.Path))
+            {
+                return Content("指定的附件不存在");
+            }
+
+            return File(attachment.Path, "text/plain", attachment.Name);
+        }
+
+        public ActionResult DownloadAttachments(string id)
+        {
+            var project = ProjectService.GetProject(id);
+            if (project == null)
+            {
+                return Content("指定的项目不存在");
+            }
+
+            var attachments = ProjectService.GetProjectAttachments(id);
+            if (attachments == null || !attachments.Any())
+            {
+                return Content("指定的项目不存在附件");
+            }
+
+            var zipFileName = Server.MapPath(string.Format("{0}\\{1}.zip", AttachmentsTempFolder, Guid.NewGuid().ToString()));
+            using (var stream = System.IO.File.Create(zipFileName))
+            {
+                using (var s = new ZipOutputStream(stream))
+                {
+                    s.SetLevel(9);
+                    foreach (var attachment in attachments)
+                    {
+                        byte[] bytes = System.IO.File.ReadAllBytes(attachment.Path);
+                        var entry = new ZipEntry(new FileInfo(attachment.Path).Name);
+                        s.PutNextEntry(entry);
+                        s.Write(bytes, 0, bytes.Length);
+                    }
+                    s.Finish();
+                }
+            }
+            return File(zipFileName, "application/zip", string.Format("{0}附件.zip", project.Name));
+        }
+
 
         public ActionResult DeleteAttachment(string attachmentId)
         {

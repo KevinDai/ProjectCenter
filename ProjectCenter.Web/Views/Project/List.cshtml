@@ -360,18 +360,19 @@
         };
         self.startUploadAttachment = function () {
             $("#file_upload").uploadify("settings", 'formData', {'projectId': self.Id()});
-            $('#file_upload').uploadify('upload','*')
+            $('#file_upload').uploadify('upload','*');
             //request("/Project/AddComment", { projectId: self.Id(), content: self.EditCommentContent() }, function () {
             //$("#attachmentDialog").modal("hide");
             //});
         };
         self.cancelUploadAttachment = function(){
             $('#file_upload').uploadify('cancel','*');
-            $('#file_upload').uploadify('stop')
+            $('#file_upload').uploadify('stop');
         };
         self.deleteAttachment = function(attachment){
             request("/Project/DeleteAttachment", { attachmentId: attachment.Id }, function () {
                 self.refrushAttachments();
+                showMessage("删除附件成功");
             });
         };
         self.refrushAttachments= function(){
@@ -388,6 +389,7 @@
         self.deleteComment = function (comment) {
             request("/Project/DeleteComment", { commentId: comment.Id }, function () {
                 self.refrushComments();
+                showMessage("删除附件成功");
             });
         };
         self.saveComment = function () {
@@ -470,15 +472,18 @@
             'swf': '/Scripts/uploadify.swf',
             'auto': false,
             'multi': true,
-            'buttonClass': 'btn btn-success',
+            'buttonClass': 'btn btn-primary',
             'buttonText': '选择文件',
-            'uploader': '/Project/AddAttachment',
+            'uploader': '/Project/UploadAttachment',
             'onQueueComplete': function(queueData){
+                showMessage("上传附件完成");
                 self.refrushAttachments();
             }
         });
         $(".uploadify-button,.uploadify").removeAttr("style");
-
+        $("#attachmentDialog").on('hide.bs.modal', function () {
+            self.cancelUploadAttachment();
+        })
         self.update(project);
     };
 

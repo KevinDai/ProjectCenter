@@ -88,7 +88,7 @@
     //window.requestMessager = $.globalMessenger().post({ hideAfter: 5 }).hide();
     //requestMessager.hide();
     window.request = function (url, data, callback) {
-        var temp = setTimeout('showLoadding("加载中…")', 1000 * 1);
+        var temp = setTimeout('showLoadding("处理数据中…")', 1000 * 1);
         $.ajax({
             type: "POST",
             timeout: 600000,
@@ -96,7 +96,6 @@
             url: url,
             data: ko.toJSON(data) /*JSON.stringify()*/
         }).success(function (postResult) {
-            hideALlMessage();
             if (postResult && postResult.Status == 0) {
                 callback(postResult.Data);
             } else {
@@ -107,6 +106,7 @@
             showErrorMessage("系统错误");
         }).complete(function () {
             clearTimeout(temp);
+            hideLoadding();
         });
     };
 
@@ -131,7 +131,7 @@
 
     var errorMessage = undefined;
     window.showErrorMessage = function (msg) {
-        hideALlMessage();
+        //hideALlMessage();
         if (errorMessage) {
             errorMessage.update(msg);
         } else {
@@ -145,7 +145,7 @@
 
     var commonMessage = undefined;
     window.showMessage = function (msg) {
-        hideALlMessage();
+        //hideALlMessage();
         if (commonMessage) {
             commonMessage.update(msg);
         } else {
