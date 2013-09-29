@@ -87,10 +87,7 @@ namespace ProjectCenter.Web.Models
 
             project.Map(this);
 
-            EnableViewDetail = userInfo.RightDetail.EnableViewDetail
-                || project.CreatorId == userInfo.UserId
-                || new ManagerIdsSpecification(userInfo.UserId).SatisfiedBy().Compile()(project)
-                || new ParticipantIdsSpecification(userInfo.UserId).SatisfiedBy().Compile()(project);
+            EnableViewDetail = userInfo.EnableViewDetail(project);
         }
     }
 }

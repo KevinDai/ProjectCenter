@@ -156,9 +156,44 @@
         }
     };
 
-    var hideALlMessage = function () {
-        $.globalMessenger().hideAll();
+    //var hideALlMessage = function () {
+    //    $.globalMessenger().hideAll();
+    //};
+
+    var popMessageOk = function () { };
+    var popMessageCancel = function () { };
+    $('#popMessage').on('hide.bs.modal', function () {
+        alert("1");
+    });
+    $('#popMessage').find(".btn-ok").click(function () {
+        alert("2");
+        $("#popMessage").modal("hide");
+    });
+    window.showPopMessage = function (title, message, hideCallback) {
+        var pop = $('#popMessage');
+        pop.find(".title").text(title);
+        pop.find(".content").html(message);
+        $("#popMessage").modal("show");
     };
+
+    window.showPopConfrimMessage = function (title, message, okCallback, cancelCallBack) {
+    };
+
+    var PopMessage = function (element, options) {
+    };
+
+
+    $.fn.popMessage = function (option, _relatedTarget) {
+        return this.each(function () {
+            var $this = $(this)
+            var data = $this.data('popMessage')
+            var options = $.extend({}, typeof option == 'object' && option)
+
+            if (!data) $this.data('popMessage', (data = new PopMessage(this, options)))
+            if (typeof option == 'string') data[option](_relatedTarget)
+            else if (options.show) data.show(_relatedTarget)
+        })
+    }
 
     var UserSelectBox = function (element, options) {
         var self = this;

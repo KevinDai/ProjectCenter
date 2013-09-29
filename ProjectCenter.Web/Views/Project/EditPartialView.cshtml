@@ -69,21 +69,21 @@
                         @if (ViewBag.UserInfo.RightDetail.EnableCheckProject)
                         {
                             <select data-bind="value: Status" class="form-control">
+                                <!-- ko if: Status() == 0 -->
                                 <option value="0">发布待审</option>
-                                <option value="1">发布已审核</option>
+                                <!-- /ko -->
+                                <option value="1">进行中</option>
                                 <option value="2">完成待审</option>
-                                <option value="3">完成已审核</option>
-                                <option value="4">已取消</option>
+                                <option value="3">已完成</option>
                             </select>
                         }
                         else
                         {
                             <select data-bind="value: Status" class="form-control" disabled="disabled">
                                 <option value="0">发布待审</option>
-                                <option value="1">发布已审核</option>
+                                <option value="1">进行中</option>
                                 <option value="2">完成待审</option>
-                                <option value="3">完成已审核</option>
-                                <option value="4">已取消</option>
+                                <option value="3">已完成</option>
                             </select>
                         }
                     </div>
@@ -221,6 +221,8 @@
                         @if (ViewBag.UserInfo.RightDetail.EnbaleDeleteProject)
                         {
                             <a data-bind="click: $parent.deleteAttachment" href="#"><span class="glyphicon glyphicon-remove"></span></a>
+                        }else{
+                            <a data-bind="click: $parent.deleteAttachment, visible: $root.user.UserId == UploadUserId" href="#"><span class="glyphicon glyphicon-remove"></span></a>
                         }
                     </td>
                 </tr>
@@ -247,6 +249,8 @@
                                 @if (ViewBag.UserInfo.RightDetail.EnbaleDeleteProject)
                                 {
                                     <li><a data-bind="click: $parents[1].deleteComment" class="comment-action-link" href="#">删除</a></li>
+                                }else{
+                                    <li><a data-bind="click: $parents[1].deleteComment, visible: $root.user.UserId == CreatorId" class="comment-action-link" href="#">删除</a></li>
                                 }
                             </ul>
                             <hr class="title-content-hr">

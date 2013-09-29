@@ -157,6 +157,7 @@ body
         outline: none;
         empty-cells: show;
         line-height: 1;
+        text-overflow: ellipsis;
     }
 
     .table.list-table tbody > tr

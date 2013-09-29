@@ -40,6 +40,24 @@ namespace ProjectCenter.Web.Controllers
 
         #region 方法
 
+        private class Test
+        {
+            public string Name
+            {
+                get;
+                set;
+            }
+        }
+
+        public class Test1
+        {
+            public int Name
+            {
+                get;
+                set;
+            }
+        }
+
         private ISpecification<Project> BuildProjectSpecification(QueryFilter queryFilter)
         {
             ISpecification<Project> spec = null;
@@ -277,6 +295,8 @@ namespace ProjectCenter.Web.Controllers
 
             return JsonMessageResult(null);
         }
+
+
 
         [HttpPost]
         public ActionResult UploadAttachment()
