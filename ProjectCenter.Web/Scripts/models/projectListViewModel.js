@@ -171,7 +171,7 @@ var projectEditViewModel = function (project) {
         'removeCompleted': true,
         'queueID': 'queueUpload',
         'swf': '/Scripts/uploadify.swf',
-        'auto': false,
+        'auto': true,
         'multi': true,
         'buttonClass': 'btn btn-primary',
         'buttonText': '选择文件',

@@ -106,6 +106,8 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\NoteController.cs" />
     <Compile Include="Controllers\ProjectController.cs" />
+    <Compile Include="Exports\ExportColumn.cs" />
+    <Compile Include="Exports\ProjectExprot.cs" />
     <Compile Include="Extensions\MappingExtensions.cs" />
     <Compile Include="Extensions\UserInfoExtensions.cs" />
     <Compile Include="Global.asax.cs">

@@ -8,13 +8,13 @@
         <div class="system-toolbar affix">
             <div class="container">
                 <div class="row">
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <div class="btn-group">
                             <button data-bind="click: add" class="btn btn-danger btn-new">
                                 发布任务</button>
                         </div>
                     </div>
-                    <div class="col-md-9">
+                    <div class="col-md-10">
                         <div id="listToolbar" class="row">
                             <div class="col-md-6">
                                 <ul class="list-inline">
@@ -136,7 +136,7 @@
         <div class="row">
             <div class="col-md-12 system-content">
                 <div class="row">
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <div class="system-sidebar">
                             <ul class="nav system-sidenav">
                                 <!-- ko foreach: { data: filterLinks, as: 'filterLink' } -->
@@ -157,7 +157,7 @@
                             </ul>
                         </div>
                     </div>
-                    <div id="list" class="col-md-9">
+                    <div id="list" class="col-md-10">
                         <div class="row">
                             <div class="col-md-12">
                                 @if (ViewBag.UserInfo.RightDetail.EnbaleDeleteProject)
@@ -180,7 +180,7 @@
                                             </tr>
                                         </thead>
                                         <tbody data-bind="foreach: pageList.List">
-                                            <tr data-bind="css: EnableViewDetail ? undefined : 'warning'">
+                                            <tr data-bind="css: EnableViewDetail ? undefined : 'active'">
                                                 <td>
                                                     <div class="checkbox">
                                                         <label>
@@ -230,7 +230,7 @@
                                             </tr>
                                         </thead>
                                         <tbody data-bind="foreach: pageList.List">
-                                            <tr data-bind="css: EnableViewDetail ? undefined : 'warning'">
+                                            <tr data-bind="css: EnableViewDetail ? undefined : 'active'">
                                                 <td data-bind="click: $root.edit">
                                                     <h5 data-bind="text: Name"></h5>
                                                 </td>
@@ -259,7 +259,7 @@
                             </div>
                         </div>
                     </div>
-                    <div id="edit" class="col-md-9" style="display: none">
+                    <div id="edit" class="col-md-10" style="display: none">
                         <div class="row">
                             <div class="col-md-12">
                                 @*                                <ul id="myTab" class="nav nav-tabs">
@@ -300,7 +300,7 @@
     $(function () {
         $(".system-toolbar .btn-action").tooltip();
         ko.applyBindings(new projectListViewModel(@Html.ToJsonString(currentUser)));
-        showPopMessage("Test","<a href='#'>test</a>");
+        //showPopMessage("Test","<a href='#'>test</a>",function(){alert("1");});
     });
 
 </script>

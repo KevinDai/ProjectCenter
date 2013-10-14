@@ -160,40 +160,17 @@
     //    $.globalMessenger().hideAll();
     //};
 
-    var popMessageOk = function () { };
-    var popMessageCancel = function () { };
-    $('#popMessage').on('hide.bs.modal', function () {
-        alert("1");
-    });
-    $('#popMessage').find(".btn-ok").click(function () {
-        alert("2");
-        $("#popMessage").modal("hide");
-    });
-    window.showPopMessage = function (title, message, hideCallback) {
-        var pop = $('#popMessage');
-        pop.find(".title").text(title);
-        pop.find(".content").html(message);
-        $("#popMessage").modal("show");
-    };
+    //$.fn.popMessage = function (option, _relatedTarget) {
+    //    return this.each(function () {
+    //        var $this = $(this)
+    //        var data = $this.data('popMessage')
+    //        var options = $.extend({}, typeof option == 'object' && option)
 
-    window.showPopConfrimMessage = function (title, message, okCallback, cancelCallBack) {
-    };
-
-    var PopMessage = function (element, options) {
-    };
-
-
-    $.fn.popMessage = function (option, _relatedTarget) {
-        return this.each(function () {
-            var $this = $(this)
-            var data = $this.data('popMessage')
-            var options = $.extend({}, typeof option == 'object' && option)
-
-            if (!data) $this.data('popMessage', (data = new PopMessage(this, options)))
-            if (typeof option == 'string') data[option](_relatedTarget)
-            else if (options.show) data.show(_relatedTarget)
-        })
-    }
+    //        if (!data) $this.data('popMessage', (data = new PopMessage(this, options)))
+    //        if (typeof option == 'string') data[option](_relatedTarget)
+    //        else if (options.show) data.show(_relatedTarget)
+    //    })
+    //}
 
     var UserSelectBox = function (element, options) {
         var self = this;
@@ -315,4 +292,70 @@
         });
     }
 
+
+    $(function () {
+        (function () {
+            var $element = $("#popMessage"),
+                $btnOk = $element.find(".btn-ok"),
+                okCallback = undefined,
+                cancelCallback = undefined,
+                init = function () {
+                    $element.on('hide.bs.modal', function () {
+                        debugger;
+                        if (cancelCallback) cancelCallback();
+                        reset();
+                    });
+                    $btnOk.click(function () {
+                        debugger;
+                        if (okCallback) okCallback();
+                        hide();
+                    });
+                },
+                reset = function () {
+                    setTitle("");
+                    setContent("");
+                    okCallback = undefined;
+                    cancelCallback = undefined;
+                },
+                setTitle = function (title) {
+                    $element.find(".title").text(title);
+                },
+                setContent = function (content) {
+                    $element.find(".content").html(content);
+                },
+                show = function (showBtnOk) {
+                    if (showBtnOk) {
+                        $btnOk.show();
+                    } else {
+                        $btnOk.hide();
+                    }
+                    $element.modal("show");
+                },
+                hide = function () {
+                    $element.modal("hide");
+                };
+
+            init();
+
+            window.showPopMessage = function (title, message, onCancel) {
+                setTitle(title);
+                setContent(message);
+                cancelCallback = onCancel;
+                show(false);
+            };
+
+            window.updatePopMessage = function (message) {
+                setContent(message);
+            };
+
+            window.showPopConfrimMessage = function (title, message, onOK, onCancel) {
+                setTitle(title);
+                setContent(message);
+                okCallback = onOk;
+                cancelCallback = onCancel;
+                show(true);
+            };
+
+        })();
+    });
 })(jQuery);

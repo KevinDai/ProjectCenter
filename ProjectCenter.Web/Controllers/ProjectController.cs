@@ -181,6 +181,7 @@ namespace ProjectCenter.Web.Controllers
             return View();
         }
 
+        [HttpPost]
         public ActionResult LoadProjects(QueryFilter queryFilter)
         {
             if (queryFilter == null)
@@ -200,6 +201,10 @@ namespace ProjectCenter.Web.Controllers
             return JsonMessageResult(model);
         }
 
+        public ActionResult ExportProject(QueryFilter queryFilter)
+        {
+            return JsonMessageResult(null);
+        }
 
         [HttpPost]
         public ActionResult GetProject(string projectId)
@@ -279,6 +284,7 @@ namespace ProjectCenter.Web.Controllers
             return JsonMessageResult(new ProjectEditViewModel(project, UserInfo));
         }
 
+        [HttpPost]
         public ActionResult DeleteProject(string projectId)
         {
             var project = ProjectService.GetProject(projectId);

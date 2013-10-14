@@ -95,6 +95,15 @@ namespace ProjectCenter.Models
         }
 
         /// <summary>
+        /// 需要支持
+        /// </summary>
+        public string NeedSupport
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
         /// 项目金额
         /// </summary>
         public double Amount
@@ -203,5 +212,46 @@ namespace ProjectCenter.Models
             set;
         }
 
+        public string TypeString
+        {
+            get
+            {
+                switch ((ProjectType)Type)
+                {
+                    case ProjectType.VerticalResearch:
+                        return "纵向研究";
+                    case ProjectType.HorizontalResearch:
+                        return "横向研究";
+                    case ProjectType.HorizontalEnquire:
+                        return "横向咨询";
+                    case ProjectType.VerticalWork:
+                        return "纵向工作";
+                    case ProjectType.CenterWork:
+                        return "中心工作";
+                    default:
+                        return "未归类";
+                }
+            }
+        }
+
+        public string StatusString
+        {
+            get
+            {
+                switch ((ProjectStatus)Status)
+                {
+                    case ProjectStatus.PublishedWaitCheck:
+                        return "发布待审";
+                    case ProjectStatus.PublishedAndChecked:
+                        return "进行中";
+                    case ProjectStatus.CompletedWaitCheck:
+                        return "完成待审";
+                    case ProjectStatus.CompletedAndChecked:
+                        return "已完成";
+                    default:
+                        return "未知状态";
+                }
+            }
+        }
     }
 }
