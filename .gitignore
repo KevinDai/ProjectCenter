@@ -49,7 +49,9 @@ x64/
 build/
 [Bb]in/
 [Oo]bj/
-
+Attachments/
+FileTemp/
+TempFiles/
 # MSTest test Results
 [Tt]est[Rr]esult*/
 [Bb]uild[Ll]og.*

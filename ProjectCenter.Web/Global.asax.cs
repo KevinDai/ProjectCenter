@@ -38,7 +38,7 @@ namespace ProjectCenter.Web
             RegisterRoutes(RouteTable.Routes);
 
             //创建附件下载缓存目录
-            var folder = Server.MapPath(ProjectController.AttachmentsTempFolder);
+            var folder = Server.MapPath(ProjectController.TempFilesFolder);
             if (!Directory.Exists(folder))
             {
                 Directory.CreateDirectory(folder);

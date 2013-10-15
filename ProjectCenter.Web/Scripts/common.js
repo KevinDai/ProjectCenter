@@ -112,7 +112,7 @@
 
     var loaddingMessage = undefined;
     window.showLoadding = function (msg) {
-        hideALlMessage();
+        //hideALlMessage();
         if (loaddingMessage) {
             loaddingMessage.update(msg);
         } else {
@@ -301,7 +301,6 @@
                 cancelCallback = undefined,
                 init = function () {
                     $element.on('hide.bs.modal', function () {
-                        debugger;
                         if (cancelCallback) cancelCallback();
                         reset();
                     });
@@ -346,6 +345,10 @@
 
             window.updatePopMessage = function (message) {
                 setContent(message);
+            };
+
+            window.closePopMessage = function () {
+                hide();
             };
 
             window.showPopConfrimMessage = function (title, message, onOK, onCancel) {

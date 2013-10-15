@@ -122,6 +122,13 @@
                 </div>
                 <div class="form-group">
                     <label class="col-md-2 control-label">
+                        需要支持：</label>
+                    <div class="col-md-8">
+                        <textarea data-bind="value: NeedSupport, enable: EnableEditProject" class="form-control" rows="4"></textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-2 control-label">
                         推进计划：</label>
                     <div class="col-md-8">
                         <textarea data-bind="value: AdvancePlan, enable: EnableEditProject" class="form-control" rows="4"></textarea>
@@ -221,7 +228,9 @@
                         @if (ViewBag.UserInfo.RightDetail.EnbaleDeleteProject)
                         {
                             <a data-bind="click: $parent.deleteAttachment" href="#"><span class="glyphicon glyphicon-remove"></span></a>
-                        }else{
+                        }
+                        else
+                        {
                             <a data-bind="click: $parent.deleteAttachment, visible: $root.user.UserId == UploadUserId" href="#"><span class="glyphicon glyphicon-remove"></span></a>
                         }
                     </td>
@@ -249,7 +258,9 @@
                                 @if (ViewBag.UserInfo.RightDetail.EnbaleDeleteProject)
                                 {
                                     <li><a data-bind="click: $parents[1].deleteComment" class="comment-action-link" href="#">删除</a></li>
-                                }else{
+                                }
+                                else
+                                {
                                     <li><a data-bind="click: $parents[1].deleteComment, visible: $root.user.UserId == CreatorId" class="comment-action-link" href="#">删除</a></li>
                                 }
                             </ul>

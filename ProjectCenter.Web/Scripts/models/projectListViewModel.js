@@ -38,6 +38,7 @@ var projectEditViewModel = function (project) {
     self.ParticipantNames = ko.observable();
     self.NeedFinish = ko.observable();
     self.CurrentProgress = ko.observable();
+    self.NeedSupport = ko.observable();
     self.AdvancePlan = ko.observable();
     self.Amount = ko.observable();
     self.FormattedAmount = priceFormatted("Amount");
@@ -144,6 +145,7 @@ var projectEditViewModel = function (project) {
         self.ParticipantNames(project.ParticipantNames);
         self.NeedFinish(project.NeedFinish);
         self.CurrentProgress(project.CurrentProgress);
+        self.NeedSupport(project.NeedSupport);
         self.AdvancePlan(project.AdvancePlan);
         self.Amount(project.Amount);
         self.TypeOfPayment(project.TypeOfPayment);
@@ -307,6 +309,19 @@ var projectListViewModel = function (user) {
             self.back = function () {
                 query();
                 showProjectListView();
+            };
+            self.exportQuery = function () {
+                var flag = true;
+                showPopMessage("项目导出", "正在生成导出文件，请稍候……", function () {
+                    flag = false;
+                });
+                request("/Project/ExportProjects", { queryFilter: self.queryFilter }, function (result) {
+                    if (flag) {
+                        //window.open("/Project/DownloadProjectExportFile?path=" + result);
+                        //closePopMessage();
+                        updatePopMessage("导出文件生成成功，<a target='_blank' href='/Project/DownloadProjectExportFile?path=" + result + "'>点击下载</a>");
+                    }
+                });
             };
             self.add = function () {
                 self.projectEdit().update({ EnableEditProject: true });

@@ -6,6 +6,7 @@ using ProjectCenter.Services.Specifications.Projects;
 using ProjectCenter.Util.Exceptions;
 using ProjectCenter.Util.Query;
 using ProjectCenter.Util.Query.Specification;
+using ProjectCenter.Web.Exports;
 using ProjectCenter.Web.Models;
 using System;
 using System.Collections.Generic;
@@ -13,13 +14,15 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using ProjectCenter.Web.Extensions;
 
 namespace ProjectCenter.Web.Controllers
 {
     public class ProjectController : BaseController
     {
         public const string AttachmentFolder = "\\Attachments";
-        public const string AttachmentsTempFolder = "\\AttachmentsTemp";
+        public const string TempFilesFolder = "\\TempFiles";
+        public const int ExportPageSize = 2000;
 
         private IProjectService _projectService;
         public IProjectService ProjectService
@@ -201,9 +204,43 @@ namespace ProjectCenter.Web.Controllers
             return JsonMessageResult(model);
         }
 
-        public ActionResult ExportProject(QueryFilter queryFilter)
+        [HttpPost]
+        public ActionResult ExportProjects(QueryFilter queryFilter)
         {
-            return JsonMessageResult(null);
+            var export = new ProjectExprot();
+
+            ISpecification<Project> spec = BuildProjectSpecification(queryFilter);
+            SortDescriptor<Project>[] sort = new SortDescriptor<Project>[] { 
+                SortDescriptor<Project>.CreateSortDescriptor(p => p.Type) 
+            };
+
+            PageList<Project> pageList = null;
+            int pageIndex = 1;
+            int pageSize = ExportPageSize;
+            do
+            {
+                pageList = ProjectService.GetProjectPageList(spec, sort, pageIndex, pageSize);
+                foreach (var project in pageList.List)
+                {
+                    if (UserInfo.EnableViewDetail(project))
+                    {
+                        export.WriteProject(project);
+                    }
+                }
+            } while (pageList.Total > pageIndex++ * pageSize);
+            export.GroupProjectTypeColumn();
+
+            var fileName = Guid.NewGuid().ToString() + ".xls";
+            var xlsFile = Server.MapPath(string.Format("{0}\\{1}", TempFilesFolder, fileName));
+            export.SaveToFile(xlsFile);
+
+            return JsonMessageResult(fileName);
+        }
+
+        public ActionResult DownloadProjectExportFile(string path)
+        {
+            var fullPath = Server.MapPath(string.Format("{0}\\{1}", TempFilesFolder, path));
+            return File(fullPath, "application/vnd.ms-excel", "工作任务清单.xls");
         }
 
         [HttpPost]
@@ -302,8 +339,6 @@ namespace ProjectCenter.Web.Controllers
             return JsonMessageResult(null);
         }
 
-
-
         [HttpPost]
         public ActionResult UploadAttachment()
         {
@@ -354,7 +389,7 @@ namespace ProjectCenter.Web.Controllers
                 return Content("指定的项目不存在附件");
             }
 
-            var zipFileName = Server.MapPath(string.Format("{0}\\{1}.zip", AttachmentsTempFolder, Guid.NewGuid().ToString()));
+            var zipFileName = Server.MapPath(string.Format("{0}\\{1}.zip", TempFilesFolder, Guid.NewGuid().ToString()));
             using (var stream = System.IO.File.Create(zipFileName))
             {
                 using (var s = new ZipOutputStream(stream))
@@ -372,7 +407,6 @@ namespace ProjectCenter.Web.Controllers
             }
             return File(zipFileName, "application/zip", string.Format("{0}附件.zip", project.Name));
         }
-
 
         public ActionResult DeleteAttachment(string attachmentId)
         {

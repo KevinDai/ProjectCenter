@@ -17,18 +17,18 @@ namespace ProjectCenter.Web.Exports
         private static readonly int DataRowStartIndex = 2;
         private static readonly string Title = "咨询策划中心工作任务清单";
         private static readonly ExportColumn[] Columns = new ExportColumn[] {
-            new ExportColumn(){Name="序号",Width=100},
-            new ExportColumn(){Name="类别",Width=100},
-            new ExportColumn(){Name="任务内容",Width=100},
-            new ExportColumn(){Name="委托单位",Width=100},
-            new ExportColumn(){Name="需要完成的材料",Width=100},
-            new ExportColumn(){Name="具体进展",Width=100},
-            new ExportColumn(){Name="责任人",Width=100},
-            new ExportColumn(){Name="参与人",Width=100},
-            new ExportColumn(){Name="完成时间",Width=100},
-            new ExportColumn(){Name="需要的支持",Width=100},
-            new ExportColumn(){Name="推进计划",Width=100},
-            new ExportColumn(){Name="状态",Width=100}
+            new ExportColumn(){Name="序号",Width=5},
+            new ExportColumn(){Name="类别",Width=10},
+            new ExportColumn(){Name="任务内容",Width=25},
+            new ExportColumn(){Name="委托单位",Width=25},
+            new ExportColumn(){Name="需要完成的材料",Width=25},
+            new ExportColumn(){Name="具体进展",Width=25},
+            new ExportColumn(){Name="责任人",Width=25},
+            new ExportColumn(){Name="参与人",Width=25},
+            new ExportColumn(){Name="完成时间",Width=10},
+            new ExportColumn(){Name="需要的支持",Width=25},
+            new ExportColumn(){Name="推进计划",Width=25},
+            new ExportColumn(){Name="状态",Width=10}
         };
 
         protected HSSFWorkbook HSSFWorkbook
@@ -90,7 +90,9 @@ namespace ProjectCenter.Web.Exports
             style.Alignment = HorizontalAlignment.CENTER;
             //create a font style
             IFont font = HSSFWorkbook.CreateFont();
-            font.FontHeight = 16 * 16;
+            //font.Boldweight
+            font.FontHeightInPoints = 16;
+            //font.FontHeight = 16 * 16;
             font.FontName = "宋体";
             font.Boldweight = (short)FontBoldWeight.BOLD; //加粗
             style.SetFont(font);
@@ -113,6 +115,14 @@ namespace ProjectCenter.Web.Exports
             defaultDataStyle.BorderRight = BorderStyle.THIN;
             defaultDataStyle.BorderTop = BorderStyle.THIN;
             defaultDataStyle.WrapText = true;
+
+            IFont font = HSSFWorkbook.CreateFont();
+            //font.FontHeight = 10 * 10;
+            font.FontHeightInPoints = 9;
+            font.FontName = "宋体";
+            font.Boldweight = (short)FontBoldWeight.BOLD; //加粗
+            defaultDataStyle.SetFont(font);
+
             return defaultDataStyle;
         }
 
@@ -127,8 +137,9 @@ namespace ProjectCenter.Web.Exports
             HeaderStyle.VerticalAlignment = VerticalAlignment.CENTER;
             //create a font style
             IFont font = HSSFWorkbook.CreateFont();
-            //font.FontHeight = 20 * 20;
-            font.Boldweight = (short)FontBoldWeight.BOLD; //加粗
+            font.FontHeightInPoints = 9;
+            //font.FontHeight = 10 * 10;
+            font.FontName = "宋体";
             HeaderStyle.SetFont(font);
             HeaderStyle.BorderBottom = BorderStyle.THIN;
             HeaderStyle.BorderLeft = BorderStyle.THIN;
@@ -164,7 +175,7 @@ namespace ProjectCenter.Web.Exports
                 var cell = row.CreateCell(i);
                 cell.CellStyle = HeaderCellDefaultStyle;
                 cell.SetCellValue(column.Name);
-                sheet.SetColumnWidth(i, column.Width);
+                sheet.SetColumnWidth(i, column.Width * 256);
             }
         }
 
@@ -179,7 +190,7 @@ namespace ProjectCenter.Web.Exports
         public void WriteProject(Project project)
         {
             var row = Sheet.CreateRow(DataRowIndex);
-            row.CreateCell(0).SetCellValue(DataRowIndex);
+            row.CreateCell(0).SetCellValue(DataRowIndex - DataRowStartIndex + 1);
             row.CreateCell(1).SetCellValue(project.TypeString);
             row.CreateCell(2).SetCellValue(project.Name);
             row.CreateCell(3).SetCellValue(project.Consignor);
@@ -194,9 +205,40 @@ namespace ProjectCenter.Web.Exports
             DataRowIndex++;
         }
 
-        public string GenerateFile(string filePath)
+        public void GroupProjectTypeColumn()
         {
+            if (DataRowIndex > DataRowStartIndex)
+            {
+                var cellIndex = 1;
+                var tempIndex = DataRowStartIndex;
+                var tempValue = Sheet.GetRow(DataRowStartIndex).GetCell(cellIndex).StringCellValue;
+                var endIndex = DataRowIndex - 1;
+                for (int i = DataRowStartIndex + 1; i <= endIndex; i++)
+                {
+                    var cellValue = Sheet.GetRow(i).GetCell(cellIndex).StringCellValue;
+                    if (cellValue != tempValue)
+                    {
+                        if (i - tempIndex > 1)
+                        {
+                            Sheet.AddMergedRegion(new CellRangeAddress(tempIndex, i - 1, cellIndex, cellIndex));
+                        }
+                        tempValue = cellValue;
+                        tempIndex = i;
+                    }
+                    else if (i == endIndex)
+                    {
+                        Sheet.AddMergedRegion(new CellRangeAddress(tempIndex, i, cellIndex, cellIndex));
+                    }
+                }
+            }
+        }
 
+        public void SaveToFile(string filePath)
+        {
+            using (FileStream fs = new FileStream(filePath, FileMode.OpenOrCreate))
+            {
+                HSSFWorkbook.Write(fs);
+            }
         }
     }
 }
