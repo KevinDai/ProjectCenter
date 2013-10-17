@@ -305,7 +305,6 @@
                         reset();
                     });
                     $btnOk.click(function () {
-                        debugger;
                         if (okCallback) okCallback();
                         hide();
                     });
@@ -351,7 +350,7 @@
                 hide();
             };
 
-            window.showPopConfrimMessage = function (title, message, onOK, onCancel) {
+            window.showPopConfrimMessage = function (title, message, onOk, onCancel) {
                 setTitle(title);
                 setContent(message);
                 okCallback = onOk;

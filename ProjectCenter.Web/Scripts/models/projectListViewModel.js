@@ -15,9 +15,18 @@ var projectEditViewModel = function (project) {
         },
         formattedDateStr = function (datetime) {
             return datetime ? datetime.replace(/\//g, '-').split(" ")[0] : datetime;
+        },
+        makeCheckArray = function (array) {
+            if (array) {
+                for (var i = 0; i < array.length; i++) {
+                    array[i].Checked = ko.observable(false);
+                }
+            }
+            return array;
         };
     self.EnableEditProject = ko.observable(false);
     self.EnableSetCompleteCheck = ko.observable(false);
+    self.EnableDelete = ko.observable(false);
     self.Id = ko.observable();
     self.Type = ko.observable();
     self.Name = ko.observable("").extend({ required: true });
@@ -67,6 +76,56 @@ var projectEditViewModel = function (project) {
         //$("#attachmentDialog").modal("hide");
         //});
     };
+    self.AllAttachmentsChecked = ko.computed({
+        read: function () {
+            if (self.Attachments() && self.Attachments().length > 0) {
+                var items = self.Attachments();
+                for (var i = 0; i < items.length; i++) {
+                    if (!items[i].Checked()) {
+                        return false;
+                    }
+                }
+                return true;
+            } else {
+                return false;
+            }
+        },
+        write: function (value) {
+            var items = self.Attachments();
+            for (var i = 0; i < items.length; i++) {
+                items[i].Checked(value);
+            }
+        },
+        owner: self
+    });
+    self.downloadAttachments = function () {
+        if (!self.Attachments() || self.Attachments().length == 0) {
+            showMessage("无可以下载的附件");
+        } else {
+            var attachments = self.Attachments(),
+                checkedIds = [],
+                flag = true;
+            for (var i = 0; i < attachments.length; i++) {
+                if (attachments[i].Checked()) {
+                    checkedIds.push(attachments[i].Id);
+                }
+            }
+            if (checkedIds.length == 0) {
+                showMessage("请选择需要下载的附件");
+            } else {
+                showPopMessage("压缩附件", "正在生成附件压缩文件，请稍候……", function () {
+                    flag = false;
+                });
+
+                request("/Project/ZipAttachments", { ids: checkedIds }, function (result) {
+                    if (flag) {
+                        updatePopMessage("附件压缩文件生成成功，<a onclick='closePopMessage();' target='_blank' " +
+                            "href='/Project/DownloadAttachmentZipFile?path=" + result + "'>点击下载</a>");
+                    }
+                });
+            }
+        }
+    };
     self.cancelUploadAttachment = function () {
         $('#file_upload').uploadify('cancel', '*');
         $('#file_upload').uploadify('stop');
@@ -81,7 +140,7 @@ var projectEditViewModel = function (project) {
         request("/Project/LoadAttachments", {
             projectId: self.Id()
         }, function (result) {
-            self.Attachments(result);
+            self.Attachments(makeCheckArray(result));
         });
     };
     self.addComment = function () {
@@ -132,6 +191,7 @@ var projectEditViewModel = function (project) {
     self.update = function (project, onlyBaseInfo) {
         self.EnableEditProject(project.EnableEditProject);
         self.EnableSetCompleteCheck(project.EnableSetCompleteCheck);
+        self.EnableDelete(project.EnableDelete);
         self.Id(project.Id);
         self.Type(project.Type);
         self.Name(project.Name);
@@ -154,7 +214,7 @@ var projectEditViewModel = function (project) {
         self.AmountReceived(project.AmountReceived);
         self.InvoiceStatus(project.InvoiceStatus);
         if (!onlyBaseInfo) {
-            self.Attachments(project.Attachments);
+            self.Attachments(makeCheckArray(project.Attachments));
             self.CommentPageList.update(project.CommentPageList);
         }
     };
@@ -173,7 +233,7 @@ var projectEditViewModel = function (project) {
         'removeCompleted': true,
         'queueID': 'queueUpload',
         'swf': '/Scripts/uploadify.swf',
-        'auto': true,
+        'auto': false,
         'multi': true,
         'buttonClass': 'btn btn-primary',
         'buttonText': '选择文件',
@@ -208,6 +268,7 @@ var projectListItemViewModel = function (project) {
             self.Status = project.Status;
             self.DaySpanHtml = projectDaySpanHtml(project);
             self.EnableViewDetail = project.EnableViewDetail;
+            self.EnableDelete = project.EnableDelete;
         },
         formatDateString = function (date) {
             return date.getFullYear() + "年" + (date.getMonth() + 1) + "月" + date.getDate() + "日";
@@ -319,7 +380,8 @@ var projectListViewModel = function (user) {
                     if (flag) {
                         //window.open("/Project/DownloadProjectExportFile?path=" + result);
                         //closePopMessage();
-                        updatePopMessage("导出文件生成成功，<a target='_blank' href='/Project/DownloadProjectExportFile?path=" + result + "'>点击下载</a>");
+                        updatePopMessage("导出文件生成成功，<a onclick='closePopMessage();' target='_blank' " +
+                            "href='/Project/DownloadProjectExportFile?path=" + result + "'>点击下载</a>");
                     }
                 });
             };
@@ -345,6 +407,15 @@ var projectListViewModel = function (user) {
                     showErrorMessage("无该项目的查看权限");
                 }
 
+            };
+            self.delete = function (data) {
+                showPopConfrimMessage("删除确认", "是否确认删除指定的项目？", function () {
+                    request("/Project/DeleteProject", { projectId: data.Id }, function (result) {
+                        showMessage("删除成功");
+                        showProjectListView();
+                        query(false);
+                    });
+                });
             };
             self.check = function (status) {
                 var projectIds = [];

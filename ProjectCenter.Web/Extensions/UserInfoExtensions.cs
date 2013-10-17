@@ -22,11 +22,20 @@ namespace ProjectCenter.Web.Extensions
 
         public static bool EnableViewDetail(this UserInfo user, Project project)
         {
+            return true;
+            //return ParamatersValid(user, project) && (
+            //    user.RightDetail.EnableViewDetail
+            //    || project.CreatorId == user.UserId && project.Status == (int)ProjectStatus.PublishedWaitCheck
+            //    || new ManagerIdsSpecification(user.UserId).SatisfiedBy().Compile()(project)
+            //    || new ParticipantIdsSpecification(user.UserId).SatisfiedBy().Compile()(project));
+        }
+
+
+        public static bool EnableDelete(this UserInfo user, Project project)
+        {
             return ParamatersValid(user, project) && (
-                user.RightDetail.EnableViewDetail
-                || project.CreatorId == user.UserId && project.Status == (int)ProjectStatus.PublishedWaitCheck
-                || new ManagerIdsSpecification(user.UserId).SatisfiedBy().Compile()(project)
-                || new ParticipantIdsSpecification(user.UserId).SatisfiedBy().Compile()(project));
+                user.RightDetail.EnbaleDeleteProject
+                || project.CreatorId == user.UserId && project.Status == (int)ProjectStatus.PublishedWaitCheck);
         }
 
         public static bool EnableSetCompleteCheck(this UserInfo user, Project project)

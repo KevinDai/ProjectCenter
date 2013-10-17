@@ -80,6 +80,15 @@ namespace ProjectCenter.Web.Models
             set;
         }
 
+        /// <summary>
+        /// 是否允许查看详细信息
+        /// </summary>
+        public bool EnableDelete
+        {
+            get;
+            set;
+        }
+
         public ProjectListItemViewModel(Project project, UserInfo userInfo)
         {
             Preconditions.CheckNotNull(project, "project");
@@ -88,6 +97,7 @@ namespace ProjectCenter.Web.Models
             project.Map(this);
 
             EnableViewDetail = userInfo.EnableViewDetail(project);
+            EnableDelete = userInfo.EnableDelete(project);
         }
     }
 }

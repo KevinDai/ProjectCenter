@@ -52,6 +52,7 @@
     <Compile Include="IProjectService.cs" />
     <Compile Include="IServiceFactory.cs" />
     <Compile Include="IUserService.cs" />
+    <Compile Include="Models\LoginResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceFactory.cs" />
     <Compile Include="Specifications\Projects\CreatorIdSpecification.cs" />

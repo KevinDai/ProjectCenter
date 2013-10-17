@@ -1,4 +1,5 @@
 ﻿using ProjectCenter.Models;
+using ProjectCenter.Services.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,6 @@ namespace ProjectCenter.Services
 
         IEnumerable<User> GetAllUser();
 
-        User Login(string loginName, string password);
+        LoginResult Login(string loginName, string password);
     }
 }

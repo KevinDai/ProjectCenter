@@ -193,28 +193,46 @@
     </div>
 </div>
 <div data-bind="visible: Id" class="col-md-12">
-    <div class="panel panel-default table-panel">
+    <div class="panel panel-default">
         <div class="panel-heading">
             <ul class="list-unstyled list-inline pull-right list-panel-title">
                 <li><a data-bind="click: refrushAttachments" href="#"><span class="glyphicon glyphicon-refresh"></span><span class="btn-glyphicon-content">刷新</span></a></li>
                 <li>
-                    <a data-bind="attr: {'href': Attachments() && Attachments().length > 0 ? '/Project/DownloadAttachments/' + Id() : 'javascript:void(0);'}" target="_blank">
+                    @*<a data-bind="attr: {'href': Attachments() && Attachments().length > 0 ? '/Project/DownloadAttachments/' + Id() : 'javascript:void(0);'}" target="_blank">
                         <span class="glyphicon glyphicon-download-alt"></span><span class="btn-glyphicon-content">下载全部</span>
+                    </a>*@
+                    <a data-bind="click: downloadAttachments" href="#">
+                        <span class="glyphicon glyphicon-download-alt"></span><span class="btn-glyphicon-content">下载</span>
                     </a>
                 </li>
                 <li data-bind="visible: EnableEditProject"><a data-bind="click: addAttachment" href="#"><span class="glyphicon glyphicon-plus"></span><span class="btn-glyphicon-content">上传附件</span></a></li>
             </ul>
             <h3 class="panel-title">附件列表</h3>
         </div>
-        <table class="table attchment-table">
+        <table data-bind="visible: Attachments() && Attachments().length > 0" class="table attchment-table">
             <colgroup>
+                <col style="width: 40px;">
                 <col style="width: 450px;">
                 <col style="width: 100px;">
                 <col style="width: 150px;">
                 <col style="width: 40px;">
             </colgroup>
+            <thead>
+                <tr>
+                    <th>
+                        <input data-bind="checked: AllAttachmentsChecked, click: function(){ return true; }, clickBubble: false" type="checkbox">
+                    </th>
+                    <th>附件名称</th>
+                    <th>上传人</th>
+                    <th>上传时间</th>
+                    <th></th>
+                </tr>
+            </thead>
             <tbody data-bind="foreach: Attachments">
                 <tr>
+                    <td>
+                        <input data-bind="checked: Checked" type="checkbox">
+                    </td>
                     <td>
                         <a data-bind="attr: {'href': '/Project/DownloadAttachment/'+ Id}" target="_blank"><span data-bind="text: Name"></span></a>
                     </td>

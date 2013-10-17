@@ -30,6 +30,8 @@ namespace ProjectCenter.Services
 
         Attachment GetAttachment(string attachmentId);
 
+        IEnumerable<Attachment> GetAttachments(string[] attachmentIds);
+
         void DeleteAttachment(Attachment attachment);
 
         Comment AddComment(Comment comment);

@@ -20,6 +20,7 @@ namespace ProjectCenter.Web.Models
 
             EnableSetCompleteCheck = userInfo.EnableSetCompleteCheck(project);
             EnableEditProject = userInfo.EnableEditProject(project);
+            EnableDelete = userInfo.EnableDelete(project);
         }
 
         public bool EnableEditProject
@@ -29,6 +30,12 @@ namespace ProjectCenter.Web.Models
         }
 
         public bool EnableSetCompleteCheck
+        {
+            get;
+            set;
+        }
+
+        public bool EnableDelete
         {
             get;
             set;

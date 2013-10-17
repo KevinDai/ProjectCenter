@@ -1,4 +1,5 @@
-﻿using ProjectCenter.Web.Controllers;
+﻿using log4net;
+using ProjectCenter.Web.Controllers;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -43,6 +44,13 @@ namespace ProjectCenter.Web
             {
                 Directory.CreateDirectory(folder);
             }
+
+            log4net.Config.XmlConfigurator.Configure();
+        }
+
+        protected void Application_Error(object sender, EventArgs e)
+        {
+            LogManager.GetLogger("").Fatal(Server.GetLastError());
         }
     }
 }

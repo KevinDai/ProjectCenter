@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Security.Cryptography;
 using ProjectCenter.Util.Exceptions;
+using ProjectCenter.Services.Models;
 
 namespace ProjectCenter.Services.Imp
 {
@@ -47,15 +48,28 @@ namespace ProjectCenter.Services.Imp
             //return user;
         }
 
-        public User Login(string loginName, string password)
+        public LoginResult Login(string loginName, string password)
         {
+            LoginResult result = new LoginResult();
+
             User user = Users.FirstOrDefault(u => u.LoginName == loginName);
             if (user == null)
             {
-                throw new BusinessException("不存在该登录名的用户");
+                result.FailMessage = "不存在该用户名的用户";
             }
-            return user.Passwrod == password ? user : null;
-            //return GetMD5String(password) == user.Passwrod;
+            else if (user.RightLevel > 3)
+            {
+                result.FailMessage = "该用户不允许登录";
+            }
+            else if (GetMD5String(password) != user.Passwrod)
+            {
+                result.FailMessage = "用户名或者密码错误";
+            }
+            else
+            {
+                result.User = user;
+            }
+            return result;
         }
 
         private string GetMD5String(string str)

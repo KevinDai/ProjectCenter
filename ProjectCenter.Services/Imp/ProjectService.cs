@@ -185,6 +185,12 @@ namespace ProjectCenter.Services.Imp
             return Attachments.Find(attachmentId);
         }
 
+        public IEnumerable<Attachment> GetAttachments(string[] attachmentIds)
+        {
+            return Attachments.Where(q => attachmentIds.Contains(q.Id)).ToArray();
+        }
+
+
         public void DeleteAttachment(Attachment attachment)
         {
             DeleteEntity(attachment);

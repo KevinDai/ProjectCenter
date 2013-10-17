@@ -40,9 +40,8 @@
                                                     class="glyphicon glyphicon-tags"></span><span class="caret caret-right"></span>
                                                 </a>
                                                 <ul class="dropdown-menu">
-                                                    <li><a data-bind="click: check.bind($data, 1)" href="#">标记为发布已审核</a></li>
-                                                    <li><a data-bind="click: check.bind($data, 3)" href="#">标记为完成已审核</a></li>
-                                                    <li><a data-bind="click: check.bind($data, 4)" href="#">标记为已取消</a></li>
+                                                    <li><a data-bind="click: check.bind($data, 1)" href="#">标记为进行中</a></li>
+                                                    <li><a data-bind="click: check.bind($data, 3)" href="#">标记为已完成</a></li>
                                                 </ul>
                                             </div>
                                         }
@@ -65,21 +64,17 @@
                                             <span class="glyphicon glyphicon-ok"></span>
 
                                         </a>
-                                        <div data-bind="visible: projectEdit.EnableSetCompleteCheck" class="btn-group item-action">
-                                            <a data-bind="click: projectEdit.sendFinishCheck" data-toggle="tooltip" data-placement="bottom" class="btn btn-default btn-action" title="标记为完成待审">
+                                        <div data-bind="visible: projectEdit().EnableSetCompleteCheck" class="btn-group item-action">
+                                            <a data-bind="click: projectEdit().sendFinishCheck" data-toggle="tooltip" data-placement="bottom" class="btn btn-default btn-action" title="标记为完成待审">
                                                 <span class="glyphicon glyphicon-tags"></span>
                                             </a>
                                         </div>
-                                        @*                                        <a class="btn btn-default btn-action"
-                                            data-toggle="tooltip" data-placement="bottom" title="删除"><span class="glyphicon glyphicon-trash"></span></a>*@
-                                        @*<div class="btn-group item-action">
-                                            <a class="btn dropdown-toggle btn-action" data-toggle="dropdown" title="标记"><i class="glyphicon glyphicon-tags">
-                                            </i><span class="caret"></span></a>
-                                            <ul class="dropdown-menu">
-                                                <li><a href="#"><i class="icon-ok"></i>标记为完成</a></li>
-                                                <li><a href="#"><i class="icon-off"></i>标记为取消</a></li>
-                                            </ul>
-                                        </div>*@ </li>
+                                        <div data-bind="visible: projectEdit().EnableDelete" class="btn-group item-action">
+                                            <a data-bind="click: $root.delete.bind($data, projectEdit())" data-toggle="tooltip" data-placement="bottom" class="btn btn-default btn-action" title="删除">
+                                                <span class="glyphicon glyphicon-trash"></span>
+                                            </a>
+                                        </div>
+                                    </li>
                                 </ul>
                             </div>
                         </div>
@@ -160,7 +155,7 @@
                     <div id="list" class="col-md-10">
                         <div class="row">
                             <div class="col-md-12">
-                                @if (ViewBag.UserInfo.RightDetail.EnbaleDeleteProject)
+                                @if (ViewBag.UserInfo.RightDetail.EnableCheckProject)
                                 {
                                     <table class="table table-hover list-table ">
                                         <colgroup>
@@ -169,6 +164,7 @@
                                             <col style="width: 120px;">
                                             <col style="width: 200px;">
                                             <col style="width: 190px;">
+                                            <col style="width: 40px;">
                                         </colgroup>
                                         <thead>
                                             <tr>
@@ -177,6 +173,7 @@
                                                 <th>负责人</th>
                                                 <th>参与人</th>
                                                 <th>项目状态</th>
+                                                <th></th>
                                             </tr>
                                         </thead>
                                         <tbody data-bind="foreach: pageList.List">
@@ -196,7 +193,7 @@
                                                         <span data-bind="text: ManagerNames"></span>
                                                     </div>
                                                 </td>
-                                                <td data-bind="click: $root.showProjectEditView">
+                                                <td data-bind="click: $root.edit">
                                                     <div>
                                                         <span data-bind="text: ParticipantNames"></span>
                                                     </div>
@@ -207,6 +204,9 @@
                                                     <small data-bind="text: StartTime" class="muted"></small>-
                                                 <small data-bind="text: Deadline" class="muted"></small>
                                                 </td>
+                                                <td>
+                                                    <a data-bind="click: $root.delete, visible: EnableDelete" href="#"><span class="glyphicon glyphicon-trash"></span></a>
+                                                </td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -215,11 +215,11 @@
                                 {
                                     <table class="table table-hover list-table ">
                                         <colgroup>
-
                                             <col style="width: 200px;">
                                             <col style="width: 120px;">
                                             <col style="width: 200px;">
                                             <col style="width: 190px;">
+                                            <col style="width: 40px;">
                                         </colgroup>
                                         <thead>
                                             <tr>
@@ -227,6 +227,7 @@
                                                 <th>负责人</th>
                                                 <th>参与人</th>
                                                 <th>项目状态</th>
+                                                <th></th>
                                             </tr>
                                         </thead>
                                         <tbody data-bind="foreach: pageList.List">
@@ -250,6 +251,9 @@
                                                     <br />
                                                     <small data-bind="text: StartTime" class="muted"></small>-
                                                 <small data-bind="text: Deadline" class="muted"></small>
+                                                </td>
+                                                <td>
+                                                    <a data-bind="click: $root.delete, visible: EnableDelete" href="#"><span class="glyphicon glyphicon-trash"></span></a>
                                                 </td>
                                             </tr>
                                         </tbody>

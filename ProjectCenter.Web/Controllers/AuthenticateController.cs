@@ -10,7 +10,7 @@ using System.Web.Security;
 
 namespace ProjectCenter.Web.Controllers
 {
-    public class AuthenticateController : Controller
+    public class AuthenticateController : BaseController
     {
 
         private IUserService _userService;
@@ -37,36 +37,28 @@ namespace ProjectCenter.Web.Controllers
             {
                 return new RedirectResult("/");
             }
-            return View();
+            return View(new LoginViewModel());
         }
 
         [HttpPost]
         public ActionResult Login(string name, string password, string returnUrl)
         {
-            try
+            var result = UserService.Login(name, password);
+            if (result.User != null)
             {
-                var user = UserService.Login(name, password);
-                if (user != null)
+                FormsAuthentication.SetAuthCookie(result.User.Id, false);
+                if (!string.IsNullOrEmpty(returnUrl))
                 {
-                    FormsAuthentication.SetAuthCookie(user.Id, false);
-                    if (!string.IsNullOrEmpty(returnUrl))
-                    {
-                        return new RedirectResult(returnUrl);
-                    }
-                    else
-                    {
-                        return new RedirectResult("/");
-                    }
+                    return new RedirectResult(returnUrl);
                 }
-                return View(new LoginViewModel() { LoginName = name, Message = "" });
+                else
+                {
+                    return new RedirectResult("/");
+                }
             }
-            catch (BusinessException ex)
+            else
             {
-                return View(new LoginViewModel() { LoginName = name, Message = ex.Message });
-            }
-            catch (Exception)
-            {
-                throw;
+                return View(new LoginViewModel() { LoginName = name, Message = "登录失败，" + result.FailMessage });
             }
         }
 

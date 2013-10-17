@@ -18,7 +18,7 @@ using ProjectCenter.Web.Extensions;
 
 namespace ProjectCenter.Web.Controllers
 {
-    public class ProjectController : BaseController
+    public class ProjectController : SecurityController
     {
         public const string AttachmentFolder = "\\Attachments";
         public const string TempFilesFolder = "\\TempFiles";
@@ -154,7 +154,7 @@ namespace ProjectCenter.Web.Controllers
         private string GetAttachmentPath(string projectId, string fileName)
         {
 
-            var folder = Server.MapPath(string.Format("{0}\\{1}", AttachmentFolder, projectId));
+            var folder = GetProjectAttachmentsFolder(projectId);
             if (!Directory.Exists(folder))
             {
                 Directory.CreateDirectory(folder);
@@ -169,6 +169,16 @@ namespace ProjectCenter.Web.Controllers
                 i++;
             }
             return filePath;
+        }
+
+        private string GetAttachmentZipFilePath(string zipFile)
+        {
+            return Server.MapPath(string.Format("{0}\\{1}", TempFilesFolder, zipFile));
+        }
+
+        private string GetProjectAttachmentsFolder(string projectId)
+        {
+            return Server.MapPath(string.Format("{0}\\{1}", AttachmentFolder, projectId));
         }
 
         #endregion
@@ -325,16 +335,21 @@ namespace ProjectCenter.Web.Controllers
         public ActionResult DeleteProject(string projectId)
         {
             var project = ProjectService.GetProject(projectId);
-            if (project == null)
+            if (project != null)
             {
-                throw new BusinessException("操作的项目不存在");
-            }
-            if (!UserInfo.RightDetail.EnbaleDeleteProject)
-            {
-                throw new BusinessException("无删除操作权限");
-            }
+                if (!UserInfo.EnableDelete(project))
+                {
+                    throw new BusinessException("无删除操作权限");
+                }
 
-            ProjectService.DeleteProject(project);
+                ProjectService.DeleteProject(project);
+
+                var attachmentsFolder = GetProjectAttachmentsFolder(projectId);
+                if (Directory.Exists(attachmentsFolder))
+                {
+                    Directory.Delete(attachmentsFolder, true);
+                }
+            }
 
             return JsonMessageResult(null);
         }
@@ -375,56 +390,97 @@ namespace ProjectCenter.Web.Controllers
             return File(attachment.Path, "text/plain", attachment.Name);
         }
 
-        public ActionResult DownloadAttachments(string id)
+        public ActionResult ZipAttachments(string[] ids)
         {
-            var project = ProjectService.GetProject(id);
-            if (project == null)
+            string zipFile = string.Empty;
+            if (ids != null && ids.Length > 0)
             {
-                return Content("指定的项目不存在");
-            }
-
-            var attachments = ProjectService.GetProjectAttachments(id);
-            if (attachments == null || !attachments.Any())
-            {
-                return Content("指定的项目不存在附件");
-            }
-
-            var zipFileName = Server.MapPath(string.Format("{0}\\{1}.zip", TempFilesFolder, Guid.NewGuid().ToString()));
-            using (var stream = System.IO.File.Create(zipFileName))
-            {
-                using (var s = new ZipOutputStream(stream))
+                var attachments = ProjectService.GetAttachments(ids).Where(a=>System.IO.File.Exists(a.Path)).ToArray();
+                if (attachments.Any())
                 {
-                    s.SetLevel(9);
-                    foreach (var attachment in attachments)
+                    zipFile =  Guid.NewGuid().ToString() + ".zip";
+                    var zipFilePath = GetAttachmentZipFilePath(zipFile);
+                    using (var stream = System.IO.File.Create(zipFilePath))
                     {
-                        byte[] bytes = System.IO.File.ReadAllBytes(attachment.Path);
-                        var entry = new ZipEntry(new FileInfo(attachment.Path).Name);
-                        s.PutNextEntry(entry);
-                        s.Write(bytes, 0, bytes.Length);
+                        using (var s = new ZipOutputStream(stream))
+                        {
+                            s.SetLevel(9);
+                            foreach (var attachment in attachments)
+                            {
+                                byte[] bytes = System.IO.File.ReadAllBytes(attachment.Path);
+                                var entry = new ZipEntry(new FileInfo(attachment.Path).Name);
+                                s.PutNextEntry(entry);
+                                s.Write(bytes, 0, bytes.Length);
+                            }
+                            s.Finish();
+                        }
                     }
-                    s.Finish();
                 }
             }
-            return File(zipFileName, "application/zip", string.Format("{0}附件.zip", project.Name));
+
+            if (string.IsNullOrEmpty(zipFile))
+            {
+                throw new BusinessException("指定的附件不存在，请刷新附件列表");
+            }
+
+            return JsonMessageResult(zipFile);
         }
+
+        public ActionResult DownloadAttachmentZipFile(string path)
+        {
+            var fullPath = GetAttachmentZipFilePath(path);
+            return File(fullPath, "application/zip", "项目附件.zip");
+        }
+
+        //public ActionResult DownloadAttachments(string id)
+        //{
+        //    var project = ProjectService.GetProject(id);
+        //    if (project == null)
+        //    {
+        //        return Content("指定的项目不存在");
+        //    }
+
+        //    var attachments = ProjectService.GetProjectAttachments(id);
+        //    if (attachments == null || !attachments.Any())
+        //    {
+        //        return Content("指定的项目不存在附件");
+        //    }
+
+        //    var zipFileName = Server.MapPath(string.Format("{0}\\{1}.zip", TempFilesFolder, Guid.NewGuid().ToString()));
+        //    using (var stream = System.IO.File.Create(zipFileName))
+        //    {
+        //        using (var s = new ZipOutputStream(stream))
+        //        {
+        //            s.SetLevel(9);
+        //            foreach (var attachment in attachments)
+        //            {
+        //                byte[] bytes = System.IO.File.ReadAllBytes(attachment.Path);
+        //                var entry = new ZipEntry(new FileInfo(attachment.Path).Name);
+        //                s.PutNextEntry(entry);
+        //                s.Write(bytes, 0, bytes.Length);
+        //            }
+        //            s.Finish();
+        //        }
+        //    }
+        //    return File(zipFileName, "application/zip", string.Format("{0}附件.zip", project.Name));
+        //}
 
         public ActionResult DeleteAttachment(string attachmentId)
         {
             var attachment = ProjectService.GetAttachment(attachmentId);
-            if (attachment == null)
+            if (attachment != null)
             {
-                throw new BusinessException("操作的附件不存");
-            }
-            if (!UserInfo.RightDetail.EnbaleDeleteProject)
-            {
-                throw new BusinessException("无删除操作权限");
-            }
+                if (!UserInfo.RightDetail.EnbaleDeleteProject)
+                {
+                    throw new BusinessException("无删除操作权限");
+                }
 
-            ProjectService.DeleteAttachment(attachment);
+                ProjectService.DeleteAttachment(attachment);
 
-            if (System.IO.File.Exists(attachment.Path))
-            {
-                System.IO.File.Delete(attachment.Path);
+                if (System.IO.File.Exists(attachment.Path))
+                {
+                    System.IO.File.Delete(attachment.Path);
+                }
             }
 
             return JsonMessageResult(null);
