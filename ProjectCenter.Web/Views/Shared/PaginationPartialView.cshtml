@@ -7,6 +7,6 @@
             <a data-bind="click: $root.nextPage, attr: {disabled: PageIndex() < MaxPageIndex() ? undefined : 'disabled'}" class="btn btn-default"><span class="glyphicon glyphicon-chevron-right"></span></a>
         </div>
         <a data-bind="click: $root.refrush" class="btn btn-default"><span class="glyphicon glyphicon-refresh"></span></a>
-        <a class="btn btn-default"><span class="glyphicon glyphicon-search"></span></a>
+        <a id="btnSearch" class="btn btn-default" data-toggle="popover"><span class="glyphicon glyphicon-search"></span></a>
     </li>
 </ul>

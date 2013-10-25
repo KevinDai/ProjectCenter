@@ -105,6 +105,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActionResults\CommonJsonResult.cs" />
+    <Content Include="Content\css\datepicker.css" />
     <Content Include="Content\css\logon.css" />
     <Compile Include="Controllers\AuthenticateController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
@@ -134,7 +135,6 @@
     <Content Include="Content\css\bootstrap-theme.min.css" />
     <Content Include="Content\css\bootstrap.css" />
     <Content Include="Content\css\bootstrap.min.css" />
-    <Content Include="Content\css\datetimepicker.css" />
     <Content Include="Content\css\easyui\combobox.css" />
     <Content Include="Content\css\easyui\easyui.css" />
     <Content Include="Content\css\easyui\icon.css" />
@@ -189,8 +189,7 @@
     <Content Include="Content\themes\base\images\ui-icons_454545_256x240.png" />
     <Content Include="Content\themes\base\images\ui-icons_888888_256x240.png" />
     <Content Include="Content\themes\base\images\ui-icons_cd0a0a_256x240.png" />
-    <Content Include="Scripts\bootstrap-datetimepicker.js" />
-    <Content Include="Scripts\bootstrap-datetimepicker.min.js" />
+    <Content Include="Scripts\bootstrap-datepicker.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\common.js" />
@@ -202,7 +201,7 @@
     <Content Include="Scripts\knockout.mapping.js" />
     <Content Include="Scripts\knockout.validation.js" />
     <Content Include="Scripts\knockout.validation.min.js" />
-    <Content Include="Scripts\locales\bootstrap-datetimepicker.zh-CN.js" />
+    <Content Include="Scripts\locales\bootstrap-datepicker.zh-CN.js" />
     <Content Include="Scripts\messenger.js" />
     <Content Include="Scripts\messenger.min.js" />
     <Content Include="Scripts\models\projectListViewModel.js" />

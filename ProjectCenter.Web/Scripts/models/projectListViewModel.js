@@ -33,11 +33,11 @@ var projectEditViewModel = function (project) {
     self.Consignor = ko.observable("").extend({ required: true });
     self.StartTime = ko.observable("").extend({ required: true });
     self.StartTime.subscribe(function (newValue) {
-        $("#Deadline").datetimepicker("setStartDate", newValue);
+        $("#Deadline").datepicker("setStartDate", newValue || undefined);
     });
     self.Deadline = ko.observable("").extend({ required: true });
     self.Deadline.subscribe(function (newValue) {
-        $("#StartTime").datetimepicker("setEndDate", newValue);
+        $("#StartTime").datepicker("setEndDate", newValue || undefined);
     });
 
     self.Status = ko.observable();
@@ -219,12 +219,13 @@ var projectEditViewModel = function (project) {
         }
     };
 
-    $("#StartTime,#Deadline").datetimepicker({
+    $("#StartTime,#Deadline").datepicker({
         format: "yyyy-mm-dd",
         autoclose: true,
-        pickerPosition: "bottom-left",
+        orientation: "top left",
         minView: "month",
-        language: "zh-CN"
+        language: "zh-CN",
+        todayBtn: "linked"
     });
     $('#file_upload').uploadify({
         'formData': { 'projectId': '' },
@@ -249,6 +250,46 @@ var projectEditViewModel = function (project) {
     })
     self.update(project);
 };
+
+var projectListSearchViewModel = function () {
+    var self = this,
+        rangeComputed = function (fromField, toField) {
+            return ko.computed(function () {
+                var from = self[fromField]();
+                var to = self[toField]();
+                if (from || to) {
+                    return from + "," + to;
+                } else {
+                    return "";
+                }
+            });
+        };
+    self.ProjectName = ko.observable();
+    self.ManagerId = ko.observable();
+    self.ParticipantId = ko.observable();
+    self.StartTimeFrom = ko.observable();
+    self.StartTimeTo = ko.observable();
+    self.DeadlineFrom = ko.observable();
+    self.DeadlineTo = ko.observable();
+    self.StartTime = rangeComputed("StartTimeFrom", "StartTimeTo");;
+    self.DeadLine = rangeComputed("DeadlineFrom", "DeadlineTo");;
+    self.clear = function () {
+        for (var prop in self) {
+            if (self.hasOwnProperty(prop) && ko.isObservable(self[prop])) {
+                self[prop]("");
+            }
+        }
+    };
+    self.getFilters = function () {
+        var filters = [];
+        for (var prop in self) {
+            if (self.hasOwnProperty(prop) && ko.isObservable(self[prop]) && self[prop]()) {
+                filters.push({ Field: prop, Value: self[prop]() });
+            }
+        }
+        return filters;
+    };
+}
 
 var projectListItemViewModel = function (project) {
     var self = this,
@@ -333,6 +374,7 @@ var projectListViewModel = function (user) {
         init = function () {
             self.user = user;
             self.queryFilter = { FieldFilters: [], SortFields: [], PageIndex: 1, PageSize: 20 };
+            self.searchCondition = new projectListSearchViewModel();
             self.pageList = new pageListViewModel();
             self.projectEdit = new ko.validatedObservable(new projectEditViewModel({}));
             self.projectEdit.isValid();
@@ -349,6 +391,9 @@ var projectListViewModel = function (user) {
             self.query = function () {
                 query(true);
                 showProjectListView();
+            };
+            self.search = function () {
+                query(true);
             };
             self.refrush = function () {
                 query();
@@ -492,12 +537,13 @@ var projectListViewModel = function (user) {
         query = function (updateQueryFilter) {
             if (updateQueryFilter) {
                 var queryFilter = self.queryFilter;
-                queryFilter.FieldFilters = [];
+                queryFilter.FieldFilters = self.searchCondition.getFilters();
                 queryFilter.SortFields = [];
                 for (var i = 0; i < self.filterLinks.length; i++) {
                     var filterLink = self.filterLinks[i];
                     queryFilter.FieldFilters.push({ Field: filterLink.field, Value: filterLink.value() });
                 }
+
                 queryFilter.PageIndex = 1;
                 self.queryFilter = queryFilter;
             }
@@ -510,6 +556,7 @@ var projectListViewModel = function (user) {
         showProjectEditView = function () {
             $("#list").hide();
             $("#listToolbar").hide();
+            $("#searchPanel").hide();
             $("#edit").show();
             $("#editToolbar").show();
             window.scrollTo(0, 0);
@@ -521,6 +568,13 @@ var projectListViewModel = function (user) {
             $("#editToolbar").hide();
             window.scrollTo(0, 0);
         };
+
+    $(".input-daterange").datepicker({
+        format: "yyyy-mm-dd",
+        autoclose: true,
+        orientation: "top left",
+        todayBtn: "linked"
+    });
 
     init();
 };

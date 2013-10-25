@@ -81,55 +81,74 @@
                     </div>
                 </div>
                 <hr class="toolbar-hr">
-                @*             <div class="row">
-                    <div class="col-md-10">
-                        <form class="form-horizontal" role="form">
-                            <div class="form-group">
-                                <label class="col-md-2 control-label">项目名称</label>
-                                <div class="col-md-6">
-                                    <input type="email" class="form-control">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-2 control-label">
-                                    截止时间</label>
-                                <div class="col-md-4">
-                                    <div class="input-group date form_datetime">
-                                        <input data-bind="value: Deadline" class="form-control required" type="text" value="">
-                                        <span class="input-group-addon">
-                                            <span class="glyphicon glyphicon-remove"></span>
-                                        </span>
-                                        <span class="input-group-addon">
-                                            <span class="glyphicon glyphicon-calendar"></span>
-                                        </span>
-                                    </div>
-                                </div>
-                                <label class="col-md-1 control-label">至</label>
-                                <div class="col-md-4">
-                                    <div class="input-group date form_datetime">
-                                        <input data-bind="value: Deadline" class="form-control required" type="text" value="">
-                                        <span class="input-group-addon">
-                                            <span class="glyphicon glyphicon-remove"></span>
-                                        </span>
-                                        <span class="input-group-addon">
-                                            <span class="glyphicon glyphicon-calendar"></span>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="col-md-2">
+                @*                <div id="search-popover" class="row">
+
+                                        <div class="col-md-2">
                         <div class="form-group pull-right">
                             <button class="btn btn-default btn-action btn-primary">查询</button>
                         </div>
                     </div>
-                </div>
-                <hr class="toolbar-hr">*@
+                </div>*@
             </div>
         </div>
         <div class="row">
             <div class="col-md-12 system-content">
+                <div id="searchPanel" data-bind="with: searchCondition" class="col-md-5 system-search-panel">
+                    <div class="arrow"></div>
+                    <form role="form">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <div class="input-group">
+                                    <span class="input-group-addon">项目名称：
+                                    </span>
+                                    <input data-bind="value: ProjectName" type="text" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <div class="input-group">
+                                    <span class="input-group-addon">负责人：
+                                    </span>
+                                    <select data-bind="value: ManagerId" class="form-control user-select" style="width: 177px;"></select>
+                                    <span class="input-group-addon">参与人：
+                                    </span>
+                                    <select data-bind="value: ParticipantId" class="form-control user-select" style="width: 177px;"></select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <div class="input-group date input-daterange">
+                                    <span class="input-group-addon">开始时间：
+                                    </span>
+                                    <input data-bind="value: StartTimeFrom" name="start" class="form-control required" style="width: 191px;" type="text">
+                                    <span class="input-group-addon">至
+                                    </span>
+                                    <input data-bind="value: StartTimeTo" name="end" class="form-control required" style="width: 191px;" type="text">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <div class="input-group date input-daterange">
+                                    <span class="input-group-addon">截止时间：
+                                    </span>
+                                    <input data-bind="value: DeadlineFrom" name="start" class="form-control required" style="width: 191px;" type="text">
+                                    <span class="input-group-addon">至
+                                    </span>
+                                    <input data-bind="value: DeadlineTo" name="end" class="form-control required" style="width: 191px;" type="text">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <button data-bind="click: $root.search" class="btn btn-default btn-action btn-primary">查询</button>
+                                <button data-bind="click: clear" class="btn btn-default btn-action btn-default">重置</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
                 <div class="row">
                     <div class="col-md-2">
                         <div class="system-sidebar">
@@ -281,6 +300,7 @@
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
@@ -295,6 +315,15 @@
             var users = @Html.ToJsonString(users);
             $("#ManagerNames").userSelectBox({ users: users, bindValue: "ManagerIds" });
             $("#ParticipantNames").userSelectBox({ users: users, bindValue: "ParticipantIds" });
+            $(".user-select").each(function(){
+                var $this = $(this);
+                $this.append('<option value=""></option>');
+                for(var i = 0;i < users.length; i++){
+                    if(users[i].Value != "all"){
+                        $this.append('<option value="' + users[i].Value + '">' + users[i].Text + '</option>');
+                    }
+                }
+            });
         });
     </script>
 }
@@ -305,6 +334,19 @@
         $(".system-toolbar .btn-action").tooltip();
         ko.applyBindings(new projectListViewModel(@Html.ToJsonString(currentUser)));
         //showPopMessage("Test","<a href='#'>test</a>",function(){alert("1");});
+        //debugger;
+        //var element =document.getElementById("btnSearch");
+        //var offsetLeft = element.offsetLeft; 
+        //while(element = element.offsetParent ) 
+        //{ 
+        //    offsetLeft += element.offsetLeft; 
+        //}
+        $("#btnSearch").click(function(){
+            var $this = $(this);
+            $("#searchPanel").css("left", $this.offset().left + $this.outerWidth() - 550 + "px");
+            $("#searchPanel").css("top", $this.offset().top + $this.outerHeight() + 15 + "px");
+            $("#searchPanel").toggle();
+        });
     });
 
 </script>

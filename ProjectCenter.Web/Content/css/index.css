@@ -356,3 +356,54 @@ textarea {
     background-color: #f2dede;
     border-color: #eed3d7;
 }
+
+.system-search-panel {
+    position: fixed;
+    top: 140px;
+    background: white;
+    display: none;
+    width: 550px;
+    z-index: 1010;
+    padding: 1px;
+    text-align: left;
+    white-space: normal;
+    background-color: #ffffff;
+    border: 1px solid #cccccc;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 6px;
+    -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    background-clip: padding-box;
+    margin: 10px;
+    padding-top: 20px;
+}
+
+    .system-search-panel .arrow,
+    .system-search-panel .arrow:after {
+        position: absolute;
+        display: block;
+        width: 0;
+        height: 0;
+        border-color: transparent;
+        border-style: solid;
+    }
+
+    .system-search-panel .arrow {
+        left: 520px;
+        border-width: 11px;
+        top: -11px;
+        margin-left: -11px;
+        border-bottom-color: #999999;
+        border-bottom-color: rgba(0, 0, 0, 0.25);
+        border-top-width: 0;
+    }
+
+        .system-search-panel .arrow:after {
+            border-width: 10px;
+            content: "";
+            top: 1px;
+            margin-left: -10px;
+            border-bottom-color: #ffffff;
+            border-top-width: 0;
+            content: " ";
+        }

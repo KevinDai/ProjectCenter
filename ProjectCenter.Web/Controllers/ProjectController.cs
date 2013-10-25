@@ -250,7 +250,7 @@ namespace ProjectCenter.Web.Controllers
         public ActionResult DownloadProjectExportFile(string path)
         {
             var fullPath = Server.MapPath(string.Format("{0}\\{1}", TempFilesFolder, path));
-            return File(fullPath, "application/vnd.ms-excel", "工作任务清单.xls");
+            return File(fullPath, "application/vnd.ms-excel", HttpUtility.UrlEncode("工作任务清单.xls", System.Text.Encoding.UTF8));
         }
 
         [HttpPost]
@@ -395,10 +395,10 @@ namespace ProjectCenter.Web.Controllers
             string zipFile = string.Empty;
             if (ids != null && ids.Length > 0)
             {
-                var attachments = ProjectService.GetAttachments(ids).Where(a=>System.IO.File.Exists(a.Path)).ToArray();
+                var attachments = ProjectService.GetAttachments(ids).Where(a => System.IO.File.Exists(a.Path)).ToArray();
                 if (attachments.Any())
                 {
-                    zipFile =  Guid.NewGuid().ToString() + ".zip";
+                    zipFile = Guid.NewGuid().ToString() + ".zip";
                     var zipFilePath = GetAttachmentZipFilePath(zipFile);
                     using (var stream = System.IO.File.Create(zipFilePath))
                     {
