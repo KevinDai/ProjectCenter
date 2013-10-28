@@ -72,6 +72,15 @@ namespace ProjectCenter.Web.Models
         }
 
         /// <summary>
+        /// 最新动态
+        /// </summary>
+        public string LatestNews
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
         /// 是否允许查看详细信息
         /// </summary>
         public bool EnableViewDetail

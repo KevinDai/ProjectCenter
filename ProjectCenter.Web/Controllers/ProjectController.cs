@@ -227,6 +227,18 @@ namespace ProjectCenter.Web.Controllers
             return HttpUtility.UrlEncode(name, System.Text.Encoding.UTF8);
         }
 
+        private void AddChangeLog(string projectId, ProjectActionType actionType, string message)
+        {
+            ProjectService.AddChangeLog(new ProjectChangeLog()
+            {
+                ActionType = (int)actionType,
+                UserId = UserInfo.UserId,
+                UserName = UserInfo.UserName,
+                ProjectId = projectId,
+                Message = message
+            });
+        }
+
         #endregion
 
         #region 操作
@@ -357,7 +369,7 @@ namespace ProjectCenter.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult EditProject(Project project)
+        public ActionResult EditProject(Project project, string remark)
         {
             if (string.IsNullOrEmpty(project.Id))
             {
@@ -373,6 +385,8 @@ namespace ProjectCenter.Web.Controllers
                 UpdateModel(entity, "project");
                 project = ProjectService.UpdateProject(entity);
             }
+
+            AddChangeLog(project.Id, ProjectActionType.Update, remark);
 
             return JsonMessageResult(new ProjectEditViewModel(project, UserInfo));
         }
@@ -395,6 +409,8 @@ namespace ProjectCenter.Web.Controllers
                 {
                     Directory.Delete(attachmentsFolder, true);
                 }
+
+                AddChangeLog(project.Id, ProjectActionType.Update, string.Empty);
             }
 
             return JsonMessageResult(null);
@@ -415,6 +431,8 @@ namespace ProjectCenter.Web.Controllers
             attachment.UploadUserId = UserInfo.UserId;
             attachment.UploadUserName = UserInfo.UserName;
             ProjectService.AddAttachment(attachment);
+
+            AddChangeLog(projectId, ProjectActionType.AddAttachment, file.FileName);
 
             return JsonMessageResult(null);
         }
@@ -527,6 +545,8 @@ namespace ProjectCenter.Web.Controllers
                 {
                     System.IO.File.Delete(attachment.Path);
                 }
+
+                AddChangeLog(attachment.ProjectId, ProjectActionType.DeleteAttachment, attachment.Name);
             }
 
             return JsonMessageResult(null);
@@ -542,6 +562,8 @@ namespace ProjectCenter.Web.Controllers
             comment.CreatorName = UserInfo.UserName;
 
             ProjectService.AddComment(comment);
+
+            AddChangeLog(projectId, ProjectActionType.AddComment, string.Empty);
 
             return JsonMessageResult(null);
         }
@@ -568,6 +590,8 @@ namespace ProjectCenter.Web.Controllers
                 throw new BusinessException("无删除操作权限");
             }
             ProjectService.DeleteComment(comment);
+
+            AddChangeLog(comment.ProjectId, ProjectActionType.DeleteComment, string.Empty);
 
             return JsonMessageResult(null);
         }

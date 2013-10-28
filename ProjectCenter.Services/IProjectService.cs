@@ -39,5 +39,7 @@ namespace ProjectCenter.Services
         Comment GetComment(string commentId);
 
         void DeleteComment(Comment comment);
+
+        ProjectChangeLog AddChangeLog(ProjectChangeLog log);
     }
 }

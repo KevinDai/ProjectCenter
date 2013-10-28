@@ -310,6 +310,7 @@ var projectListItemViewModel = function (project) {
             //self.createTime = formatDateString(project.CreateTime);
             self.Status = project.Status;
             self.DaySpanHtml = projectDaySpanHtml(project);
+            self.LatestNews = project.LatestNews;
             self.EnableViewDetail = project.EnableViewDetail;
             self.EnableDelete = project.EnableDelete;
         },

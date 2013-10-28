@@ -202,6 +202,14 @@ namespace ProjectCenter.Models
             set;
         }
 
+        /// <summary>
+        /// 最新动态
+        /// </summary>
+        public string LatestNews
+        {
+            get;
+            set;
+        }
 
         /// <summary>
         /// 创建时间

@@ -52,10 +52,13 @@
     <Compile Include="Mappings\AttachmentMap.cs" />
     <Compile Include="Mappings\CommentMap.cs" />
     <Compile Include="Mappings\NoteMap.cs" />
+    <Compile Include="Mappings\ProjectChangeLogMap.cs" />
     <Compile Include="Mappings\ProjectMap.cs" />
     <Compile Include="Mappings\UserMap.cs" />
     <Compile Include="Note.cs" />
+    <Compile Include="ProjectActionType.cs" />
     <Compile Include="ProjectCenterContext.cs" />
+    <Compile Include="ProjectChangeLog.cs" />
     <Compile Include="ProjectStatus.cs" />
     <Compile Include="ProjectType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

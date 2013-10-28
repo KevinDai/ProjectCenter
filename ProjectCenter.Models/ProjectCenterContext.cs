@@ -25,6 +25,7 @@ namespace ProjectCenter.Models
             //modelBuilder.Configurations.Add(new NoteMap());
             modelBuilder.Configurations.Add(new ProjectMap());
             modelBuilder.Configurations.Add(new UserMap());
+            modelBuilder.Configurations.Add(new ProjectChangeLogMap());
         }
     }
 }

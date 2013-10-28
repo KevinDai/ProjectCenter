@@ -8,6 +8,7 @@ using ProjectCenter.Util.Query;
 using ProjectCenter.Util.Query.Extensions;
 using System.Transactions;
 using ProjectCenter.Util.Query.Specification;
+using System.Data.SqlClient;
 
 namespace ProjectCenter.Services.Imp
 {
@@ -38,6 +39,15 @@ namespace ProjectCenter.Services.Imp
             }
         }
 
+
+        protected IDbSet<ProjectChangeLog> ProjectChangeLogs
+        {
+            get
+            {
+                return DbContext.Set<ProjectChangeLog>();
+            }
+        }
+
         public ProjectService(DbContext dbContext)
             : base(dbContext)
         {
@@ -64,6 +74,43 @@ namespace ProjectCenter.Services.Imp
                 case AmountReceivedStatus.All:
                     project.AmountReceived = project.Amount;
                     break;
+            }
+        }
+
+
+        private void UpdateLatestNews(ProjectChangeLog log)
+        {
+            ProjectActionType actionType = (ProjectActionType)log.ActionType;
+            if (actionType != ProjectActionType.Delete)
+            {
+                var latestNews = log.CreateTime.ToString("yyyy-MM-dd HH:mm") + " " + log.UserName;
+                switch (actionType)
+                {
+                    case ProjectActionType.Update:
+                        latestNews += "编辑";
+                        break;
+                    case ProjectActionType.AddAttachment:
+                        latestNews += "增加附件";
+                        break;
+                    case ProjectActionType.DeleteAttachment:
+                        latestNews += "删除附件";
+                        break;
+                    case ProjectActionType.AddComment:
+                        latestNews += "增加评论";
+                        break;
+                    case ProjectActionType.DeleteComment:
+                        latestNews += "删除评论";
+                        break;
+                    case ProjectActionType.Check:
+                        latestNews += "更改项目状态";
+                        break;
+                }
+
+                latestNews = string.IsNullOrWhiteSpace(log.Message) ? latestNews : latestNews + "," + log.Message;
+
+                DbContext.Database.ExecuteSqlCommand("Update Projects Set LatestNews = @p0 Where Id = @p1",
+                    new SqlParameter { ParameterName = "p0", Value = latestNews },
+                    new SqlParameter { ParameterName = "p1", Value = log.ProjectId });
             }
         }
 
@@ -220,6 +267,19 @@ namespace ProjectCenter.Services.Imp
             DeleteEntity(comment);
 
             SaveChanges();
+        }
+
+        public ProjectChangeLog AddChangeLog(ProjectChangeLog log)
+        {
+            log.Id = Guid.NewGuid().ToString();
+            log.CreateTime = DateTime.Now;
+
+            ProjectChangeLogs.Add(log);
+            SaveChanges();
+
+            UpdateLatestNews(log);
+
+            return log;
         }
 
         #endregion

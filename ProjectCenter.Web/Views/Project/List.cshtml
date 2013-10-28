@@ -181,8 +181,8 @@
                                             <col style="width: 40px;">
                                             <col style="width: 200px;">
                                             <col style="width: 120px;">
-                                            <col style="width: 200px;">
                                             <col style="width: 190px;">
+                                            <col style="width: 250px;">
                                             <col style="width: 40px;">
                                         </colgroup>
                                         <thead>
@@ -190,8 +190,8 @@
                                                 <th></th>
                                                 <th>项目名称</th>
                                                 <th>负责人</th>
-                                                <th>参与人</th>
                                                 <th>项目状态</th>
+                                                <th>最新动态</th>
                                                 <th></th>
                                             </tr>
                                         </thead>
@@ -213,15 +213,15 @@
                                                     </div>
                                                 </td>
                                                 <td data-bind="click: $root.edit">
-                                                    <div>
-                                                        <span data-bind="text: ParticipantNames"></span>
-                                                    </div>
-                                                </td>
-                                                <td data-bind="click: $root.edit">
                                                     <span data-bind="html: DaySpanHtml"></span>
                                                     <br />
                                                     <small data-bind="text: StartTime" class="muted"></small>-
                                                 <small data-bind="text: Deadline" class="muted"></small>
+                                                </td>
+                                                <td data-bind="click: $root.edit">
+                                                    <div>
+                                                        <span style="font-size: 13px;" data-bind="text: LatestNews"></span>
+                                                    </div>
                                                 </td>
                                                 <td>
                                                     <a data-bind="click: $root.delete, visible: EnableDelete" href="#"><span class="glyphicon glyphicon-trash"></span></a>
