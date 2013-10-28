@@ -181,6 +181,11 @@ namespace ProjectCenter.Web.Controllers
             return Server.MapPath(string.Format("{0}\\{1}", AttachmentFolder, projectId));
         }
 
+        private string EncodeDownloadFileName(string name)
+        {
+            return HttpUtility.UrlEncode(name, System.Text.Encoding.UTF8);
+        }
+
         #endregion
 
         #region 操作
@@ -250,7 +255,7 @@ namespace ProjectCenter.Web.Controllers
         public ActionResult DownloadProjectExportFile(string path)
         {
             var fullPath = Server.MapPath(string.Format("{0}\\{1}", TempFilesFolder, path));
-            return File(fullPath, "application/vnd.ms-excel", HttpUtility.UrlEncode("工作任务清单.xls", System.Text.Encoding.UTF8));
+            return File(fullPath, "application/vnd.ms-excel", EncodeDownloadFileName("工作任务清单.xls"));
         }
 
         [HttpPost]
@@ -387,7 +392,7 @@ namespace ProjectCenter.Web.Controllers
                 return Content("指定的附件不存在");
             }
 
-            return File(attachment.Path, "text/plain", attachment.Name);
+            return File(attachment.Path, "text/plain", EncodeDownloadFileName(attachment.Name));
         }
 
         public ActionResult ZipAttachments(string[] ids)
@@ -429,7 +434,7 @@ namespace ProjectCenter.Web.Controllers
         public ActionResult DownloadAttachmentZipFile(string path)
         {
             var fullPath = GetAttachmentZipFilePath(path);
-            return File(fullPath, "application/zip", "项目附件.zip");
+            return File(fullPath, "application/zip", EncodeDownloadFileName("项目附件.zip"));
         }
 
         //public ActionResult DownloadAttachments(string id)
