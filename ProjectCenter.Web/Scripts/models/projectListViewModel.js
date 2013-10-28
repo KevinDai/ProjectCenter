@@ -255,8 +255,8 @@ var projectListSearchViewModel = function () {
     var self = this,
         rangeComputed = function (fromField, toField) {
             return ko.computed(function () {
-                var from = self[fromField]();
-                var to = self[toField]();
+                var from = self[fromField]() || "";
+                var to = self[toField]() || "";
                 if (from || to) {
                     return from + "," + to;
                 } else {
@@ -264,6 +264,7 @@ var projectListSearchViewModel = function () {
                 }
             });
         };
+    self.FilterFields = ["ProjectName", "ManagerId", "ParticipantId", "StartTime", "Deadline"];
     self.ProjectName = ko.observable();
     self.ManagerId = ko.observable();
     self.ParticipantId = ko.observable();
@@ -272,7 +273,7 @@ var projectListSearchViewModel = function () {
     self.DeadlineFrom = ko.observable();
     self.DeadlineTo = ko.observable();
     self.StartTime = rangeComputed("StartTimeFrom", "StartTimeTo");;
-    self.DeadLine = rangeComputed("DeadlineFrom", "DeadlineTo");;
+    self.Deadline = rangeComputed("DeadlineFrom", "DeadlineTo");;
     self.clear = function () {
         for (var prop in self) {
             if (self.hasOwnProperty(prop) && ko.isObservable(self[prop])) {
@@ -282,9 +283,10 @@ var projectListSearchViewModel = function () {
     };
     self.getFilters = function () {
         var filters = [];
-        for (var prop in self) {
-            if (self.hasOwnProperty(prop) && ko.isObservable(self[prop]) && self[prop]()) {
-                filters.push({ Field: prop, Value: self[prop]() });
+        for (var i = 0; i < self.FilterFields.length; i++) {
+            var field = self.FilterFields[i];
+            if (self[field]()) {
+                filters.push({ Field: field, Value: self[field]() });
             }
         }
         return filters;
@@ -423,8 +425,6 @@ var projectListViewModel = function (user) {
                 });
                 request("/Project/ExportProjects", { queryFilter: self.queryFilter }, function (result) {
                     if (flag) {
-                        //window.open("/Project/DownloadProjectExportFile?path=" + result);
-                        //closePopMessage();
                         updatePopMessage("导出文件生成成功，<a onclick='closePopMessage();' target='_blank' " +
                             "href='/Project/DownloadProjectExportFile?path=" + result + "'>点击下载</a>");
                     }
@@ -573,6 +573,7 @@ var projectListViewModel = function (user) {
         format: "yyyy-mm-dd",
         autoclose: true,
         orientation: "top left",
+        language: "zh-CN",
         todayBtn: "linked"
     });
 

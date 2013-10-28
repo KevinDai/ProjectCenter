@@ -43,24 +43,6 @@ namespace ProjectCenter.Web.Controllers
 
         #region 方法
 
-        private class Test
-        {
-            public string Name
-            {
-                get;
-                set;
-            }
-        }
-
-        public class Test1
-        {
-            public int Name
-            {
-                get;
-                set;
-            }
-        }
-
         private ISpecification<Project> BuildProjectSpecification(QueryFilter queryFilter)
         {
             ISpecification<Project> spec = null;
@@ -114,6 +96,44 @@ namespace ProjectCenter.Web.Controllers
                                 temp = new TypeSpecification(Int32.Parse(fieldFilter.Value));
                             }
                             break;
+                        case "ProjectName":
+                            if (!string.IsNullOrWhiteSpace(fieldFilter.Value))
+                            {
+                                temp = new NameSpecification(fieldFilter.Value);
+                            }
+                            break;
+                        case "ManagerId":
+                            if (!string.IsNullOrWhiteSpace(fieldFilter.Value))
+                            {
+                                temp = new ManagerIdsSpecification(fieldFilter.Value);
+                            }
+                            break;
+                        case "ParticipantId":
+                            if (!string.IsNullOrWhiteSpace(fieldFilter.Value))
+                            {
+                                temp = new ParticipantIdsSpecification(fieldFilter.Value);
+                            }
+                            break;
+                        case "StartTime":
+                            {
+                                DateTime? min = null;
+                                DateTime? max = null;
+                                if (TryGetDateTimeSpanValue(fieldFilter.Value, ref min, ref max))
+                                {
+                                    temp = new StartTimeSpecification(min, max);
+                                }
+                            }
+                            break;
+                        case "Deadline":
+                            {
+                                DateTime? min = null;
+                                DateTime? max = null;
+                                if (TryGetDateTimeSpanValue(fieldFilter.Value, ref min, ref max))
+                                {
+                                    temp = new DeadlineSpecification(min, max);
+                                }
+                            }
+                            break;
                     }
                     if (temp != null)
                     {
@@ -122,6 +142,27 @@ namespace ProjectCenter.Web.Controllers
                 }
             }
             return spec;
+        }
+
+        private bool TryGetDateTimeSpanValue(string value, ref DateTime? min, ref DateTime? max)
+        {
+            if (!string.IsNullOrWhiteSpace(value))
+            {
+                DateTime tempDateTime;
+                var spans = value.Split(',');
+
+                if (spans.Length > 0 && DateTime.TryParse(spans[0], out tempDateTime))
+                {
+                    min = tempDateTime;
+                }
+                if (spans.Length > 1 && DateTime.TryParse(spans[1], out tempDateTime))
+                {
+                    max = tempDateTime;
+                }
+
+                return min.HasValue || max.HasValue;
+            }
+            return false;
         }
 
         private SortDescriptor<Project>[] BuildProjectSortDescriptor(QueryFilter queryFilter)

@@ -55,11 +55,13 @@
     <Compile Include="Models\LoginResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceFactory.cs" />
+    <Compile Include="Specifications\DateTimeSpanSpecification.cs" />
     <Compile Include="Specifications\Projects\CreatorIdSpecification.cs" />
     <Compile Include="Specifications\Projects\DeadlineSpecification.cs" />
     <Compile Include="Specifications\Projects\ManagerIdsSpecification.cs" />
     <Compile Include="Specifications\Projects\NameSpecification.cs" />
     <Compile Include="Specifications\Projects\ParticipantIdsSpecification.cs" />
+    <Compile Include="Specifications\Projects\StartTimeSpecification.cs" />
     <Compile Include="Specifications\Projects\StatusSpecification.cs" />
     <Compile Include="Specifications\Projects\TypeSpecification.cs" />
   </ItemGroup>
