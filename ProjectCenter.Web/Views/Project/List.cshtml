@@ -219,9 +219,7 @@
                                                 <small data-bind="text: Deadline" class="muted"></small>
                                                 </td>
                                                 <td data-bind="click: $root.edit">
-                                                    <div>
-                                                        <span style="font-size: 13px;" data-bind="text: LatestNews"></span>
-                                                    </div>
+                                                    <div class="news" data-bind="text: LatestNews"></div>
                                                 </td>
                                                 <td>
                                                     <a data-bind="click: $root.delete, visible: EnableDelete" href="#"><span class="glyphicon glyphicon-trash"></span></a>
@@ -244,8 +242,8 @@
                                             <tr>
                                                 <th>项目名称</th>
                                                 <th>负责人</th>
-                                                <th>参与人</th>
                                                 <th>项目状态</th>
+                                                <th>最新动态</th>
                                                 <th></th>
                                             </tr>
                                         </thead>
@@ -261,15 +259,13 @@
                                                     </div>
                                                 </td>
                                                 <td data-bind="click: $root.edit">
-                                                    <div>
-                                                        <span data-bind="text: ParticipantNames"></span>
-                                                    </div>
-                                                </td>
-                                                <td data-bind="click: $root.edit">
                                                     <span data-bind="html: DaySpanHtml"></span>
                                                     <br />
                                                     <small data-bind="text: StartTime" class="muted"></small>-
                                                 <small data-bind="text: Deadline" class="muted"></small>
+                                                </td>
+                                                <td data-bind="click: $root.edit">
+                                                    <div class="news" data-bind="text: LatestNews"></div>
                                                 </td>
                                                 <td>
                                                     <a data-bind="click: $root.delete, visible: EnableDelete" href="#"><span class="glyphicon glyphicon-trash"></span></a>
@@ -308,29 +304,9 @@
 
 <script src="@Url.Content("~/Scripts/models/projectListViewModel.js")" type="text/javascript"></script>
 
-@if (ViewBag.UserInfo.RightDetail.EnableSetProjectUser)
-{
-    <script type="text/javascript">
-        $(function () {
-            var users = @Html.ToJsonString(users);
-            $("#ManagerNames").userSelectBox({ users: users, bindValue: "ManagerIds" });
-            $("#ParticipantNames").userSelectBox({ users: users, bindValue: "ParticipantIds" });
-            $(".user-select").each(function(){
-                var $this = $(this);
-                $this.append('<option value=""></option>');
-                for(var i = 0;i < users.length; i++){
-                    if(users[i].Value != "all"){
-                        $this.append('<option value="' + users[i].Value + '">' + users[i].Text + '</option>');
-                    }
-                }
-            });
-        });
-    </script>
-}
-
 <script type="text/javascript">
-
     $(function () {
+        window.users = @Html.ToJsonString(users);
         $(".system-toolbar .btn-action").tooltip();
         ko.applyBindings(new projectListViewModel(@Html.ToJsonString(currentUser)));
         //showPopMessage("Test","<a href='#'>test</a>",function(){alert("1");});
@@ -341,12 +317,32 @@
         //{ 
         //    offsetLeft += element.offsetLeft; 
         //}
-        $("#btnSearch").click(function(){
+        $("#btnSearch").click(function () {
             var $this = $(this);
             $("#searchPanel").css("left", $this.offset().left + $this.outerWidth() - 550 + "px");
             $("#searchPanel").css("top", $this.offset().top + $this.outerHeight() + 15 + "px");
             $("#searchPanel").toggle();
         });
+        $(".user-select").each(function () {
+            var $this = $(this);
+            $this.append('<option value=""></option>');
+            for (var i = 0; i < users.length; i++) {
+                if (users[i].Value != "all") {
+                    $this.append('<option value="' + users[i].Value + '">' + users[i].Text + '</option>');
+                }
+            }
+        });
     });
 
 </script>
+
+@if (ViewBag.UserInfo.RightDetail.EnableSetProjectUser)
+{
+    <script type="text/javascript">
+        $(function () {
+            $("#ManagerNames").userSelectBox({ users: users, bindValue: "ManagerIds" });
+            $("#ParticipantNames").userSelectBox({ users: users, bindValue: "ParticipantIds" });
+
+        });
+    </script>
+}

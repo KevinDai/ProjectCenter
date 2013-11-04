@@ -64,7 +64,11 @@ var projectEditViewModel = function (project) {
     self.Attachments = ko.observableArray();
     self.CommentPageList = new pageListViewModel();
     self.EditCommentContent = ko.observableArray("");
-
+    //self.EditRemark = ko.observable("");
+    //self.save = function () {
+    //    self.EditRemark("");
+    //    $("#remarkDialog").modal("show");
+    //};
     self.addAttachment = function () {
         self.EditCommentContent("");
         $("#attachmentDialog").modal("show");
@@ -437,10 +441,14 @@ var projectListViewModel = function (user) {
             };
             self.save = function () {
                 if (self.projectEdit.isValid()) {
-                    request("/Project/EditProject", { project: self.projectEdit }, function (result) {
-                        self.projectEdit().update(result, true);
-                        showMessage("保存成功");
-                    });
+                    if (self.projectEdit().Id()) {
+                        showPopConfrimMessage("修改备注", '<textarea id="editRemark" class="form-control" rows="4"></textarea>', function () {
+                            var editRemark = $("#editRemark").val();
+                            saveProject({ project: self.projectEdit, remark: editRemark });
+                        });
+                    } else {
+                        saveProject({ project: self.projectEdit });
+                    }
                 }
             };
             self.edit = function (data) {
@@ -528,6 +536,12 @@ var projectListViewModel = function (user) {
             ];
 
             query(true);
+        },
+        saveProject = function (data) {
+            request("/Project/EditProject", data, function (result) {
+                self.projectEdit().update(result, true);
+                showMessage("保存成功");
+            });
         },
         updatePageList = function (pageList) {
             pageList.List = $.map(pageList.List, function (item) {

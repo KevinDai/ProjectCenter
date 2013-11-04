@@ -384,9 +384,9 @@ namespace ProjectCenter.Web.Controllers
                 var entity = ProjectService.GetProject(project.Id);
                 UpdateModel(entity, "project");
                 project = ProjectService.UpdateProject(entity);
-            }
 
-            AddChangeLog(project.Id, ProjectActionType.Update, remark);
+                AddChangeLog(project.Id, ProjectActionType.Update, remark);
+            }
 
             return JsonMessageResult(new ProjectEditViewModel(project, UserInfo));
         }

@@ -55,9 +55,11 @@ namespace ProjectCenter.Web.Controllers
                     UserName = user.Name,
                     RightDetail = new RightDetail(user.RightLevel)
                 };
-
             }
-
+            else if (Request.IsAjaxRequest())
+            {
+                throw new BusinessException("用户已过期，请重新登录！");
+            }
         }
 
         protected User GetUser(string userId)
