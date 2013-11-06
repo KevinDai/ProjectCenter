@@ -9,7 +9,7 @@
                     <label class="col-md-2 control-label">
                         项目类型：</label>
                     <div class="col-md-4">
-                        <select data-bind="value: Type, disable : Id" class="form-control">
+                        <select data-bind="value: Type, enable: EnableEditProject" class="form-control">
                             <option value="0">纵向研究</option>
                             <option value="1">横向研究</option>
                             <option value="2">横向咨询</option>
@@ -22,7 +22,7 @@
                     <label class="col-md-2 control-label">
                         项目名称：</label>
                     <div class="col-md-8">
-                        <input data-bind="value: Name, disable : Id" class="form-control" type="text">
+                        <input data-bind="value: Name, enable: EnableEditProject" class="form-control" type="text">
                     </div>
                 </div>
                 <div class="form-group">
@@ -37,14 +37,6 @@
                         开始时间：</label>
                     <div class="col-md-3">
                         <input id="StartTime" data-bind="value: StartTime, enable: EnableEditProject" class="form-control form_datetime" type="text" value="">
-                        @*            <div class="input-group date ">
-                            <span data-bind="visible: EnableEditProject" class="input-group-addon">
-                                <span class="glyphicon glyphicon-remove"></span>
-                            </span>
-                            <span data-bind="visible: EnableEditProject" class="input-group-addon">
-                                <span class="glyphicon glyphicon-calendar"></span>
-                            </span>
-                        </div>*@
                     </div>
                 </div>
                 <div class="form-group">
@@ -52,14 +44,6 @@
                         截止时间：</label>
                     <div class="col-md-3">
                         <input id="Deadline" data-bind="value: Deadline, enable: EnableEditProject" class="form-control required " type="text" value="">
-                        @*                        <div class="input-group date form_datetime">
-                            <span data-bind="visible: EnableEditProject" class="input-group-addon">
-                                <span class="glyphicon glyphicon-remove"></span>
-                            </span>
-                            <span data-bind="visible: EnableEditProject" class="input-group-addon">
-                                <span class="glyphicon glyphicon-calendar"></span>
-                            </span>
-                        </div>*@
                     </div>
                 </div>
                 <div class="form-group">
@@ -193,14 +177,11 @@
     </div>
 </div>
 <div data-bind="visible: Id" class="col-md-12">
-    <div class="panel panel-default">
+    <div class="panel panel-default table-panel">
         <div class="panel-heading">
             <ul class="list-unstyled list-inline pull-right list-panel-title">
                 <li><a data-bind="click: refrushAttachments" href="#"><span class="glyphicon glyphicon-refresh"></span><span class="btn-glyphicon-content">刷新</span></a></li>
                 <li>
-                    @*<a data-bind="attr: {'href': Attachments() && Attachments().length > 0 ? '/Project/DownloadAttachments/' + Id() : 'javascript:void(0);'}" target="_blank">
-                        <span class="glyphicon glyphicon-download-alt"></span><span class="btn-glyphicon-content">下载全部</span>
-                    </a>*@
                     <a data-bind="click: downloadAttachments" href="#">
                         <span class="glyphicon glyphicon-download-alt"></span><span class="btn-glyphicon-content">下载</span>
                     </a>
@@ -209,52 +190,141 @@
             </ul>
             <h3 class="panel-title">附件列表</h3>
         </div>
-        <table data-bind="visible: Attachments() && Attachments().length > 0" class="table attchment-table">
-            <colgroup>
-                <col style="width: 40px;">
-                <col style="width: 450px;">
-                <col style="width: 100px;">
-                <col style="width: 150px;">
-                <col style="width: 40px;">
-            </colgroup>
-            <thead>
-                <tr>
-                    <th>
-                        <input data-bind="checked: AllAttachmentsChecked, click: function(){ return true; }, clickBubble: false" type="checkbox">
-                    </th>
-                    <th>附件名称</th>
-                    <th>上传人</th>
-                    <th>上传时间</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody data-bind="foreach: Attachments">
-                <tr>
-                    <td>
-                        <input data-bind="checked: Checked" type="checkbox">
-                    </td>
-                    <td>
-                        <a data-bind="attr: {'href': '/Project/DownloadAttachment/'+ Id}" target="_blank"><span data-bind="text: Name"></span></a>
-                    </td>
-                    <td>
-                        <span data-bind="text: UploadUserName"></span>
-                    </td>
-                    <td>
-                        <span data-bind="text: UploadTime"></span>
-                    </td>
-                    <td>
-                        @if (ViewBag.UserInfo.RightDetail.EnbaleDeleteProject)
-                        {
-                            <a data-bind="click: $parent.deleteAttachment" href="#"><span class="glyphicon glyphicon-remove"></span></a>
-                        }
-                        else
-                        {
-                            <a data-bind="click: $parent.deleteAttachment, visible: $root.user.UserId == UploadUserId" href="#"><span class="glyphicon glyphicon-remove"></span></a>
-                        }
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="panel-body">
+            <table data-bind="visible: Attachments() && Attachments().length > 0" class="table">
+                <colgroup>
+                    <col style="width: 40px;">
+                    <col style="width: 450px;">
+                    <col style="width: 100px;">
+                    <col style="width: 150px;">
+                    <col style="width: 40px;">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>
+                            <input data-bind="checked: AllAttachmentsChecked, click: function(){ return true; }, clickBubble: false" type="checkbox">
+                        </th>
+                        <th>附件名称</th>
+                        <th>上传人</th>
+                        <th>上传时间</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody data-bind="foreach: Attachments">
+                    <tr>
+                        <td>
+                            <input data-bind="checked: Checked" type="checkbox">
+                        </td>
+                        <td>
+                            <a data-bind="attr: {'href': '/Project/DownloadAttachment/'+ Id}" target="_blank"><span data-bind="text: Name"></span></a>
+                        </td>
+                        <td>
+                            <span data-bind="text: UploadUserName"></span>
+                        </td>
+                        <td>
+                            <span data-bind="text: UploadTime"></span>
+                        </td>
+                        <td>
+                            @if (ViewBag.UserInfo.RightDetail.EnbaleDeleteProject)
+                            {
+                                <a data-bind="click: $parent.deleteAttachment" href="#"><span class="glyphicon glyphicon-remove"></span></a>
+                            }
+                            else
+                            {
+                                <a data-bind="click: $parent.deleteAttachment, visible: $root.user.UserId == UploadUserId" href="#"><span class="glyphicon glyphicon-remove"></span></a>
+                            }
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-12">
+    <div class="panel panel-default table-panel">
+        <div class="panel-heading">
+            <ul class="list-unstyled list-inline pull-right list-panel-title">
+                <li><a data-bind="click: editBudgets" href="#"><span class="glyphicon glyphicon-edit"></span><span class="btn-glyphicon-content">编辑预算</span></a></li>
+            </ul>
+            <h3 class="panel-title">财务信息</h3>
+        </div>
+        <div class="panel-body">
+            <table data-bind="visible: Budgets() && Budgets().length > 0" class="table">
+                <colgroup>
+                    <col style="width: 200px;">
+                    <col style="width: 150px;">
+                    <col style="width: 150px;">
+                    <col style="width: 150px;">
+                    <col style="width: 50px;">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>支出类型</th>
+                        <th>预算金额（元）</th>
+                        <th>已用金额（元）</th>
+                        <th>剩余金额（元）</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody data-bind="foreach: Budgets">
+                    <tr>
+                        <td>
+                            <span data-bind="text: DisplayName"></span>
+                        </td>
+                        <td>
+                            <span data-bind="text: FormattedAmount"></span>
+                        </td>
+                        <td>
+                            <span data-bind="text: Expended"></span>
+                        </td>
+                        <td>
+                            <span data-bind="text: Remained"></span>
+                        </td>
+                        <td>
+                            <a data-bind="click: $parent.addExpenditure" href="#" class="table-item-action" title="新增支出"><span class="glyphicon glyphicon-plus"></span></a>
+                            <a data-bind="click: showExpenditures" href="#" class="table-item-action" title="支出详情"><span class="glyphicon glyphicon-th-list"></span></a>
+                        </td>
+                    </tr>
+                    <tr data-bind="visible: ExpendituresVisible">
+                        <td style="padding-left: 30px;" colspan="5">
+                            <table class="table">
+                                <colgroup>
+                                    <col style="width: 150px;">
+                                    <col style="width: 150px;">
+                                    <col style="width: 300px;">
+                                    <col style="width: 40px;">
+                                </colgroup>
+                                <thead>
+                                    <tr>
+                                        <th>用户</th>
+                                        <th>支出金额（元）</th>
+                                        <th>备注</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody data-bind="foreach: Expenditures">
+                                    <tr>
+                                        <td>
+                                            <span data-bind="text: UserName"></span>
+                                        </td>
+                                        <td>
+                                            <span data-bind="text: Count"></span>
+                                        </td>
+                                        <td>
+                                            <span data-bind="text: Remark"></span>
+                                        </td>
+                                        <td>
+                                            <a href="#"><span class="glyphicon glyphicon-remove"></span></a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 <div data-bind="visible: Id" class="col-md-12">
@@ -300,8 +370,6 @@
                         <li data-bind="css: PageIndex() > 1 ? undefined : 'disabled'"><a data-bind="click: $parent.prePageComments" href="#"><span class="glyphicon glyphicon-chevron-left"></span></a></li>
                         <li data-bind="css: PageIndex() < MaxPageIndex() ? undefined : 'disabled'"><a href="#" data-bind="click: $parent.nextPageComments"><span class="glyphicon glyphicon-chevron-right"></span></a></li>
                     </ul>
-
-
                 </div>
             </div>
         </div>
@@ -326,19 +394,96 @@
                         <div id="queueUpload"></div>
                     </div>
                 </div>
-                @* <div class="row">
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div id="budgetsDialog" class="modal fade" data-backdrop="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" style="font-weight: bold;">预算金额编辑</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form data-bind="foreach: Budgets" class="form-horizontal">
+                            <div class="form-group">
+                                <label class="col-md-4 control-label"><span data-bind="text: DisplayName"></span>：</label>
+                                <div class="col-md-4">
+                                    <input data-bind="value: FormattedEditAmout" class="form-control" type="text">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="row">
                     <div class="col-md-12">
                         <ul class="list-unstyle list-inline pull-right">
                             <li>
-                                <button data-bind="click: saveComment, attr: {'disabled': EditCommentContent() ? undefined : 'disabled'}" type="button" class="btn btn-primary btn-primary">提交评论</button>
-
+                                <button type="button" class="btn btn-primary btn-primary">保存预算</button>
                             </li>
                             <li>
                                 <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
                             </li>
                         </ul>
                     </div>
-                </div>*@
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div id="expenditureDialog" class="modal fade" data-backdrop="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" style="font-weight: bold;">新增财务支出</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form data-bind="with: EditExpenditure" class="form-horizontal">
+                            <div class="form-group">
+                                <label class="col-md-4 control-label">支出类型：</label>
+                                <label data-bind="text: BudgetDisplayName" class="col-md-8 control-label" style="text-align: left;"></label>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 control-label">剩余金额：</label>
+                                <label data-bind="text: BudgetRemained" class="col-md-8 control-label" style="text-align: left;"></label>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 control-label">支出金额：</label>
+                                <div class="col-md-6">
+                                    <input data-bind="value: FormattedCount" class="form-control" type="text">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 control-label">备注说明：</label>
+                                <div class="col-md-6">
+                                    <textarea data-bind="value: Remark" class="form-control" rows="3"></textarea>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <ul class="list-unstyle list-inline pull-right">
+                            <li>
+                                <button type="button" class="btn btn-primary btn-primary">保存</button>
+                            </li>
+                            <li>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
 
         </div>
@@ -365,7 +510,6 @@
                         <ul class="list-unstyle list-inline pull-right">
                             <li>
                                 <button data-bind="click: saveComment, attr: {'disabled': EditCommentContent() ? undefined : 'disabled'}" type="button" class="btn btn-primary btn-primary">提交评论</button>
-
                             </li>
                             <li>
                                 <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
@@ -378,37 +522,3 @@
         </div>
     </div>
 </div>
-
-@*<div id="remarkDialog" class="modal fade" data-backdrop="false">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" style="font-weight: bold;">修改备注</h4>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <textarea data-bind="value: EditCommentContent, valueUpdate: 'afterkeydown'" class="form-control" rows="4"></textarea>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <ul class="list-unstyle list-inline pull-right">
-                            <li>
-                                <button data-bind="click: save" type="button" class="btn btn-primary btn-primary">提交评论</button>
-
-                            </li>
-                            <li>
-                                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </div>
-</div>*@

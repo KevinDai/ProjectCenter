@@ -1,18 +1,26 @@
 ﻿
+function computedFormatPrice(model, field) {
+    return ko.computed({
+        read: function () {
+            return model[field]()
+                ? thousandthFormatted(model[field]().toFixed(2))
+                : (0).toFixed(2);
+        },
+        write: function (value) {
+            value = parseFloat(value.replace(/[^\.\d]/g, ""));
+            model[field](isNaN(value) ? 0 : value); // Write to underlying storage
+        },
+        owner: model
+    });
+}
+
+function thousandthFormatted(str) {
+    var re = /\d{1,3}(?=(\d{3})+$)/g;
+    return str.replace(/^(\d+)((\.\d+)?)$/, function (s, s1, s2) { return s1.replace(re, "$&,") + s2; });
+}
+
 var projectEditViewModel = function (project) {
     var self = this,
-        priceFormatted = function (field) {
-            return ko.computed({
-                read: function () {
-                    return self[field]() ? self[field]().toFixed(2) : (0).toFixed(2);
-                },
-                write: function (value) {
-                    value = parseFloat(value.replace(/[^\.\d]/g, ""));
-                    self[field](isNaN(value) ? 0 : value); // Write to underlying storage
-                },
-                owner: self
-            });
-        },
         formattedDateStr = function (datetime) {
             return datetime ? datetime.replace(/\//g, '-').split(" ")[0] : datetime;
         },
@@ -50,20 +58,51 @@ var projectEditViewModel = function (project) {
     self.NeedSupport = ko.observable();
     self.AdvancePlan = ko.observable();
     self.Amount = ko.observable();
-    self.FormattedAmount = priceFormatted("Amount");
+    self.FormattedAmount = computedFormatPrice(self, "Amount");
     self.TypeOfPayment = ko.observable();
     self.NeedFinish = ko.observable();
     self.AmountReceivedStatus = ko.observable();
     self.AmountReceived = ko.observable();
-    self.FormattedAmountReceived = priceFormatted("AmountReceived");
+    self.FormattedAmountReceived = computedFormatPrice(self, "AmountReceived");
     self.AmountRemained = ko.computed(function () {
         var result = self.Amount() - self.AmountReceived();
-        return result.toFixed(2)
+        return thousandthFormatted(result.toFixed(2));
     });
     self.InvoiceStatus = ko.observable();
     self.Attachments = ko.observableArray();
+    self.Budgets = ko.observableArray([
+       new projectBudgetViewModel({
+           Id: "0", Category: 1, DisplayName: "工资（奖金）", Amount: 300333.00, Expenditures: [
+               { UserId: "1", UserName: "测试用户", Remark: "备注", Count: 100.00 },
+               { UserId: "1", UserName: "测试用户", Remark: "备注", Count: 100.00 },
+               { UserId: "1", UserName: "测试用户", Remark: "备注", Count: 100.00 },
+               { UserId: "1", UserName: "测试用户", Remark: "备注", Count: 100.00 },
+               { UserId: "1", UserName: "测试用户", Remark: "备注", Count: 100.00 }
+           ]
+       }),
+       new projectBudgetViewModel({
+           Id: "0", Category: 1, DisplayName: "劳务费", Amount: 300333.00, Expenditures: [
+               { UserId: "1", UserName: "测试用户", Remark: "备注", Count: 100.00 },
+               { UserId: "1", UserName: "测试用户", Remark: "备注", Count: 100.00 },
+               { UserId: "1", UserName: "测试用户", Remark: "备注", Count: 100.00 },
+               { UserId: "1", UserName: "测试用户", Remark: "备注", Count: 100.00 },
+               { UserId: "1", UserName: "测试用户", Remark: "备注", Count: 100.00 },
+               { UserId: "1", UserName: "测试用户", Remark: "备注", Count: 100.00 }
+           ]
+       }),
+       new projectBudgetViewModel({
+           Id: "0", Category: 1, DisplayName: "差旅费（交通费）", Amount: 300333.00, Expenditures: [
+               { UserId: "1", UserName: "测试用户", Remark: "备注", Count: 100.00 },
+               { UserId: "1", UserName: "测试用户", Remark: "备注", Count: 100.00 },
+               { UserId: "1", UserName: "测试用户", Remark: "备注", Count: 100.00 },
+               { UserId: "1", UserName: "测试用户", Remark: "备注", Count: 100.00 }
+           ]
+       })
+    ]);
+
     self.CommentPageList = new pageListViewModel();
     self.EditCommentContent = ko.observableArray("");
+    self.EditExpenditure = new editExpenditureViewModel();
     //self.EditRemark = ko.observable("");
     //self.save = function () {
     //    self.EditRemark("");
@@ -192,6 +231,13 @@ var projectEditViewModel = function (project) {
             showMessage("操作成功");
         });
     };
+    self.editBudgets = function () {
+        $("#budgetsDialog").modal("show");
+    };
+    self.addExpenditure = function (budget) {
+        self.EditExpenditure.setBudget(budget);
+        $("#expenditureDialog").modal("show");
+    };
     self.update = function (project, onlyBaseInfo) {
         self.EnableEditProject(project.EnableEditProject);
         self.EnableSetCompleteCheck(project.EnableSetCompleteCheck);
@@ -254,6 +300,56 @@ var projectEditViewModel = function (project) {
     })
     self.update(project);
 };
+
+var projectBudgetViewModel = function (budget) {
+    var self = this;
+    self.Id = ko.observable(budget.Id);
+    self.DisplayName = ko.observable(budget.DisplayName);
+    self.Amount = ko.observable(budget.Amount);
+    self.EditAmout = ko.observable(budget.Amount);
+    self.FormattedEditAmout = computedFormatPrice(self, "EditAmout");
+    self.FormattedAmount = computedFormatPrice(self, "Amount");
+    self.Expenditures = ko.observableArray(budget.Expenditures);
+    self.Expended = ko.computed(function () {
+        var result = 0,
+            expenditures = self.Expenditures();
+        if (expenditures && expenditures.length > 0) {
+            for (var i = 0; i < expenditures.length; i++) {
+                result += expenditures[i].Count;
+            }
+        }
+        return thousandthFormatted(result.toFixed(2));
+    });
+    self.Remained = ko.computed(function () {
+        var result = self.Amount() - self.Expended();
+        return thousandthFormatted(result.toFixed(2));
+    });
+    self.ExpendituresVisible = ko.observable(false);
+
+    self.showExpenditures = function () {
+        self.ExpendituresVisible(!self.ExpendituresVisible());
+    };
+    self.editReset = function () {
+        self.EditAmout(self.Amount);
+    };
+};
+
+var editExpenditureViewModel = function () {
+    var self = this;
+    self.BudgetId = ko.observable();
+    self.BudgetDisplayName = ko.observable();
+    self.BudgetRemained = ko.observable();
+    self.Count = ko.observable();
+    self.FormattedCount = computedFormatPrice(self, "Count");
+    self.Remark = ko.observable();
+    self.setBudget = function (budget) {
+        self.BudgetId(budget.Id());
+        self.BudgetDisplayName(budget.DisplayName());
+        self.BudgetRemained(budget.Remained());
+        self.Count(0);
+        self.Remark("");
+    };
+}
 
 var projectListSearchViewModel = function () {
     var self = this,

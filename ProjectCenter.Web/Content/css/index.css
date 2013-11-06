@@ -3,6 +3,11 @@ body {
     /*font-family: "宋体";*/
 }
 
+
+label {
+    font-weight: normal;
+}
+
 /*.datetimepicker
 {
     line-height: 1.1;
@@ -152,8 +157,8 @@ body {
         line-height: 1.3;
     }
 
-.attchment-table {
-    font-size: 13px;
+.table-item-action {
+    margin-right: 5px;
 }
 
 .timespan-status {
@@ -306,12 +311,17 @@ body {
             text-decoration: none;
         }
 
-.table-panel > .panel-heading {
-    border-bottom: 0px;
-}
-
 .panel-title {
     font-weight: bold;
+}
+
+.panel-body .table {
+    margin-bottom: 0px;
+}
+
+.table-panel .panel-body {
+    padding-top: 5px;
+    font-size: 13px;
 }
 
 .panel-user-select {
