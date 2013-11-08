@@ -219,7 +219,7 @@
                                                 <small data-bind="text: Deadline" class="muted"></small>
                                                 </td>
                                                 <td data-bind="click: $root.edit">
-                                                    <div class="news" data-bind="text: LatestNews"></div>
+                                                    <div data-bind="text: LatestNews, css: HasNewsView ? 'news' : 'read'"></div>
                                                 </td>
                                                 <td>
                                                     <a data-bind="click: $root.delete, visible: EnableDelete" href="#"><span class="glyphicon glyphicon-trash"></span></a>
@@ -265,7 +265,7 @@
                                                 <small data-bind="text: Deadline" class="muted"></small>
                                                 </td>
                                                 <td data-bind="click: $root.edit">
-                                                    <div class="news" data-bind="text: LatestNews"></div>
+                                                    <div data-bind="text: LatestNews, css: HasNewsView ? 'news' : 'read'"></div>
                                                 </td>
                                                 <td>
                                                     <a data-bind="click: $root.delete, visible: EnableDelete" href="#"><span class="glyphicon glyphicon-trash"></span></a>

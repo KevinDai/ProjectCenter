@@ -246,19 +246,24 @@ namespace ProjectCenter.Models
         {
             get
             {
-                switch ((ProjectStatus)Status)
-                {
-                    case ProjectStatus.PublishedWaitCheck:
-                        return "发布待审";
-                    case ProjectStatus.PublishedAndChecked:
-                        return "进行中";
-                    case ProjectStatus.CompletedWaitCheck:
-                        return "完成待审";
-                    case ProjectStatus.CompletedAndChecked:
-                        return "已完成";
-                    default:
-                        return "未知状态";
-                }
+                return GetStatusString((ProjectStatus)Status);
+            }
+        }
+
+        public static string GetStatusString(ProjectStatus status)
+        {
+            switch (status)
+            {
+                case ProjectStatus.PublishedWaitCheck:
+                    return "发布待审";
+                case ProjectStatus.PublishedAndChecked:
+                    return "进行中";
+                case ProjectStatus.CompletedWaitCheck:
+                    return "完成待审";
+                case ProjectStatus.CompletedAndChecked:
+                    return "已完成";
+                default:
+                    return "未知状态";
             }
         }
     }

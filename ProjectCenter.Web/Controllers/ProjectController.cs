@@ -264,9 +264,16 @@ namespace ProjectCenter.Web.Controllers
             SortDescriptor<Project>[] sort = BuildProjectSortDescriptor(queryFilter);
 
             var result = ProjectService.GetProjectPageList(spec, sort, queryFilter.PageIndex, queryFilter.PageSize);
+            var viewStatus = ProjectService.GetProjectViewStatus(result.List.Select(q => q.Id).ToArray(), UserInfo.UserId)
+                .ToDictionary(q => q.ProjectId, q => q);
 
+            ProjectViewStatus temp = null;
             var model = new PageList<ProjectListItemViewModel>(
-                result.List.Select(item => new ProjectListItemViewModel(item, UserInfo)),
+                result.List.Select(item =>
+                {
+                    viewStatus.TryGetValue(item.Id, out temp);
+                    return new ProjectListItemViewModel(item, UserInfo, temp);
+                }),
                 result.PageIndex, result.PageSize, result.Total);
 
             return JsonMessageResult(model);
@@ -324,6 +331,8 @@ namespace ProjectCenter.Web.Controllers
             model.Attachments = ProjectService.GetProjectAttachments(projectId);
             model.CommentPageList = ProjectService.GetProjectCommentPageList(projectId, 1, 20);
 
+            ProjectService.UpdateProjectViewStatus(projectId, UserInfo.UserId, ViewStatus.Read);
+
             return JsonMessageResult(model);
         }
 
@@ -335,7 +344,13 @@ namespace ProjectCenter.Web.Controllers
                 throw new BusinessException("无审核操作权限");
             }
 
-            ProjectService.CheckProjects(projectIds, (ProjectStatus)status);
+            var projectStatus = (ProjectStatus)status;
+            ProjectService.CheckProjects(projectIds, projectStatus);
+
+            foreach (var projectId in projectIds)
+            {
+                AddChangeLog(projectId, ProjectActionType.ChangeStatus, Project.GetStatusString(projectStatus));
+            }
 
             return JsonMessageResult(null);
         }
@@ -357,7 +372,10 @@ namespace ProjectCenter.Web.Controllers
                 throw new BusinessException("指定的项目的当前状态不能提交完成待审");
             }
 
-            ProjectService.CheckProjects(new string[] { projectId }, ProjectStatus.CompletedWaitCheck);
+            var status = ProjectStatus.CompletedWaitCheck;
+            ProjectService.CheckProjects(new string[] { projectId }, status);
+
+            AddChangeLog(projectId, ProjectActionType.ChangeStatus, Project.GetStatusString(status));
 
             return JsonMessageResult((int)ProjectStatus.CompletedWaitCheck);
         }
@@ -378,6 +396,8 @@ namespace ProjectCenter.Web.Controllers
                 //var entity = ProjectService.GetProject(project.Id);
                 //UpdateModel(entity, "project");
                 project = ProjectService.AddProject(project);
+
+                AddChangeLog(project.Id, ProjectActionType.Create, remark);
             }
             else
             {
@@ -385,6 +405,7 @@ namespace ProjectCenter.Web.Controllers
                 UpdateModel(entity, "project");
                 project = ProjectService.UpdateProject(entity);
 
+                AddChangeLog(project.Id, ProjectActionType.Update, remark);
                 AddChangeLog(project.Id, ProjectActionType.Update, remark);
             }
 
@@ -594,6 +615,14 @@ namespace ProjectCenter.Web.Controllers
             AddChangeLog(comment.ProjectId, ProjectActionType.DeleteComment, string.Empty);
 
             return JsonMessageResult(null);
+        }
+
+        [HttpPost]
+        public ActionResult LoadProjectChangeLogs(string projectId, int pageIndex, int pageSize)
+        {
+            var changeLogs = ProjectService.GetProjectChangeLogPageList(projectId, pageIndex, pageSize);
+
+            return JsonMessageResult(changeLogs);
         }
 
         #endregion

@@ -145,7 +145,7 @@ label {
         /*height: 61px;*/
     }
 
-    .table.list-table .news {
+    .table.list-table .news, .read {
         text-overflow: ellipsis;
         word-break: break-all;
         word-wrap: break-word;
@@ -153,8 +153,15 @@ label {
         height: 30px;
         overflow: hidden;
         font-size: 13px;
-        color: #999;
         line-height: 1.3;
+    }
+
+    .table.list-table .read {
+        color: #999;
+    }
+
+    .table.list-table .news {
+        color: #b94a48;
     }
 
 .table-item-action {
@@ -178,7 +185,7 @@ label {
 }
 
 .timespan-expired {
-    color: #b94a48;
+    color: red;
 }
 
 .timespan-day {
@@ -337,16 +344,16 @@ label {
             margin: 0px 2px 0px 0px;
         }*/
 
-.comment-pagination {
+.panel-pagination {
     /*text-align: center;*/
     /*font-size: 13px;*/
 }
 
-    .comment-pagination .pagination {
+    .panel-pagination .pagination {
         margin: 0px 0px 0px -20px;
     }
 
-    .comment-pagination div {
+    .panel-pagination div {
         margin: 5px 10px;
     }
 

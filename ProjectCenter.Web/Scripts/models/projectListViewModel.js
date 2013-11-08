@@ -101,6 +101,7 @@ var projectEditViewModel = function (project) {
     ]);
 
     self.CommentPageList = new pageListViewModel();
+    self.ChangeLogPageList = new pageListViewModel();
     self.EditCommentContent = ko.observableArray("");
     self.EditExpenditure = new editExpenditureViewModel();
     //self.EditRemark = ko.observable("");
@@ -225,6 +226,30 @@ var projectEditViewModel = function (project) {
             self.refrushComments();
         }
     };
+    self.refrushChangeLogs = function () {
+        self.CommentPageList.update();
+        request("/Project/LoadProjectChangeLogs", {
+            projectId: self.Id(),
+            pageIndex: self.ChangeLogPageList.PageIndex(),
+            pageSize: self.ChangeLogPageList.PageSize()
+        }, function (result) {
+            self.ChangeLogPageList.update(result);
+        });
+    };
+    self.nextPageChangeLogs = function () {
+        var pageIndex = self.ChangeLogPageList.PageIndex();
+        if (pageIndex < self.ChangeLogPageList.MaxPageIndex()) {
+            self.ChangeLogPageList.PageIndex(pageIndex + 1);
+            self.refrushChangeLogs();
+        }
+    };
+    self.prePageChangeLogs = function () {
+        var pageIndex = self.ChangeLogPageList.PageIndex();
+        if (pageIndex > 1) {
+            self.ChangeLogPageList.PageIndex(pageIndex - 1);
+            self.refrushChangeLogs();
+        }
+    };
     self.sendFinishCheck = function () {
         request("/Project/SendFinishCheck", { projectId: self.Id() }, function (result) {
             self.Status(result);
@@ -279,7 +304,7 @@ var projectEditViewModel = function (project) {
     });
     $('#file_upload').uploadify({
         'formData': { 'projectId': '' },
-        'fileSizeLimit': '5MB',
+        'fileSizeLimit': '10MB',
         'uploadLimit': 100,
         'removeCompleted': true,
         'queueID': 'queueUpload',
@@ -297,7 +322,10 @@ var projectEditViewModel = function (project) {
     $(".uploadify-button,.uploadify").removeAttr("style");
     $("#attachmentDialog").on('hide.bs.modal', function () {
         self.cancelUploadAttachment();
-    })
+    });
+    $("#changelogs_tab").on('shown.bs.tab', function (e) {
+        self.refrushChangeLogs();
+    });
     self.update(project);
 };
 
@@ -411,6 +439,7 @@ var projectListItemViewModel = function (project) {
             self.Status = project.Status;
             self.DaySpanHtml = projectDaySpanHtml(project);
             self.LatestNews = project.LatestNews;
+            self.HasNewsView = project.HasNewsView;
             self.EnableViewDetail = project.EnableViewDetail;
             self.EnableDelete = project.EnableDelete;
         },
@@ -670,6 +699,7 @@ var projectListViewModel = function (user) {
             $("#searchPanel").hide();
             $("#edit").show();
             $("#editToolbar").show();
+            $("#project_tab").tab("show");
             window.scrollTo(0, 0);
         },
         showProjectListView = function () {

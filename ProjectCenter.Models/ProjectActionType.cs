@@ -13,6 +13,7 @@ namespace ProjectCenter.Models
         DeleteComment = 3,
         AddAttachment = 4,
         DeleteAttachment = 5,
-        Check = 6
+        ChangeStatus = 6,
+        Create = 7
     }
 }

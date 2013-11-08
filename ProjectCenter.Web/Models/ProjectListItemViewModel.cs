@@ -81,6 +81,15 @@ namespace ProjectCenter.Web.Models
         }
 
         /// <summary>
+        /// 有新的更新查看
+        /// </summary>
+        public bool HasNewsView
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
         /// 是否允许查看详细信息
         /// </summary>
         public bool EnableViewDetail
@@ -98,13 +107,13 @@ namespace ProjectCenter.Web.Models
             set;
         }
 
-        public ProjectListItemViewModel(Project project, UserInfo userInfo)
+        public ProjectListItemViewModel(Project project, UserInfo userInfo, ProjectViewStatus viewStatus)
         {
             Preconditions.CheckNotNull(project, "project");
             Preconditions.CheckNotNull(userInfo, "userInfo");
 
             project.Map(this);
-
+            HasNewsView = viewStatus == null || viewStatus.Status == (int)ViewStatus.None;
             EnableViewDetail = userInfo.EnableViewDetail(project);
             EnableDelete = userInfo.EnableDelete(project);
         }

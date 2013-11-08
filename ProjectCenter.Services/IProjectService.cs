@@ -14,9 +14,15 @@ namespace ProjectCenter.Services
 
         Project GetProject(string projectId);
 
+        void UpdateProjectViewStatus(string projectId, string userId, ViewStatus status);
+
+        IEnumerable<ProjectViewStatus> GetProjectViewStatus(string[] projectIds, string userId);
+
         IEnumerable<Attachment> GetProjectAttachments(string projectId);
 
         PageList<Comment> GetProjectCommentPageList(string projectId, int pageIndex, int pageSize);
+
+        PageList<ProjectChangeLog> GetProjectChangeLogPageList(string projectId, int pageIndex, int pageSize);
 
         Project AddProject(Project project);
 

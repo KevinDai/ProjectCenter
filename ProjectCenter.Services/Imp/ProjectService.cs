@@ -23,6 +23,14 @@ namespace ProjectCenter.Services.Imp
             }
         }
 
+        protected IDbSet<ProjectViewStatus> ProjectViewStatuses
+        {
+            get
+            {
+                return DbContext.Set<ProjectViewStatus>();
+            }
+        }
+
         protected IDbSet<Attachment> Attachments
         {
             get
@@ -83,33 +91,15 @@ namespace ProjectCenter.Services.Imp
             ProjectActionType actionType = (ProjectActionType)log.ActionType;
             if (actionType != ProjectActionType.Delete)
             {
-                var latestNews = log.CreateTime.ToString("yyyy-MM-dd HH:mm") + " " + log.UserName;
-                switch (actionType)
-                {
-                    case ProjectActionType.Update:
-                        latestNews += "编辑";
-                        break;
-                    case ProjectActionType.AddAttachment:
-                        latestNews += "增加附件";
-                        break;
-                    case ProjectActionType.DeleteAttachment:
-                        latestNews += "删除附件";
-                        break;
-                    case ProjectActionType.AddComment:
-                        latestNews += "增加评论";
-                        break;
-                    case ProjectActionType.DeleteComment:
-                        latestNews += "删除评论";
-                        break;
-                    case ProjectActionType.Check:
-                        latestNews += "更改项目状态";
-                        break;
-                }
-
+                var latestNews = log.CreateTime.ToString("yyyy-MM-dd HH:mm") + " " + log.UserName + log.ActionTypeString;
                 latestNews = string.IsNullOrWhiteSpace(log.Message) ? latestNews : latestNews + "," + log.Message;
 
                 DbContext.Database.ExecuteSqlCommand("Update Projects Set LatestNews = @p0 Where Id = @p1",
                     new SqlParameter { ParameterName = "p0", Value = latestNews },
+                    new SqlParameter { ParameterName = "p1", Value = log.ProjectId });
+
+                DbContext.Database.ExecuteSqlCommand("Update ProjectViewStatuses Set Status = @p0 Where ProjectId = @p1",
+                    new SqlParameter { ParameterName = "p0", Value = (int)ViewStatus.None },
                     new SqlParameter { ParameterName = "p1", Value = log.ProjectId });
             }
         }
@@ -136,6 +126,34 @@ namespace ProjectCenter.Services.Imp
         public Project GetProject(string projectId)
         {
             return Projects.Find(projectId);
+        }
+
+        public void UpdateProjectViewStatus(string projectId, string userId, ViewStatus status)
+        {
+            var pvs = ProjectViewStatuses.FirstOrDefault(q => q.ProjectId == projectId && q.UserId == userId);
+            if (pvs == null)
+            {
+                pvs = new ProjectViewStatus()
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    UserId = userId,
+                    ProjectId = projectId,
+                    Status = (int)status
+                };
+                ProjectViewStatuses.Add(pvs);
+                SaveChanges();
+            }
+            else if (pvs.Status != (int)status)
+            {
+                pvs.Status = (int)status;
+                UpdateEntity(pvs);
+                SaveChanges();
+            }
+        }
+
+        public IEnumerable<ProjectViewStatus> GetProjectViewStatus(string[] projectIds, string userId)
+        {
+            return ProjectViewStatuses.Where(q => projectIds.Contains(q.ProjectId) && q.UserId == userId).ToArray();
         }
 
         public Project AddProject(Project project)
@@ -167,6 +185,13 @@ namespace ProjectCenter.Services.Imp
         public PageList<Comment> GetProjectCommentPageList(string projectId, int pageIndex, int pageSize)
         {
             return Comments.Where(c => c.ProjectId == projectId)
+                .OrderByDescending(q => q.CreateTime)
+                .PageList(pageIndex, pageSize);
+        }
+
+        public PageList<ProjectChangeLog> GetProjectChangeLogPageList(string projectId, int pageIndex, int pageSize)
+        {
+            return ProjectChangeLogs.Where(q => q.ProjectId == projectId)
                 .OrderByDescending(q => q.CreateTime)
                 .PageList(pageIndex, pageSize);
         }
@@ -283,6 +308,5 @@ namespace ProjectCenter.Services.Imp
         }
 
         #endregion
-
     }
 }
