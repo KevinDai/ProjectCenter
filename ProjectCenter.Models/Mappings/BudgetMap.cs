@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity.ModelConfiguration;
 using System.Linq;
 using System.Text;
-using System.Data.Entity.ModelConfiguration;
 
 namespace ProjectCenter.Models.Mappings
 {
-    internal class AttachmentMap : EntityTypeConfiguration<Attachment>
+    internal class BudgetMap : EntityTypeConfiguration<Budget>
     {
-        public AttachmentMap()
+        public BudgetMap()
         {
             this.HasKey(ri => ri.Id);
 
-            this.ToTable("Attachments");
+            this.ToTable("Budgets");
         }
     }
 }

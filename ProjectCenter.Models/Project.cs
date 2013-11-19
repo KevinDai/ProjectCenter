@@ -104,6 +104,15 @@ namespace ProjectCenter.Models
         }
 
         /// <summary>
+        /// 财务编号
+        /// </summary>
+        public string FinanceCode
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
         /// 项目金额
         /// </summary>
         public double Amount
@@ -212,6 +221,15 @@ namespace ProjectCenter.Models
         }
 
         /// <summary>
+        /// 财务权限最新动态
+        /// </summary>
+        public string FinanceLatestNews
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
         /// 创建时间
         /// </summary>
         public DateTime CreateTime
@@ -265,6 +283,12 @@ namespace ProjectCenter.Models
                 default:
                     return "未知状态";
             }
+        }
+
+        public bool NeedManageFinance()
+        {
+            var projectType = (ProjectType)Type;
+            return projectType != ProjectType.CenterWork && projectType != ProjectType.VerticalWork;
         }
     }
 }

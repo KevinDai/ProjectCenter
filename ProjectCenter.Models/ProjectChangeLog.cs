@@ -70,6 +70,12 @@ namespace ProjectCenter.Models
                         return "删除评论";
                     case ProjectActionType.ChangeStatus:
                         return "更改项目状态";
+                    case ProjectActionType.EditBudget:
+                        return "编辑项目财务预算";
+                    case ProjectActionType.AddExpenditure:
+                        return "增加项目支出记录";
+                    case ProjectActionType.DeleteExpenditure:
+                        return "删除项目支出记录";
                     default:
                         return "未知类型";
                 }

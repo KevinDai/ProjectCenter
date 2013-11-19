@@ -61,7 +61,7 @@
                                     @if (ViewBag.UserInfo.RightDetail.EnableCheckProject)
                                     {
                                         <select data-bind="value: Status" class="form-control">
-                                           @* <!-- ko if: Status() == 0 -->
+                                            @* <!-- ko if: Status() == 0 -->
                                             <!-- /ko -->*@
                                             <option value="0">发布待审</option>
                                             <option value="1">进行中</option>
@@ -124,6 +124,13 @@
                                     推进计划：</label>
                                 <div class="col-md-8">
                                     <textarea data-bind="value: AdvancePlan, enable: EnableEditProject" class="form-control" rows="4"></textarea>
+                                </div>
+                            </div>
+                            <div data-bind="visible: Id" class="form-group">
+                                <label class="col-md-2 control-label" for="taskName">
+                                    财务编号：</label>
+                                <div class="col-md-4">
+                                    <input data-bind="value: FinanceCode, enable: EnableManageFinance" class="form-control" type="text" value="">
                                 </div>
                             </div>
                             <div class="form-group">
@@ -248,10 +255,11 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-12">
+            <div data-bind="visible: EnableManageFinance" class="col-md-12">
                 <div class="panel panel-default table-panel">
                     <div class="panel-heading">
                         <ul class="list-unstyled list-inline pull-right list-panel-title">
+                            <li><a data-bind="click: refrushBudgets" href="#"><span class="glyphicon glyphicon-refresh"></span><span class="btn-glyphicon-content">刷新</span></a></li>
                             <li><a data-bind="click: editBudgets" href="#"><span class="glyphicon glyphicon-edit"></span><span class="btn-glyphicon-content">编辑预算</span></a></li>
                         </ul>
                         <h3 class="panel-title">财务信息</h3>
@@ -275,37 +283,40 @@
                                 </tr>
                             </thead>
                             <tbody data-bind="foreach: Budgets">
-                                <tr>
-                                    <td>
-                                        <span data-bind="text: DisplayName"></span>
+                                <tr class="warning budget">
+                                    <td data-bind="click: toggleExpenditures">
+                                        <span data-bind="text: CategoryString"></span>
                                     </td>
-                                    <td>
+                                    <td data-bind="click: toggleExpenditures">
                                         <span data-bind="text: FormattedAmount"></span>
                                     </td>
-                                    <td>
-                                        <span data-bind="text: Expended"></span>
+                                    <td data-bind="click: toggleExpenditures">
+                                        <span data-bind="text: FormattedExpended"></span>
                                     </td>
-                                    <td>
-                                        <span data-bind="text: Remained"></span>
+                                    <td data-bind="click: toggleExpenditures">
+                                        <span data-bind="text: FormattedRemained"></span>
                                     </td>
                                     <td>
                                         <a data-bind="click: $parent.addExpenditure" href="#" class="table-item-action" title="新增支出"><span class="glyphicon glyphicon-plus"></span></a>
-                                        <a data-bind="click: showExpenditures" href="#" class="table-item-action" title="支出详情"><span class="glyphicon glyphicon-th-list"></span></a>
+                                        <a data-bind="click: toggleExpenditures" href="#" class="table-item-action" title="支出详情"><span class="glyphicon glyphicon-th-list"></span></a>
                                     </td>
                                 </tr>
                                 <tr data-bind="visible: ExpendituresVisible">
                                     <td style="padding-left: 30px;" colspan="5">
-                                        <table class="table">
+                                        <span class="text-muted" data-bind="visible: !Expenditures() || Expenditures().length == 0">暂无支出记录</span>
+                                        <table data-bind="visible: Expenditures() && Expenditures().length > 0" class="table  table-hover">
                                             <colgroup>
-                                                <col style="width: 150px;">
-                                                <col style="width: 150px;">
-                                                <col style="width: 300px;">
+                                                <col style="width: 120px;">
+                                                <col style="width: 120px;">
+                                                <col style="width: 120px;">
+                                                <col style="width: 200px;">
                                                 <col style="width: 40px;">
                                             </colgroup>
                                             <thead>
                                                 <tr>
                                                     <th>用户</th>
                                                     <th>支出金额（元）</th>
+                                                    <th>创建时间</th>
                                                     <th>备注</th>
                                                     <th></th>
                                                 </tr>
@@ -313,16 +324,19 @@
                                             <tbody data-bind="foreach: Expenditures">
                                                 <tr>
                                                     <td>
-                                                        <span data-bind="text: UserName"></span>
+                                                        <span data-bind="text: CreatorName"></span>
                                                     </td>
                                                     <td>
-                                                        <span data-bind="text: Count"></span>
+                                                        <span data-bind="text: FormattedCount"></span>
+                                                    </td>
+                                                    <td>
+                                                        <span data-bind="text: CreateTime"></span>
                                                     </td>
                                                     <td>
                                                         <span data-bind="text: Remark"></span>
                                                     </td>
                                                     <td>
-                                                        <a href="#"><span class="glyphicon glyphicon-remove"></span></a>
+                                                        <a data-bind="click: $parent.deleteExpenditure" href="#"><span class="glyphicon glyphicon-remove"></span></a>
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -485,9 +499,13 @@
                     <div class="col-md-12">
                         <form data-bind="foreach: Budgets" class="form-horizontal">
                             <div class="form-group">
-                                <label class="col-md-4 control-label"><span data-bind="text: DisplayName"></span>：</label>
-                                <div class="col-md-4">
-                                    <input data-bind="value: FormattedEditAmout" class="form-control" type="text">
+                                <label class="col-md-4 control-label"><span data-bind="text: CategoryString"></span>：</label>
+                                <div class="col-md-3">
+                                    <input data-bind="value: FormattedEditAmout, css: EditAmout() < Expended() ? 'error form-control' : 'form-control'" class="form-control" type="text">
+                                </div>
+                                <label class="col-md-2 control-label">已支出：</label>
+                                <div class="col-md-3">
+                                    <label class="col-md-4 control-label" data-bind="text: FormattedExpended"></label>
                                 </div>
                             </div>
                         </form>
@@ -497,7 +515,7 @@
                     <div class="col-md-12">
                         <ul class="list-unstyle list-inline pull-right">
                             <li>
-                                <button type="button" class="btn btn-primary btn-primary">保存预算</button>
+                                <button data-bind="click: saveBudgets" type="button" class="btn btn-primary btn-primary">保存预算</button>
                             </li>
                             <li>
                                 <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
@@ -524,11 +542,11 @@
                         <form data-bind="with: EditExpenditure" class="form-horizontal">
                             <div class="form-group">
                                 <label class="col-md-4 control-label">支出类型：</label>
-                                <label data-bind="text: BudgetDisplayName" class="col-md-8 control-label" style="text-align: left;"></label>
+                                <label data-bind="text: BudgetCategoryString" class="col-md-8 control-label" style="text-align: left;"></label>
                             </div>
                             <div class="form-group">
                                 <label class="col-md-4 control-label">剩余金额：</label>
-                                <label data-bind="text: BudgetRemained" class="col-md-8 control-label" style="text-align: left;"></label>
+                                <label data-bind="text: BudgetFormattedRemained" class="col-md-8 control-label" style="text-align: left;"></label>
                             </div>
                             <div class="form-group">
                                 <label class="col-md-4 control-label">支出金额：</label>
@@ -549,7 +567,7 @@
                     <div class="col-md-12">
                         <ul class="list-unstyle list-inline pull-right">
                             <li>
-                                <button type="button" class="btn btn-primary btn-primary">保存</button>
+                                <button data-bind="click: saveExpenditure" type="button" class="btn btn-primary btn-primary">保存</button>
                             </li>
                             <li>
                                 <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>

@@ -9,6 +9,7 @@ using ProjectCenter.Util.Query.Extensions;
 using System.Transactions;
 using ProjectCenter.Util.Query.Specification;
 using System.Data.SqlClient;
+using ProjectCenter.Util.Exceptions;
 
 namespace ProjectCenter.Services.Imp
 {
@@ -36,6 +37,23 @@ namespace ProjectCenter.Services.Imp
             get
             {
                 return DbContext.Set<Attachment>();
+            }
+        }
+
+        protected IDbSet<Budget> Budgets
+        {
+            get
+            {
+                return DbContext.Set<Budget>();
+            }
+        }
+
+
+        protected IDbSet<Expenditure> Expenditures
+        {
+            get
+            {
+                return DbContext.Set<Expenditure>();
             }
         }
 
@@ -94,14 +112,36 @@ namespace ProjectCenter.Services.Imp
                 var latestNews = log.CreateTime.ToString("yyyy-MM-dd HH:mm") + " " + log.UserName + log.ActionTypeString;
                 latestNews = string.IsNullOrWhiteSpace(log.Message) ? latestNews : latestNews + "," + log.Message;
 
-                DbContext.Database.ExecuteSqlCommand("Update Projects Set LatestNews = @p0 Where Id = @p1",
-                    new SqlParameter { ParameterName = "p0", Value = latestNews },
-                    new SqlParameter { ParameterName = "p1", Value = log.ProjectId });
+                switch (actionType)
+                {
+                    case ProjectActionType.EditBudget:
+                    case ProjectActionType.AddExpenditure:
+                    case ProjectActionType.DeleteExpenditure:
+                        DbContext.Database.ExecuteSqlCommand("Update Projects Set FinanceLatestNews = @p0 Where Id = @p1",
+                            new SqlParameter { ParameterName = "p0", Value = latestNews },
+                            new SqlParameter { ParameterName = "p1", Value = log.ProjectId });
+                        DbContext.Database.ExecuteSqlCommand("Update ProjectViewStatuses Set FinanceStatus = @p0 Where ProjectId = @p1",
+                            new SqlParameter { ParameterName = "p0", Value = (int)ViewStatus.None },
+                            new SqlParameter { ParameterName = "p1", Value = log.ProjectId });
+                        break;
+                    default:
+                        DbContext.Database.ExecuteSqlCommand("Update Projects Set LatestNews = @p0, FinanceLatestNews = '' Where Id = @p1",
+                            new SqlParameter { ParameterName = "p0", Value = latestNews },
+                            new SqlParameter { ParameterName = "p1", Value = log.ProjectId });
 
-                DbContext.Database.ExecuteSqlCommand("Update ProjectViewStatuses Set Status = @p0 Where ProjectId = @p1",
-                    new SqlParameter { ParameterName = "p0", Value = (int)ViewStatus.None },
-                    new SqlParameter { ParameterName = "p1", Value = log.ProjectId });
+                        DbContext.Database.ExecuteSqlCommand("Update ProjectViewStatuses Set Status = @p0, FinanceStatus = 1 Where ProjectId = @p1",
+                            new SqlParameter { ParameterName = "p0", Value = (int)ViewStatus.None },
+                            new SqlParameter { ParameterName = "p1", Value = log.ProjectId });
+                        break;
+                }
+
             }
+        }
+
+        private double GetExpendituresTotalCount(string projectId, int budgetCategory)
+        {
+            double? result = Expenditures.Where(q => q.ProjectId == projectId && q.BudgetCategory == budgetCategory).Select(q => (double?)q.Count).Sum();
+            return result ?? 0.0;
         }
 
         #endregion
@@ -125,10 +165,11 @@ namespace ProjectCenter.Services.Imp
 
         public Project GetProject(string projectId)
         {
-            return Projects.Find(projectId);
+            var project = Projects.Find(projectId);
+            return project;
         }
 
-        public void UpdateProjectViewStatus(string projectId, string userId, ViewStatus status)
+        public void UpdateProjectViewStatus(string projectId, string userId, ViewStatus status, ViewStatus financeStatus)
         {
             var pvs = ProjectViewStatuses.FirstOrDefault(q => q.ProjectId == projectId && q.UserId == userId);
             if (pvs == null)
@@ -138,14 +179,16 @@ namespace ProjectCenter.Services.Imp
                     Id = Guid.NewGuid().ToString(),
                     UserId = userId,
                     ProjectId = projectId,
-                    Status = (int)status
+                    Status = (int)status,
+                    FinanceStatus = (int)financeStatus
                 };
                 ProjectViewStatuses.Add(pvs);
                 SaveChanges();
             }
-            else if (pvs.Status != (int)status)
+            else if (pvs.Status != (int)status || pvs.FinanceStatus != (int)financeStatus)
             {
                 pvs.Status = (int)status;
+                pvs.FinanceStatus = (int)financeStatus;
                 UpdateEntity(pvs);
                 SaveChanges();
             }
@@ -182,6 +225,21 @@ namespace ProjectCenter.Services.Imp
             return Attachments.Where(q => q.ProjectId == projectId).OrderBy(q => q.UploadTime).ToArray();
         }
 
+        public IEnumerable<Budget> GetProjectBudgets(string projectId)
+        {
+            return Budgets.Where(q => q.ProjectId == projectId).OrderBy(q => q.Category).ToArray();
+        }
+
+        public IEnumerable<Expenditure> GetProjectExpenditures(string projectId)
+        {
+            return Expenditures.Where(q => q.ProjectId == projectId).OrderBy(q => q.CreateTime).ToArray();
+        }
+
+        public IEnumerable<Expenditure> GetProjectExpenditures(string projectId, BudgetCategory category)
+        {
+            return Expenditures.Where(q => q.ProjectId == projectId && q.BudgetCategory == (int)category).OrderBy(q => q.CreateTime).ToArray();
+        }
+
         public PageList<Comment> GetProjectCommentPageList(string projectId, int pageIndex, int pageSize)
         {
             return Comments.Where(c => c.ProjectId == projectId)
@@ -189,11 +247,15 @@ namespace ProjectCenter.Services.Imp
                 .PageList(pageIndex, pageSize);
         }
 
-        public PageList<ProjectChangeLog> GetProjectChangeLogPageList(string projectId, int pageIndex, int pageSize)
+        public PageList<ProjectChangeLog> GetProjectChangeLogPageList(string projectId, int pageIndex, int pageSize, bool containsFinance = false)
         {
-            return ProjectChangeLogs.Where(q => q.ProjectId == projectId)
-                .OrderByDescending(q => q.CreateTime)
-                .PageList(pageIndex, pageSize);
+            var query = ProjectChangeLogs.Where(q => q.ProjectId == projectId);
+            if (!containsFinance)
+            {
+                query = query.Where(q => q.ActionType < 100);
+            }
+            return query.OrderByDescending(q => q.CreateTime)
+              .PageList(pageIndex, pageSize);
         }
 
         public void CheckProjects(string[] projectIds, ProjectStatus status)
@@ -223,20 +285,87 @@ namespace ProjectCenter.Services.Imp
 
         public void DeleteProject(Project project)
         {
-            DeleteEntity(project);
-
-            var attachments = GetProjectAttachments(project.Id);
-            foreach (var item in attachments)
+            using (TransactionScope ts = new TransactionScope())
             {
-                DeleteEntity(item);
-            }
+                DbContext.Database.ExecuteSqlCommand("Delete Attachments Where ProjectId = @p0", new SqlParameter { ParameterName = "p0", Value = project.Id });
+                DbContext.Database.ExecuteSqlCommand("Delete Comments Where ProjectId = @p0", new SqlParameter { ParameterName = "p0", Value = project.Id });
+                DbContext.Database.ExecuteSqlCommand("Delete ProjectViewStatuses Where ProjectId = @p0", new SqlParameter { ParameterName = "p0", Value = project.Id });
+                DbContext.Database.ExecuteSqlCommand("Delete Budgets Where ProjectId = @p0", new SqlParameter { ParameterName = "p0", Value = project.Id });
+                DbContext.Database.ExecuteSqlCommand("Delete Expenditures Where ProjectId = @p0", new SqlParameter { ParameterName = "p0", Value = project.Id });
 
-            var comments = GetProjectComments(project.Id);
-            foreach (var item in comments)
+                ts.Complete();
+
+                DeleteEntity(project);
+                SaveChanges();
+            }
+        }
+
+        public Budget AddBudget(Budget budget)
+        {
+            using (TransactionScope ts = new TransactionScope())
             {
-                DeleteEntity(item);
-            }
+                if (Budgets.Where(q => q.ProjectId == budget.ProjectId && q.Category == budget.Category).Count() > 0)
+                {
+                    throw new BusinessException(string.Format("已经存在{0}类型的预算记录", budget.CategoryString));
+                }
+                budget.Id = Guid.NewGuid().ToString();
+                AddEntity(budget);
+                SaveChanges();
 
+                ts.Complete();
+
+                return budget;
+            }
+        }
+
+        public Budget EditBudget(Budget budget)
+        {
+            using (TransactionScope ts = new TransactionScope())
+            {
+                var totalCount = GetExpendituresTotalCount(budget.ProjectId, budget.Category);
+                if (budget.Amount < totalCount)
+                {
+                    throw new BusinessException(string.Format("{0}预算的支出记录总金额超过预算设定的可用金额", budget.CategoryString));
+                }
+                UpdateEntity(budget);
+                SaveChanges();
+
+                ts.Complete();
+
+                return budget;
+            }
+        }
+
+        public Expenditure GetExpenditure(string expenditureId)
+        {
+            return Expenditures.FirstOrDefault(q => q.Id == expenditureId);
+        }
+
+
+        public Expenditure AddExpenditure(Expenditure expenditure)
+        {
+            using (TransactionScope ts = new TransactionScope())
+            {
+                var budget = Budgets.First(q => q.ProjectId == expenditure.ProjectId && q.Category == expenditure.BudgetCategory);
+                var totalCount = GetExpendituresTotalCount(expenditure.ProjectId, expenditure.BudgetCategory);
+                if (totalCount + expenditure.Count > budget.Amount)
+                {
+                    throw new BusinessException("增加的支出金额大于该类预算的可用金额");
+                }
+
+                expenditure.Id = Guid.NewGuid().ToString();
+                expenditure.CreateTime = DateTime.Now;
+                AddEntity(expenditure);
+                SaveChanges();
+
+                ts.Complete();
+            }
+            return expenditure;
+        }
+
+        public void DeleteExpenditure(Expenditure expenditure)
+        {
+            DeleteEntity(expenditure);
             SaveChanges();
         }
 
@@ -308,5 +437,6 @@ namespace ProjectCenter.Services.Imp
         }
 
         #endregion
+
     }
 }

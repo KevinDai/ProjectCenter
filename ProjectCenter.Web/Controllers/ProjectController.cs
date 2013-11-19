@@ -15,6 +15,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using ProjectCenter.Web.Extensions;
+using System.Transactions;
 
 namespace ProjectCenter.Web.Controllers
 {
@@ -239,6 +240,46 @@ namespace ProjectCenter.Web.Controllers
             });
         }
 
+        private BudgetViewModel[] GetBudgetViewModels(string projectId)
+        {
+            var budgets = ProjectService.GetProjectBudgets(projectId)
+                .Select(b => new BudgetViewModel(b))
+                .ToDictionary(b => b.Category, b => b);
+            var categorys = Enum.GetValues(typeof(BudgetCategory));
+            foreach (int category in categorys)
+            {
+                if (!budgets.ContainsKey(category))
+                {
+                    var entity = new Budget()
+                    {
+                        ProjectId = projectId,
+                        Category = category,
+                        Amount = 0
+                    };
+                    entity = ProjectService.AddBudget(entity);
+                    budgets.Add(entity.Category, new BudgetViewModel(entity));
+                }
+            }
+            var expenditures = ProjectService.GetProjectExpenditures(projectId);
+            BudgetViewModel budget = null;
+            foreach (var expenditure in expenditures)
+            {
+                if (budgets.TryGetValue(expenditure.BudgetCategory, out budget))
+                {
+                    budget.Expenditures.Add(expenditure);
+                }
+            }
+            return budgets.Values.OrderBy(q => q.Category).ToArray();
+        }
+
+        private void FinanceManageRightValid()
+        {
+            if (!UserInfo.RightDetail.EnableManageFinance)
+            {
+                throw new BusinessException("无操作财务信息权限");
+            }
+        }
+
         #endregion
 
         #region 操作
@@ -330,8 +371,12 @@ namespace ProjectCenter.Web.Controllers
             var model = new ProjectEditViewModel(project, UserInfo);
             model.Attachments = ProjectService.GetProjectAttachments(projectId);
             model.CommentPageList = ProjectService.GetProjectCommentPageList(projectId, 1, 20);
+            if (model.EnableManageFinance)
+            {
+                model.Budgets = GetBudgetViewModels(project.Id);
+            }
 
-            ProjectService.UpdateProjectViewStatus(projectId, UserInfo.UserId, ViewStatus.Read);
+            ProjectService.UpdateProjectViewStatus(projectId, UserInfo.UserId, ViewStatus.Read, ViewStatus.Read);
 
             return JsonMessageResult(model);
         }
@@ -406,7 +451,6 @@ namespace ProjectCenter.Web.Controllers
                 project = ProjectService.UpdateProject(entity);
 
                 AddChangeLog(project.Id, ProjectActionType.Update, remark);
-                AddChangeLog(project.Id, ProjectActionType.Update, remark);
             }
 
             return JsonMessageResult(new ProjectEditViewModel(project, UserInfo));
@@ -431,10 +475,113 @@ namespace ProjectCenter.Web.Controllers
                     Directory.Delete(attachmentsFolder, true);
                 }
 
-                AddChangeLog(project.Id, ProjectActionType.Update, string.Empty);
+                AddChangeLog(project.Id, ProjectActionType.Delete, project.Name);
             }
 
             return JsonMessageResult(null);
+        }
+
+        [HttpPost]
+        public ActionResult LoadBudgets(string projectId)
+        {
+            FinanceManageRightValid();
+
+            var budgets = GetBudgetViewModels(projectId);
+            return JsonMessageResult(budgets);
+        }
+
+        [HttpPost]
+        public ActionResult EditBudgets(string projectId, BudgetEditItemViewModel[] items)
+        {
+            FinanceManageRightValid();
+
+            if (items != null && items.Any())
+            {
+                using (TransactionScope ts = new TransactionScope())
+                {
+                    var project = ProjectService.GetProject(projectId);
+                    if (project == null)
+                    {
+                        throw new BusinessException("指定的项目不存在");
+                    }
+                    if (!project.NeedManageFinance())
+                    {
+                        throw new BusinessException("指定的项目不需要进行财务管理");
+                    }
+
+                    var count = items.Sum(q => q.Amount);
+                    if (project.Amount < count)
+                    {
+                        throw new BusinessException("设定的分类预算总额大于指定的项目的金额");
+                    }
+
+                    var budgets = ProjectService.GetProjectBudgets(projectId)
+                        .ToDictionary(b => b.Category, b => b);
+
+                    Budget budget = null;
+                    foreach (var item in items)
+                    {
+                        if (budgets.TryGetValue(item.Category, out budget))
+                        {
+                            if (budget.Amount != item.Amount)
+                            {
+                                budget.Amount = item.Amount;
+                                ProjectService.EditBudget(budget);
+                            }
+                        }
+                        else
+                        {
+                            budget = new Budget()
+                            {
+                                ProjectId = projectId,
+                                Category = item.Category,
+                                Amount = item.Amount
+                            };
+                            ProjectService.AddBudget(budget);
+                        }
+                    }
+                    ts.Complete();
+                }
+
+                AddChangeLog(projectId, ProjectActionType.EditBudget, string.Empty);
+            }
+            return JsonMessageResult(null);
+        }
+
+        [HttpPost]
+        public ActionResult AddExpenditure(Expenditure expenditure)
+        {
+            FinanceManageRightValid();
+
+            expenditure.CreatorId = UserInfo.UserId;
+            expenditure.CreatorName = UserInfo.UserName;
+            ProjectService.AddExpenditure(expenditure);
+
+            AddChangeLog(expenditure.ProjectId, ProjectActionType.AddExpenditure, expenditure.BudgetCategoryString);
+
+            return JsonMessageResult(null);
+        }
+
+        [HttpPost]
+        public ActionResult DeleteExpenditure(string expenditureId)
+        {
+            FinanceManageRightValid();
+            var expenditure = ProjectService.GetExpenditure(expenditureId);
+            if (expenditure != null)
+            {
+                ProjectService.DeleteExpenditure(expenditure);
+                AddChangeLog(expenditure.ProjectId, ProjectActionType.DeleteExpenditure, expenditure.BudgetCategoryString);
+            }
+            return JsonMessageResult(null);
+        }
+
+        [HttpPost]
+        public ActionResult LoadExpenditure(string projectId, int category)
+        {
+            FinanceManageRightValid();
+
+            var expenditures = ProjectService.GetProjectExpenditures(projectId, (BudgetCategory)category);
+            return JsonMessageResult(expenditures);
         }
 
         [HttpPost]
@@ -620,7 +767,7 @@ namespace ProjectCenter.Web.Controllers
         [HttpPost]
         public ActionResult LoadProjectChangeLogs(string projectId, int pageIndex, int pageSize)
         {
-            var changeLogs = ProjectService.GetProjectChangeLogPageList(projectId, pageIndex, pageSize);
+            var changeLogs = ProjectService.GetProjectChangeLogPageList(projectId, pageIndex, pageSize, UserInfo.RightDetail.EnableManageFinance);
 
             return JsonMessageResult(changeLogs);
         }

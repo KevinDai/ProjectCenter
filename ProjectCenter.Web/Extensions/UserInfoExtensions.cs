@@ -30,7 +30,6 @@ namespace ProjectCenter.Web.Extensions
             //    || new ParticipantIdsSpecification(user.UserId).SatisfiedBy().Compile()(project));
         }
 
-
         public static bool EnableDelete(this UserInfo user, Project project)
         {
             return ParamatersValid(user, project) && (

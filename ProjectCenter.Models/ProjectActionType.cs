@@ -14,6 +14,9 @@ namespace ProjectCenter.Models
         AddAttachment = 4,
         DeleteAttachment = 5,
         ChangeStatus = 6,
-        Create = 7
+        Create = 7,
+        EditBudget = 100,
+        AddExpenditure = 101,
+        DeleteExpenditure = 102
     }
 }

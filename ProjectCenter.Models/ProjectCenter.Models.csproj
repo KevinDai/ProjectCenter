@@ -47,10 +47,15 @@
   <ItemGroup>
     <Compile Include="AmountReceivedStatus.cs" />
     <Compile Include="Attachment.cs" />
+    <Compile Include="Budget.cs" />
+    <Compile Include="BudgetCategory.cs" />
     <Compile Include="Comment.cs" />
+    <Compile Include="Expenditure.cs" />
     <Compile Include="InvoiceStatus.cs" />
     <Compile Include="Mappings\AttachmentMap.cs" />
+    <Compile Include="Mappings\BudgetMap.cs" />
     <Compile Include="Mappings\CommentMap.cs" />
+    <Compile Include="Mappings\ExpenditureMap.cs" />
     <Compile Include="Mappings\NoteMap.cs" />
     <Compile Include="Mappings\ProjectChangeLogMap.cs" />
     <Compile Include="Mappings\ProjectMap.cs" />

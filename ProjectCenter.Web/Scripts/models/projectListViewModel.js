@@ -34,6 +34,7 @@ var projectEditViewModel = function (project) {
         };
     self.EnableEditProject = ko.observable(false);
     self.EnableSetCompleteCheck = ko.observable(false);
+    self.EnableManageFinance = ko.observable(false);
     self.EnableDelete = ko.observable(false);
     self.Id = ko.observable();
     self.Type = ko.observable();
@@ -57,6 +58,7 @@ var projectEditViewModel = function (project) {
     self.CurrentProgress = ko.observable();
     self.NeedSupport = ko.observable();
     self.AdvancePlan = ko.observable();
+    self.FinanceCode = ko.observable();
     self.Amount = ko.observable();
     self.FormattedAmount = computedFormatPrice(self, "Amount");
     self.TypeOfPayment = ko.observable();
@@ -70,36 +72,7 @@ var projectEditViewModel = function (project) {
     });
     self.InvoiceStatus = ko.observable();
     self.Attachments = ko.observableArray();
-    self.Budgets = ko.observableArray([
-       new projectBudgetViewModel({
-           Id: "0", Category: 1, DisplayName: "工资（奖金）", Amount: 300333.00, Expenditures: [
-               { UserId: "1", UserName: "测试用户", Remark: "备注", Count: 100.00 },
-               { UserId: "1", UserName: "测试用户", Remark: "备注", Count: 100.00 },
-               { UserId: "1", UserName: "测试用户", Remark: "备注", Count: 100.00 },
-               { UserId: "1", UserName: "测试用户", Remark: "备注", Count: 100.00 },
-               { UserId: "1", UserName: "测试用户", Remark: "备注", Count: 100.00 }
-           ]
-       }),
-       new projectBudgetViewModel({
-           Id: "0", Category: 1, DisplayName: "劳务费", Amount: 300333.00, Expenditures: [
-               { UserId: "1", UserName: "测试用户", Remark: "备注", Count: 100.00 },
-               { UserId: "1", UserName: "测试用户", Remark: "备注", Count: 100.00 },
-               { UserId: "1", UserName: "测试用户", Remark: "备注", Count: 100.00 },
-               { UserId: "1", UserName: "测试用户", Remark: "备注", Count: 100.00 },
-               { UserId: "1", UserName: "测试用户", Remark: "备注", Count: 100.00 },
-               { UserId: "1", UserName: "测试用户", Remark: "备注", Count: 100.00 }
-           ]
-       }),
-       new projectBudgetViewModel({
-           Id: "0", Category: 1, DisplayName: "差旅费（交通费）", Amount: 300333.00, Expenditures: [
-               { UserId: "1", UserName: "测试用户", Remark: "备注", Count: 100.00 },
-               { UserId: "1", UserName: "测试用户", Remark: "备注", Count: 100.00 },
-               { UserId: "1", UserName: "测试用户", Remark: "备注", Count: 100.00 },
-               { UserId: "1", UserName: "测试用户", Remark: "备注", Count: 100.00 }
-           ]
-       })
-    ]);
-
+    self.Budgets = ko.observableArray([]);
     self.CommentPageList = new pageListViewModel();
     self.ChangeLogPageList = new pageListViewModel();
     self.EditCommentContent = ko.observableArray("");
@@ -175,9 +148,11 @@ var projectEditViewModel = function (project) {
         $('#file_upload').uploadify('stop');
     };
     self.deleteAttachment = function (attachment) {
-        request("/Project/DeleteAttachment", { attachmentId: attachment.Id }, function () {
-            self.refrushAttachments();
-            showMessage("删除附件成功");
+        showPopConfrimMessage("删除确认", "是否确认删除指定的附件？", function () {
+            request("/Project/DeleteAttachment", { attachmentId: attachment.Id }, function () {
+                self.refrushAttachments();
+                showMessage("删除附件成功");
+            });
         });
     };
     self.refrushAttachments = function () {
@@ -192,9 +167,12 @@ var projectEditViewModel = function (project) {
         $("#commentDialog").modal("show");
     };
     self.deleteComment = function (comment) {
-        request("/Project/DeleteComment", { commentId: comment.Id }, function () {
-            self.refrushComments();
-            showMessage("删除附件成功");
+        showPopConfrimMessage("删除确认", "是否确认删除指定的评论？", function () {
+
+            request("/Project/DeleteComment", { commentId: comment.Id }, function () {
+                self.refrushComments();
+                showMessage("删除附件成功");
+            });
         });
     };
     self.saveComment = function () {
@@ -256,17 +234,94 @@ var projectEditViewModel = function (project) {
             showMessage("操作成功");
         });
     };
+    self.refrushBudgets = function () {
+        request("/Project/LoadBudgets", {
+            projectId: self.Id()
+        }, function (result) {
+            self.updateBudgets(result);
+        });
+    };
+    self.updateBudgets = function (budgets) {
+        var models = [];
+        if (budgets) {
+            for (var i = 0; i < budgets.length; i++) {
+                models.push(new projectBudgetViewModel(budgets[i]));
+            }
+        }
+        self.Budgets(models);
+    };
     self.editBudgets = function () {
+        var budgets = self.Budgets();
+        if (budgets) {
+            for (var i = 0; i < budgets.length; i++) {
+                budgets[i].editReset();
+            }
+        }
         $("#budgetsDialog").modal("show");
+    };
+    self.saveBudgets = function () {
+        var budgets = self.Budgets(),
+            totalAmount = 0,
+            items = [],
+            budget,
+            amount = 0;
+        for (var i = 0; i < budgets.length; i++) {
+            budget = budgets[i];
+            amount = budget.EditAmout();
+            totalAmount = totalAmount + amount;
+            if (amount < budget.Expended()) {
+                showErrorMessage(budget.CategoryString() + "预算的金额不能小于已经支出的金额");
+                return;
+            }
+            items.push({ Category: budget.Category(), Amount: amount });
+        }
+        if (totalAmount > self.Amount()) {
+            showErrorMessage("预算的金额总和不能大于项目金额");
+            return;
+        }
+        request("/Project/EditBudgets", {
+            projectId: self.Id(),
+            items: items
+        }, function (result) {
+            showMessage("预算编辑成功");
+            self.refrushBudgets();
+            $("#budgetsDialog").modal("hide");
+        });
     };
     self.addExpenditure = function (budget) {
         self.EditExpenditure.setBudget(budget);
         $("#expenditureDialog").modal("show");
     };
+    self.saveExpenditure = function () {
+        var expenditure = self.EditExpenditure;
+        if (expenditure.Count() > expenditure.BudgetRemained()) {
+            showErrorMessage("支出金额不能超过该类预算的剩余金额");
+            return;
+        }
+        request("/Project/AddExpenditure", {
+            expenditure: self.EditExpenditure
+        }, function (result) {
+            showMessage("支出记录添加成功");
+            self.refrushExpenditures(expenditure.BudgetCategory());
+            $("#expenditureDialog").modal("hide");
+        });
+    };
+    self.refrushExpenditures = function (category) {
+        var budgets = self.Budgets();
+        if (budgets) {
+            for (var i = 0; i < budgets.length; i++) {
+                if (budgets[i].Category() == category) {
+                    budgets[i].refreshExpenditures();
+                    return;
+                }
+            }
+        }
+    };
     self.update = function (project, onlyBaseInfo) {
         self.EnableEditProject(project.EnableEditProject);
         self.EnableSetCompleteCheck(project.EnableSetCompleteCheck);
         self.EnableDelete(project.EnableDelete);
+        self.EnableManageFinance(project.EnableManageFinance);
         self.Id(project.Id);
         self.Type(project.Type);
         self.Name(project.Name);
@@ -282,6 +337,7 @@ var projectEditViewModel = function (project) {
         self.CurrentProgress(project.CurrentProgress);
         self.NeedSupport(project.NeedSupport);
         self.AdvancePlan(project.AdvancePlan);
+        self.FinanceCode(project.FinanceCode);
         self.Amount(project.Amount);
         self.TypeOfPayment(project.TypeOfPayment);
         self.NeedFinish(project.NeedFinish);
@@ -291,7 +347,17 @@ var projectEditViewModel = function (project) {
         if (!onlyBaseInfo) {
             self.Attachments(makeCheckArray(project.Attachments));
             self.CommentPageList.update(project.CommentPageList);
+            self.updateBudgets(project.Budgets);
+        } else {
+            var budgets = self.Budgets();
+            //需要重新加载财务信息
+            if (project.EnableManageFinance) {
+                self.refrushBudgets();
+            } else {
+                self.updateBudgets([]);
+            }
         }
+
     };
 
     $("#StartTime,#Deadline").datepicker({
@@ -330,14 +396,24 @@ var projectEditViewModel = function (project) {
 };
 
 var projectBudgetViewModel = function (budget) {
-    var self = this;
+    var self = this,
+        priceFormattedExpenditures = function (expenditures) {
+            if (expenditures && expenditures.length > 0) {
+                for (var i = 0; i < expenditures.length; i++) {
+                    expenditures[i].FormattedCount = thousandthFormatted(expenditures[i].Count.toFixed(2));
+                }
+            }
+            return expenditures;
+        };
     self.Id = ko.observable(budget.Id);
-    self.DisplayName = ko.observable(budget.DisplayName);
+    self.ProjectId = ko.observable(budget.ProjectId);
+    self.Category = ko.observable(budget.Category);
+    self.CategoryString = ko.observable(budget.CategoryString);
     self.Amount = ko.observable(budget.Amount);
     self.EditAmout = ko.observable(budget.Amount);
-    self.FormattedEditAmout = computedFormatPrice(self, "EditAmout");
     self.FormattedAmount = computedFormatPrice(self, "Amount");
-    self.Expenditures = ko.observableArray(budget.Expenditures);
+    self.FormattedEditAmout = computedFormatPrice(self, "EditAmout");
+    self.Expenditures = ko.observableArray(priceFormattedExpenditures(budget.Expenditures));
     self.Expended = ko.computed(function () {
         var result = 0,
             expenditures = self.Expenditures();
@@ -346,34 +422,58 @@ var projectBudgetViewModel = function (budget) {
                 result += expenditures[i].Count;
             }
         }
-        return thousandthFormatted(result.toFixed(2));
+        return result;
     });
+    self.FormattedExpended = computedFormatPrice(self, "Expended");
     self.Remained = ko.computed(function () {
         var result = self.Amount() - self.Expended();
-        return thousandthFormatted(result.toFixed(2));
+        return result;
     });
+    self.FormattedRemained = computedFormatPrice(self, "Remained");
     self.ExpendituresVisible = ko.observable(false);
 
-    self.showExpenditures = function () {
+    self.toggleExpenditures = function () {
         self.ExpendituresVisible(!self.ExpendituresVisible());
     };
+    self.deleteExpenditure = function (expenditure) {
+        showPopConfrimMessage("删除确认", "是否确认删除指定的支出记录？", function () {
+            request("/Project/DeleteExpenditure", {
+                expenditureId: expenditure.Id
+            }, function (result) {
+                showMessage("删除支出记录成功");
+                self.refreshExpenditures();
+            });
+        });
+    };
+    self.refreshExpenditures = function () {
+        request("/Project/LoadExpenditure", {
+            projectId: self.ProjectId(),
+            category: self.Category()
+        }, function (result) {
+            self.Expenditures(priceFormattedExpenditures(result));
+        });
+    };
     self.editReset = function () {
-        self.EditAmout(self.Amount);
+        self.EditAmout(self.Amount());
     };
 };
 
 var editExpenditureViewModel = function () {
     var self = this;
-    self.BudgetId = ko.observable();
-    self.BudgetDisplayName = ko.observable();
+    self.ProjectId = ko.observable();
+    self.BudgetCategory = ko.observable();
+    self.BudgetCategoryString = ko.observable();
     self.BudgetRemained = ko.observable();
+    self.BudgetFormattedRemained = ko.observable();
     self.Count = ko.observable();
     self.FormattedCount = computedFormatPrice(self, "Count");
     self.Remark = ko.observable();
     self.setBudget = function (budget) {
-        self.BudgetId(budget.Id());
-        self.BudgetDisplayName(budget.DisplayName());
+        self.ProjectId(budget.ProjectId());
+        self.BudgetCategory(budget.Category());
+        self.BudgetCategoryString(budget.CategoryString());
         self.BudgetRemained(budget.Remained());
+        self.BudgetFormattedRemained(budget.FormattedRemained());
         self.Count(0);
         self.Remark("");
     };

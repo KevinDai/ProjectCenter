@@ -57,7 +57,7 @@ namespace ProjectCenter.Services.Imp
             {
                 result.FailMessage = "不存在该用户名的用户";
             }
-            else if (user.RightLevel > 3)
+            else if (user.RightLevel < 0)
             {
                 result.FailMessage = "该用户不允许登录";
             }

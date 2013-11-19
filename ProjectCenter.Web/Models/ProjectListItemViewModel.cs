@@ -113,9 +113,18 @@ namespace ProjectCenter.Web.Models
             Preconditions.CheckNotNull(userInfo, "userInfo");
 
             project.Map(this);
+
             HasNewsView = viewStatus == null || viewStatus.Status == (int)ViewStatus.None;
             EnableViewDetail = userInfo.EnableViewDetail(project);
             EnableDelete = userInfo.EnableDelete(project);
+            if (userInfo.RightDetail.EnableManageFinance)
+            {
+                HasNewsView = HasNewsView || viewStatus.FinanceStatus == (int)ViewStatus.None;
+                if (!string.IsNullOrEmpty(project.FinanceLatestNews))
+                {
+                    LatestNews = project.FinanceLatestNews;
+                }
+            }
         }
     }
 }

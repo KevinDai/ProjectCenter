@@ -27,6 +27,8 @@ namespace ProjectCenter.Models
             modelBuilder.Configurations.Add(new UserMap());
             modelBuilder.Configurations.Add(new ProjectChangeLogMap());
             modelBuilder.Configurations.Add(new ProjectViewStatusMap());
+            modelBuilder.Configurations.Add(new BudgetMap());
+            modelBuilder.Configurations.Add(new ExpenditureMap());
         }
     }
 }

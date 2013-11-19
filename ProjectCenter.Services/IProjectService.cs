@@ -14,15 +14,21 @@ namespace ProjectCenter.Services
 
         Project GetProject(string projectId);
 
-        void UpdateProjectViewStatus(string projectId, string userId, ViewStatus status);
+        void UpdateProjectViewStatus(string projectId, string userId, ViewStatus status, ViewStatus financeStatus);
 
         IEnumerable<ProjectViewStatus> GetProjectViewStatus(string[] projectIds, string userId);
 
         IEnumerable<Attachment> GetProjectAttachments(string projectId);
 
+        IEnumerable<Budget> GetProjectBudgets(string projectId);
+
+        IEnumerable<Expenditure> GetProjectExpenditures(string projectId);
+
+        IEnumerable<Expenditure> GetProjectExpenditures(string projectId, BudgetCategory category);
+
         PageList<Comment> GetProjectCommentPageList(string projectId, int pageIndex, int pageSize);
 
-        PageList<ProjectChangeLog> GetProjectChangeLogPageList(string projectId, int pageIndex, int pageSize);
+        PageList<ProjectChangeLog> GetProjectChangeLogPageList(string projectId, int pageIndex, int pageSize, bool containsFinance = false);
 
         Project AddProject(Project project);
 
@@ -31,6 +37,16 @@ namespace ProjectCenter.Services
         Project UpdateProject(Project project);
 
         void DeleteProject(Project project);
+
+        Budget AddBudget(Budget budget);
+
+        Budget EditBudget(Budget budget);
+
+        Expenditure GetExpenditure(string expenditureId);
+
+        Expenditure AddExpenditure(Expenditure expenditure);
+
+        void DeleteExpenditure(Expenditure expenditure);
 
         Attachment AddAttachment(Attachment attachment);
 

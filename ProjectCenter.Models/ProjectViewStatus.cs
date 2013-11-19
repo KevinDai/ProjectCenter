@@ -32,5 +32,11 @@ namespace ProjectCenter.Models
             set;
         }
 
+        public int FinanceStatus
+        {
+            get;
+            set;
+        }
+
     }
 }

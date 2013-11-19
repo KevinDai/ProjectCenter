@@ -21,6 +21,7 @@ namespace ProjectCenter.Web.Models
             EnableSetCompleteCheck = userInfo.EnableSetCompleteCheck(project);
             EnableEditProject = userInfo.EnableEditProject(project);
             EnableDelete = userInfo.EnableDelete(project);
+            EnableManageFinance = userInfo.RightDetail.EnableManageFinance && project.NeedManageFinance();
         }
 
         public bool EnableEditProject
@@ -41,7 +42,19 @@ namespace ProjectCenter.Web.Models
             set;
         }
 
+        public bool EnableManageFinance
+        {
+            get;
+            set;
+        }
+
         public IEnumerable<Attachment> Attachments
+        {
+            get;
+            set;
+        }
+
+        public IEnumerable<BudgetViewModel> Budgets
         {
             get;
             set;

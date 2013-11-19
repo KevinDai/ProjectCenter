@@ -63,6 +63,7 @@
     <Reference Include="NPOI">
       <HintPath>..\packages\NPOI.1.2.5\lib\net40\NPOI.dll</HintPath>
     </Reference>
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Web.Helpers">
       <Private>True</Private>
     </Reference>
@@ -120,6 +121,8 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="HtmlHelpers\HtmlHelperExtensions.cs" />
+    <Compile Include="Models\BudgetEditItemViewModel.cs" />
+    <Compile Include="Models\BudgetViewModel.cs" />
     <Compile Include="Models\JsonMessage.cs" />
     <Compile Include="Models\LoginViewModel.cs" />
     <Compile Include="Models\ProjectEditViewModel.cs" />
