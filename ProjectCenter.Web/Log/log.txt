@@ -1194,3 +1194,73 @@
 [Footer]
 [Header]
 [Footer]
+[Header]
+[Footer]
+[Header]
+2013-11-25 16:32:47,067 [9] FATAL  [(null)] - System.Data.EntityException: 基础提供程序在 Open 上失败。 ---> System.InvalidOperationException: 当前 TransactionScope 已完成。
+   在 System.Transactions.Transaction.get_Current()
+   在 System.Data.ProviderBase.DbConnectionPool.GetFromTransactedPool(Transaction& transaction)
+   在 System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   在 System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   在 System.Data.ProviderBase.DbConnectionFactory.TryGetConnection(DbConnection owningConnection, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   在 System.Data.ProviderBase.DbConnectionClosed.TryOpenConnection(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   在 System.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry)
+   在 System.Data.SqlClient.SqlConnection.Open()
+   在 System.Data.EntityClient.EntityConnection.OpenStoreConnectionIf(Boolean openCondition, DbConnection storeConnectionToOpen, DbConnection originalConnection, String exceptionCode, String attemptedOperation, Boolean& closeStoreConnectionOnFailure)
+   --- 内部异常堆栈跟踪的结尾 ---
+   在 System.Data.EntityClient.EntityConnection.OpenStoreConnectionIf(Boolean openCondition, DbConnection storeConnectionToOpen, DbConnection originalConnection, String exceptionCode, String attemptedOperation, Boolean& closeStoreConnectionOnFailure)
+   在 System.Data.EntityClient.EntityConnection.Open()
+   在 System.Data.Objects.ObjectContext.EnsureConnection()
+   在 System.Data.Objects.ObjectContext.SaveChanges(SaveOptions options)
+   在 System.Data.Entity.Internal.InternalContext.SaveChanges()
+   在 ProjectCenter.Services.Imp.ServiceBase.SaveChanges() 位置 e:\Project\Common\ProjectCenter\ProjectCenter.Services\Imp\ServiceBase.cs:行号 40
+   在 ProjectCenter.Services.Imp.ProjectService.DeleteProject(Project project) 位置 e:\Project\Common\ProjectCenter\ProjectCenter.Services\Imp\ProjectService.cs:行号 299
+   在 ProjectCenter.Web.Controllers.ProjectController.DeleteProject(String projectId) 位置 e:\Project\Common\ProjectCenter\ProjectCenter.Web\Controllers\ProjectController.cs:行号 470
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.<>c__DisplayClass15.<InvokeActionMethodWithFilters>b__12()
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethodFilter(IActionFilter filter, ActionExecutingContext preContext, Func`1 continuation)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethodWithFilters(ControllerContext controllerContext, IList`1 filters, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAction(ControllerContext controllerContext, String actionName)
+   在 System.Web.Mvc.Controller.ExecuteCore()
+   在 System.Web.Mvc.ControllerBase.Execute(RequestContext requestContext)
+   在 System.Web.Mvc.MvcHandler.<>c__DisplayClass6.<>c__DisplayClassb.<BeginProcessRequest>b__5()
+   在 System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass1.<MakeVoidDelegate>b__0()
+   在 System.Web.Mvc.MvcHandler.<>c__DisplayClasse.<EndProcessRequest>b__d()
+   在 System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   在 System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+2013-11-25 16:33:29,827 [6] FATAL  [(null)] - System.Data.EntityException: 基础提供程序在 Open 上失败。 ---> System.InvalidOperationException: 当前 TransactionScope 已完成。
+   在 System.Transactions.Transaction.get_Current()
+   在 System.Data.ProviderBase.DbConnectionPool.GetFromTransactedPool(Transaction& transaction)
+   在 System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   在 System.Data.ProviderBase.DbConnectionPool.TryGetConnection(DbConnection owningObject, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   在 System.Data.ProviderBase.DbConnectionFactory.TryGetConnection(DbConnection owningConnection, TaskCompletionSource`1 retry, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   在 System.Data.ProviderBase.DbConnectionClosed.TryOpenConnection(DbConnection outerConnection, DbConnectionFactory connectionFactory, TaskCompletionSource`1 retry, DbConnectionOptions userOptions)
+   在 System.Data.SqlClient.SqlConnection.TryOpen(TaskCompletionSource`1 retry)
+   在 System.Data.SqlClient.SqlConnection.Open()
+   在 System.Data.EntityClient.EntityConnection.OpenStoreConnectionIf(Boolean openCondition, DbConnection storeConnectionToOpen, DbConnection originalConnection, String exceptionCode, String attemptedOperation, Boolean& closeStoreConnectionOnFailure)
+   --- 内部异常堆栈跟踪的结尾 ---
+   在 System.Data.EntityClient.EntityConnection.OpenStoreConnectionIf(Boolean openCondition, DbConnection storeConnectionToOpen, DbConnection originalConnection, String exceptionCode, String attemptedOperation, Boolean& closeStoreConnectionOnFailure)
+   在 System.Data.EntityClient.EntityConnection.Open()
+   在 System.Data.Objects.ObjectContext.EnsureConnection()
+   在 System.Data.Objects.ObjectContext.SaveChanges(SaveOptions options)
+   在 System.Data.Entity.Internal.InternalContext.SaveChanges()
+   在 ProjectCenter.Services.Imp.ServiceBase.SaveChanges() 位置 e:\Project\Common\ProjectCenter\ProjectCenter.Services\Imp\ServiceBase.cs:行号 40
+   在 ProjectCenter.Services.Imp.ProjectService.DeleteProject(Project project) 位置 e:\Project\Common\ProjectCenter\ProjectCenter.Services\Imp\ProjectService.cs:行号 299
+   在 ProjectCenter.Web.Controllers.ProjectController.DeleteProject(String projectId) 位置 e:\Project\Common\ProjectCenter\ProjectCenter.Web\Controllers\ProjectController.cs:行号 470
+   在 lambda_method(Closure , ControllerBase , Object[] )
+   在 System.Web.Mvc.ReflectedActionDescriptor.Execute(ControllerContext controllerContext, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethod(ControllerContext controllerContext, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.<>c__DisplayClass15.<InvokeActionMethodWithFilters>b__12()
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethodFilter(IActionFilter filter, ActionExecutingContext preContext, Func`1 continuation)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionMethodWithFilters(ControllerContext controllerContext, IList`1 filters, ActionDescriptor actionDescriptor, IDictionary`2 parameters)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAction(ControllerContext controllerContext, String actionName)
+   在 System.Web.Mvc.Controller.ExecuteCore()
+   在 System.Web.Mvc.ControllerBase.Execute(RequestContext requestContext)
+   在 System.Web.Mvc.MvcHandler.<>c__DisplayClass6.<>c__DisplayClassb.<BeginProcessRequest>b__5()
+   在 System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass1.<MakeVoidDelegate>b__0()
+   在 System.Web.Mvc.MvcHandler.<>c__DisplayClasse.<EndProcessRequest>b__d()
+   在 System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   在 System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+[Footer]

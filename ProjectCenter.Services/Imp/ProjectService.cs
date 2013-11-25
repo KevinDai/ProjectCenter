@@ -293,10 +293,10 @@ namespace ProjectCenter.Services.Imp
                 DbContext.Database.ExecuteSqlCommand("Delete Budgets Where ProjectId = @p0", new SqlParameter { ParameterName = "p0", Value = project.Id });
                 DbContext.Database.ExecuteSqlCommand("Delete Expenditures Where ProjectId = @p0", new SqlParameter { ParameterName = "p0", Value = project.Id });
 
-                ts.Complete();
-
                 DeleteEntity(project);
                 SaveChanges();
+
+                ts.Complete();
             }
         }
 

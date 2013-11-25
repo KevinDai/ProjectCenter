@@ -371,6 +371,7 @@ var projectEditViewModel = function (project) {
     $('#file_upload').uploadify({
         'formData': { 'projectId': '' },
         'fileSizeLimit': '10MB',
+        'successTimeout': 600,
         'uploadLimit': 100,
         'removeCompleted': true,
         'queueID': 'queueUpload',
