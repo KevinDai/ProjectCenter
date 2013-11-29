@@ -14,7 +14,7 @@ namespace ProjectCenter.Services
 
         Project GetProject(string projectId);
 
-        void UpdateProjectViewStatus(string projectId, string userId, ViewStatus status, ViewStatus financeStatus);
+        void UpdateProjectViewStatusRead(string projectId, string userId);
 
         IEnumerable<ProjectViewStatus> GetProjectViewStatus(string[] projectIds, string userId);
 

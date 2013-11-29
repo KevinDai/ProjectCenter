@@ -120,18 +120,18 @@ namespace ProjectCenter.Services.Imp
                         DbContext.Database.ExecuteSqlCommand("Update Projects Set FinanceLatestNews = @p0 Where Id = @p1",
                             new SqlParameter { ParameterName = "p0", Value = latestNews },
                             new SqlParameter { ParameterName = "p1", Value = log.ProjectId });
-                        DbContext.Database.ExecuteSqlCommand("Update ProjectViewStatuses Set FinanceStatus = @p0 Where ProjectId = @p1",
-                            new SqlParameter { ParameterName = "p0", Value = (int)ViewStatus.None },
-                            new SqlParameter { ParameterName = "p1", Value = log.ProjectId });
+                        DbContext.Database.ExecuteSqlCommand("Update ProjectViewStatuses Set FinanceStatus = FinanceStatus + 1 Where ProjectId = @p0 And UserId <> @p1",
+                            new SqlParameter { ParameterName = "p0", Value = log.ProjectId },
+                            new SqlParameter { ParameterName = "p1", Value = log.UserId });
                         break;
                     default:
                         DbContext.Database.ExecuteSqlCommand("Update Projects Set LatestNews = @p0, FinanceLatestNews = '' Where Id = @p1",
                             new SqlParameter { ParameterName = "p0", Value = latestNews },
                             new SqlParameter { ParameterName = "p1", Value = log.ProjectId });
 
-                        DbContext.Database.ExecuteSqlCommand("Update ProjectViewStatuses Set Status = @p0, FinanceStatus = 1 Where ProjectId = @p1",
-                            new SqlParameter { ParameterName = "p0", Value = (int)ViewStatus.None },
-                            new SqlParameter { ParameterName = "p1", Value = log.ProjectId });
+                        DbContext.Database.ExecuteSqlCommand("Update ProjectViewStatuses Set Status = Status + 1 Where ProjectId = @p0 And UserId <> @p1",
+                            new SqlParameter { ParameterName = "p0", Value = log.ProjectId },
+                            new SqlParameter { ParameterName = "p1", Value = log.UserId });
                         break;
                 }
 
@@ -169,7 +169,7 @@ namespace ProjectCenter.Services.Imp
             return project;
         }
 
-        public void UpdateProjectViewStatus(string projectId, string userId, ViewStatus status, ViewStatus financeStatus)
+        public void UpdateProjectViewStatusRead(string projectId, string userId)
         {
             var pvs = ProjectViewStatuses.FirstOrDefault(q => q.ProjectId == projectId && q.UserId == userId);
             if (pvs == null)
@@ -179,16 +179,16 @@ namespace ProjectCenter.Services.Imp
                     Id = Guid.NewGuid().ToString(),
                     UserId = userId,
                     ProjectId = projectId,
-                    Status = (int)status,
-                    FinanceStatus = (int)financeStatus
+                    Status = 0,
+                    FinanceStatus = 0
                 };
                 ProjectViewStatuses.Add(pvs);
                 SaveChanges();
             }
-            else if (pvs.Status != (int)status || pvs.FinanceStatus != (int)financeStatus)
+            else
             {
-                pvs.Status = (int)status;
-                pvs.FinanceStatus = (int)financeStatus;
+                pvs.Status = 0;
+                pvs.FinanceStatus = 0;
                 UpdateEntity(pvs);
                 SaveChanges();
             }

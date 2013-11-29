@@ -376,7 +376,7 @@ namespace ProjectCenter.Web.Controllers
                 model.Budgets = GetBudgetViewModels(project.Id);
             }
 
-            ProjectService.UpdateProjectViewStatus(projectId, UserInfo.UserId, ViewStatus.Read, ViewStatus.Read);
+            ProjectService.UpdateProjectViewStatusRead(projectId, UserInfo.UserId);
 
             return JsonMessageResult(model);
         }
