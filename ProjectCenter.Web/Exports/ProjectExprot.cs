@@ -21,14 +21,16 @@ namespace ProjectCenter.Web.Exports
             new ExportColumn(){Name="类别",Width=10},
             new ExportColumn(){Name="任务内容",Width=25},
             new ExportColumn(){Name="委托单位",Width=25},
-            new ExportColumn(){Name="需要完成的材料",Width=25},
+            new ExportColumn(){Name="工作内容",Width=25},
             new ExportColumn(){Name="具体进展",Width=25},
             new ExportColumn(){Name="责任人",Width=25},
             new ExportColumn(){Name="参与人",Width=25},
             new ExportColumn(){Name="完成时间",Width=10},
             new ExportColumn(){Name="需要的支持",Width=25},
             new ExportColumn(){Name="推进计划",Width=25},
-            new ExportColumn(){Name="状态",Width=10}
+            new ExportColumn(){Name="状态",Width=10},
+            new ExportColumn(){Name="开始年份",Width=10},
+            new ExportColumn(){Name="截止年份",Width=10}
         };
 
         protected HSSFWorkbook HSSFWorkbook
@@ -202,6 +204,8 @@ namespace ProjectCenter.Web.Exports
             row.CreateCell(9).SetCellValue(project.NeedSupport);
             row.CreateCell(10).SetCellValue(project.AdvancePlan);
             row.CreateCell(11).SetCellValue(project.StatusString);
+            row.CreateCell(12).SetCellValue(project.StartTime.Year.ToString());
+            row.CreateCell(13).SetCellValue(project.Deadline.Year.ToString());
             DataRowIndex++;
         }
 
