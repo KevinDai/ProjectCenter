@@ -478,7 +478,7 @@ var editExpenditureViewModel = function () {
         self.Count(0);
         self.Remark("");
     };
-}
+};
 
 var projectListSearchViewModel = function () {
     var self = this,
@@ -540,7 +540,7 @@ var projectListItemViewModel = function (project) {
             self.Status = project.Status;
             self.DaySpanHtml = projectDaySpanHtml(project);
             self.LatestNews = project.LatestNews;
-            self.HasNewsView = project.HasNewsView;
+            self.HasNewsView = ko.observable(project.HasNewsView);
             self.EnableViewDetail = project.EnableViewDetail;
             self.EnableDelete = project.EnableDelete;
         },
@@ -611,6 +611,7 @@ var projectListViewModel = function (user) {
             self.pageList = new pageListViewModel();
             self.projectEdit = new ko.validatedObservable(new projectEditViewModel({}));
             self.projectEdit.isValid();
+            self.changeMessages = new projectChangeMessagesViewModel();
             self.anyItemSelected = ko.computed(function () {
                 var items = self.pageList.List();
                 for (var i = 0; i < items.length; i++) {
@@ -679,10 +680,7 @@ var projectListViewModel = function (user) {
             };
             self.edit = function (data) {
                 if (data.EnableViewDetail) {
-                    request("/Project/GetProject", { projectId: data.Id }, function (result) {
-                        self.projectEdit().update(result);
-                        showProjectEditView();
-                    });
+                    editeProject(data.Id);
                 } else {
                     showErrorMessage("无该项目的查看权限");
                 }
@@ -737,6 +735,33 @@ var projectListViewModel = function (user) {
                 owner: self
             });
 
+            self.removeChangeMessage = function (item) {
+                request("/Project/UpdateProjectViewStatusRead", { projectId: item.ProjectId }, function (result) {
+                    var projects = self.pageList.List();
+                    self.changeMessages.messages.remove(item);
+                    for (var i = 0; i < projects.length; i++) {
+                        if (projects[i].Id == item.ProjectId) {
+                            projects[i].HasNewsView(false);
+                            break;
+                        }
+                    }
+                });
+            };
+
+            self.removeAllChangeMessages = function () {
+                request("/Project/UpdateAllProjectViewStatusRead", {}, function (result) {
+                    self.changeMessages.removeAll();
+                    var projects = self.pageList.List();
+                    for (var i = 0; i < projects.length; i++) {
+                        projects[i].HasNewsView(false);
+                    }
+                });
+            };
+
+            self.viewChangeMessage = function (item) {
+                editeProject(item.ProjectId);
+            };
+
             self.filterLinks = [
                 new filterLinkViewModel("RelationType", "我的项目",
                     [
@@ -762,6 +787,14 @@ var projectListViewModel = function (user) {
             ];
 
             query(true);
+            self.changeMessages.start();
+        },
+        editeProject = function (projectId) {
+            self.changeMessages.remove(projectId);
+            request("/Project/GetProject", { projectId: projectId }, function (result) {
+                self.projectEdit().update(result);
+                showProjectEditView();
+            });
         },
         saveProject = function (data) {
             request("/Project/EditProject", data, function (result) {
@@ -820,4 +853,45 @@ var projectListViewModel = function (user) {
     });
 
     init();
+};
+
+var projectChangeMessagesViewModel = function () {
+    var self = this;
+    self.messages = ko.observableArray([]);
+    self.total = ko.computed(function () {
+        var messages = self.messages(),
+            result = 0;
+        for (var i = 0; i < messages.length; i++) {
+            result = result + messages[i].Count;
+        }
+        return result;
+    });
+    self.start = function () {
+        self.refrush();
+        setInterval(self.refrush, 300000);
+    };
+    self.refrush = function () {
+        request("/Project/LoadChangeMessages", {}, function (result) {
+            self.messages(result);
+        });
+    };
+    self.remove = function (projectId) {
+        var removeItem = undefined,
+            messages = self.messages();
+        for (var i = 0; i < messages.length; i++) {
+            if (messages[i].ProjectId == projectId) {
+                removeItem = messages[i];
+                break;
+            }
+        }
+        if (removeItem) {
+            self.messages.remove(removeItem);
+        }
+    };
+    self.removeAll = function () {
+        self.messages([]);
+    };
+    $(".message-header").click(function () {
+        $(".message-list").toggle();
+    });
 };

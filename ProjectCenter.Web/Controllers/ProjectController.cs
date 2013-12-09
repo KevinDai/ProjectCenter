@@ -664,6 +664,31 @@ namespace ProjectCenter.Web.Controllers
             return File(fullPath, "application/zip", EncodeDownloadFileName("项目附件.zip"));
         }
 
+        [HttpPost]
+        public ActionResult LoadChangeMessages()
+        {
+            var viewStatus = ProjectService.GetChangedProjectViewStatusDetail(
+                UserInfo.UserId, UserInfo.RightDetail.EnableManageFinance);
+            var result = viewStatus.Select(vs => new ChangeMessageViewModel(UserInfo, vs)).ToArray();
+
+            return JsonMessageResult(result);
+        }
+
+        [HttpPost]
+        public ActionResult UpdateProjectViewStatusRead(string projectId)
+        {
+            ProjectService.UpdateProjectViewStatusRead(projectId, UserInfo.UserId);
+            return JsonMessageResult(null);
+        }
+
+        [HttpPost]
+        public ActionResult UpdateAllProjectViewStatusRead()
+        {
+            ProjectService.UpdateAllProjectViewStatusRead(UserInfo.UserId);
+            return JsonMessageResult(null);
+        }
+
+
         //public ActionResult DownloadAttachments(string id)
         //{
         //    var project = ProjectService.GetProject(id);

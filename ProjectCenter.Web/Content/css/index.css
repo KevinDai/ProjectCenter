@@ -455,6 +455,7 @@ textarea {
     border: 1px solid #e7e7e7;
     font-size: 13px;
     overflow-y: auto;
+    display: none;
 }
 
     .message-list li > div {
@@ -475,7 +476,7 @@ textarea {
     }
 
     .message-list .badge {
-        padding: 2px 5px;
+        padding: 1px 3px;
         background-color: #428bca;
         width: 30px;
     }
@@ -484,6 +485,7 @@ textarea {
     padding: 5px 10px;
     color: white;
     background: #404040;
+    cursor: default;
 }
 
     .message-header .badge {
@@ -491,6 +493,10 @@ textarea {
         color: #333;
         width: 35px;
     }
+
+        .message-header .badge:hover {
+            color: #333;
+        }
 
     .message-header .glyphicon {
         top: 2px;

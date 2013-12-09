@@ -68,6 +68,7 @@
     <Compile Include="ProjectStatus.cs" />
     <Compile Include="ProjectType.cs" />
     <Compile Include="ProjectViewStatus.cs" />
+    <Compile Include="ProjectViewStatusDetail.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="User.cs" />
     <Compile Include="Project.cs" />

@@ -16,6 +16,8 @@ namespace ProjectCenter.Services
 
         void UpdateProjectViewStatusRead(string projectId, string userId);
 
+        void UpdateAllProjectViewStatusRead(string userId);
+
         IEnumerable<ProjectViewStatus> GetProjectViewStatus(string[] projectIds, string userId);
 
         IEnumerable<Attachment> GetProjectAttachments(string projectId);
@@ -63,5 +65,7 @@ namespace ProjectCenter.Services
         void DeleteComment(Comment comment);
 
         ProjectChangeLog AddChangeLog(ProjectChangeLog log);
+
+        IEnumerable<ProjectViewStatusDetail> GetChangedProjectViewStatusDetail(string userId, bool includeFinanceStatus);
     }
 }

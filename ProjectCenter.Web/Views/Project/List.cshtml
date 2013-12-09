@@ -211,7 +211,7 @@
                                                 <small data-bind="text: Deadline" class="muted"></small>
                                                 </td>
                                                 <td data-bind="click: $root.edit">
-                                                    <div data-bind="text: LatestNews, css: HasNewsView ? 'news' : 'read'"></div>
+                                                    <div data-bind="text: LatestNews, css: HasNewsView() ? 'news' : 'read'"></div>
                                                 </td>
                                                 <td>
                                                     <a data-bind="click: $root.delete, visible: EnableDelete" href="#"><span class="glyphicon glyphicon-trash"></span></a>
@@ -257,7 +257,7 @@
                                                 <small data-bind="text: Deadline" class="muted"></small>
                                                 </td>
                                                 <td data-bind="click: $root.edit">
-                                                    <div data-bind="text: LatestNews, css: HasNewsView ? 'news' : 'read'"></div>
+                                                    <div data-bind="text: LatestNews, css: HasNewsView() ? 'news' : 'read'"></div>
                                                 </td>
                                                 <td>
                                                     <a data-bind="click: $root.delete, visible: EnableDelete" href="#"><span class="glyphicon glyphicon-trash"></span></a>
@@ -295,93 +295,14 @@
 </div>
 <div class="message-container">
     <div class="message-list">
-        <ul class="list-unstyled">
+        <ul data-bind="foreach: changeMessages.messages" class="list-unstyled">
             <li style="margin: 10px 5px; border-bottom: 1px solid #e7e7e7">
                 <div class="project-name">
-                    <a href="#">测试项目长度测试项目长度测试项目长项目长</a>
+                    <span data-bind="visible: NeedCheck" class="text-danger">[待审]</span>
+                    <a data-bind="click: $root.viewChangeMessage, text: ProjectName" href="#"></a>
                 </div>
                 <div class="change-count pull-right">
-                    <a href="#"><span class="badge">42</span></a>
-                </div>
-            </li>
-            <li style="margin: 10px 5px; border-bottom: 1px solid #e7e7e7">
-                <div class="project-name">
-                    <a href="#">测试项目长度测试项目长度测试项目长项目长</a>
-                </div>
-                <div class="change-count pull-right">
-                    <a href="#"><span class="badge">42</span></a>
-                </div>
-            </li>
-            <li style="margin: 10px 5px; border-bottom: 1px solid #e7e7e7">
-                <div class="project-name">
-                    <a href="#">测试项目长度测试项目长度测试项目长项目长</a>
-                </div>
-                <div class="change-count pull-right">
-                    <a href="#"><span class="badge">42</span></a>
-                </div>
-            </li>
-            <li style="margin: 10px 5px; border-bottom: 1px solid #e7e7e7">
-                <div class="project-name">
-                    <a href="#">测试项目长度测试项目长度测试项目长项目长</a>
-                </div>
-                <div class="change-count pull-right">
-                    <a href="#"><span class="badge">42</span></a>
-                </div>
-            </li>
-            <li style="margin: 10px 5px; border-bottom: 1px solid #e7e7e7">
-                <div class="project-name">
-                    <a href="#">测试项目长度测试项目长度测试项目长项目长</a>
-                </div>
-                <div class="change-count pull-right">
-                    <a href="#"><span class="badge">42</span></a>
-                </div>
-            </li>
-            <li style="margin: 10px 5px; border-bottom: 1px solid #e7e7e7">
-                <div class="project-name">
-                    <a href="#">测试项目长度测试项目长度测试项目长项目长</a>
-                </div>
-                <div class="change-count pull-right">
-                    <a href="#"><span class="badge">42</span></a>
-                </div>
-            </li>
-            <li style="margin: 10px 5px; border-bottom: 1px solid #e7e7e7">
-                <div class="project-name">
-                    <a href="#">测试项目长度测试项目长度测试项目长项目长</a>
-                </div>
-                <div class="change-count pull-right">
-                    <a href="#"><span class="badge">42</span></a>
-                </div>
-            </li>
-            <li style="margin: 10px 5px; border-bottom: 1px solid #e7e7e7">
-                <div class="project-name">
-                    <a href="#">测试项目长度测试项目长度测试项目长项目长</a>
-                </div>
-                <div class="change-count pull-right">
-                    <a href="#"><span class="badge">42</span></a>
-                </div>
-            </li>
-            <li style="margin: 10px 5px; border-bottom: 1px solid #e7e7e7">
-                <div class="project-name">
-                    <a href="#">测试项目长度测试项目长度测试项目长项目长</a>
-                </div>
-                <div class="change-count pull-right">
-                    <a href="#"><span class="badge">42</span></a>
-                </div>
-            </li>
-            <li style="margin: 10px 5px; border-bottom: 1px solid #e7e7e7">
-                <div class="project-name">
-                    <a href="#">测试项目长度测试项目长度测试项目长项目长</a>
-                </div>
-                <div class="change-count pull-right">
-                    <a href="#"><span class="badge">42</span></a>
-                </div>
-            </li>
-            <li style="margin: 10px 5px; border-bottom: 1px solid #e7e7e7">
-                <div class="project-name">
-                    <a href="#">测试项目长度测试项目长度测试项目长项目长</a>
-                </div>
-                <div class="change-count pull-right">
-                    <a href="#"><span class="badge">42</span></a>
+                    <a data-bind="click: $root.removeChangeMessage" href="#" title="忽略"><span data-bind="text: Count" class="badge"></span></a>
                 </div>
             </li>
         </ul>
@@ -392,7 +313,7 @@
             <span>项目动态</span>
         </div>
         <ul class="pull-right list-inline" style="margin-bottom: 0px;">
-            <li><a href="#" class="badge">42</a></li>
+            <li><a data-bind="click: $root.removeAllChangeMessages, text: changeMessages.total, clickBubble: false" href="#" class="badge" title="忽略全部"></a></li>
             @*<li><a href="#"><span class="glyphicon glyphicon-chevron-up"></span></a></li>*@
         </ul>
     </div>

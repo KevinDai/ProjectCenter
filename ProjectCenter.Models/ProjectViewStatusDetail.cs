@@ -5,9 +5,8 @@ using System.Text;
 
 namespace ProjectCenter.Models
 {
-    public class ProjectViewStatus
+    public class ProjectViewStatusDetail
     {
-
         public string Id
         {
             get;
@@ -26,6 +25,12 @@ namespace ProjectCenter.Models
             set;
         }
 
+        public int ProjectStatus
+        {
+            get;
+            set;
+        }
+
         public int Status
         {
             get;
@@ -38,11 +43,16 @@ namespace ProjectCenter.Models
             set;
         }
 
-        public DateTime UpdateTime
+        public string ProjectName
         {
             get;
             set;
         }
 
+        public DateTime UpdateTime
+        {
+            get;
+            set;
+        }
     }
 }

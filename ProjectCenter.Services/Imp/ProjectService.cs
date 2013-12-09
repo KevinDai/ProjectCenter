@@ -120,7 +120,7 @@ namespace ProjectCenter.Services.Imp
                         DbContext.Database.ExecuteSqlCommand("Update Projects Set FinanceLatestNews = @p0 Where Id = @p1",
                             new SqlParameter { ParameterName = "p0", Value = latestNews },
                             new SqlParameter { ParameterName = "p1", Value = log.ProjectId });
-                        DbContext.Database.ExecuteSqlCommand("Update ProjectViewStatuses Set FinanceStatus = FinanceStatus + 1 Where ProjectId = @p0 And UserId <> @p1",
+                        DbContext.Database.ExecuteSqlCommand("Update ProjectViewStatuses Set FinanceStatus = FinanceStatus + 1, UpdateTime = GETDATE() Where ProjectId = @p0 And UserId <> @p1",
                             new SqlParameter { ParameterName = "p0", Value = log.ProjectId },
                             new SqlParameter { ParameterName = "p1", Value = log.UserId });
                         break;
@@ -129,7 +129,7 @@ namespace ProjectCenter.Services.Imp
                             new SqlParameter { ParameterName = "p0", Value = latestNews },
                             new SqlParameter { ParameterName = "p1", Value = log.ProjectId });
 
-                        DbContext.Database.ExecuteSqlCommand("Update ProjectViewStatuses Set Status = Status + 1 Where ProjectId = @p0 And UserId <> @p1",
+                        DbContext.Database.ExecuteSqlCommand("Update ProjectViewStatuses Set Status = Status + 1, UpdateTime = GETDATE() Where ProjectId = @p0 And UserId <> @p1",
                             new SqlParameter { ParameterName = "p0", Value = log.ProjectId },
                             new SqlParameter { ParameterName = "p1", Value = log.UserId });
                         break;
@@ -194,6 +194,13 @@ namespace ProjectCenter.Services.Imp
             }
         }
 
+        public void UpdateAllProjectViewStatusRead(string userId)
+        {
+            DbContext.Database.ExecuteSqlCommand(
+                "Update ProjectViewStatuses Set Status = 0, FinanceStatus = 0, UpdateTime = GETDATE() Where UserId = @p0 And ( Status > 0 Or FinanceStatus > 0 )",
+                new SqlParameter { ParameterName = "p0", Value = userId });
+        }
+
         public IEnumerable<ProjectViewStatus> GetProjectViewStatus(string[] projectIds, string userId)
         {
             return ProjectViewStatuses.Where(q => projectIds.Contains(q.ProjectId) && q.UserId == userId).ToArray();
@@ -201,23 +208,35 @@ namespace ProjectCenter.Services.Imp
 
         public Project AddProject(Project project)
         {
-            project.Id = Guid.NewGuid().ToString();
-            project.CreateTime = DateTime.Now;
+            using (TransactionScope ts = new TransactionScope())
+            {
+                project.Id = Guid.NewGuid().ToString();
+                project.CreateTime = DateTime.Now;
 
-            ProjectValidSet(project);
+                ProjectValidSet(project);
 
-            AddEntity(project);
+                AddEntity(project);
 
-            //if (attachmentIds != null && attachmentIds.Any())
-            //{
-            //    var attachments = Attachments.Where(q => attachmentIds.Contains(q.Id)).ToArray();
-            //    foreach (var item in attachments)
-            //    {
-            //        item.ProjectId = project.Id;
-            //    }
-            //}
-            SaveChanges();
-            return project;
+                //if (attachmentIds != null && attachmentIds.Any())
+                //{
+                //    var attachments = Attachments.Where(q => attachmentIds.Contains(q.Id)).ToArray();
+                //    foreach (var item in attachments)
+                //    {
+                //        item.ProjectId = project.Id;
+                //    }
+                //}
+                SaveChanges();
+
+                DbContext.Database.ExecuteSqlCommand(
+                @"INSERT INTO [ProjectViewStatuses] 
+                SELECT NEWID() AS [Id], @p0 AS [ProjectId], U.ID AS [UserId], 0 AS [Status], 0 AS [FinanceStatus], GETDATE() AS [UpdateTime]
+                FROM Users U
+                WHERE  U.RIGHTLEVEL >= 0",
+                    new SqlParameter { ParameterName = "p0", Value = project.Id });
+
+                ts.Complete();
+                return project;
+            }
         }
 
         public IEnumerable<Attachment> GetProjectAttachments(string projectId)
@@ -436,7 +455,32 @@ namespace ProjectCenter.Services.Imp
             return log;
         }
 
-        #endregion
+        public IEnumerable<ProjectViewStatusDetail> GetChangedProjectViewStatusDetail(string userId, bool includeFinanceStatus)
+        {
+            var viewStatusQuery = ProjectViewStatuses.Where(q => q.UserId == userId);
+            if (includeFinanceStatus)
+            {
+                viewStatusQuery = viewStatusQuery.Where(q => q.Status > 0 || q.FinanceStatus > 0);
+            }
+            else
+            {
+                viewStatusQuery = viewStatusQuery.Where(q => q.Status > 0);
+            }
+            var query = viewStatusQuery.Join(Projects, vs => vs.ProjectId, p => p.Id, (vs, p) => new ProjectViewStatusDetail
+            {
+                Id = vs.Id,
+                ProjectId = vs.ProjectId,
+                ProjectName = p.Name,
+                ProjectStatus = p.Status,
+                UserId = vs.UserId,
+                Status = vs.Status,
+                FinanceStatus = vs.FinanceStatus,
+                UpdateTime = vs.UpdateTime
+            }).OrderByDescending(q => q.UpdateTime);
 
+            return query.ToArray();
+        }
+
+        #endregion
     }
 }
