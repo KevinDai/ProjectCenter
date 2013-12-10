@@ -727,7 +727,7 @@ namespace ProjectCenter.Web.Controllers
             var attachment = ProjectService.GetAttachment(attachmentId);
             if (attachment != null)
             {
-                if (!UserInfo.RightDetail.EnbaleDeleteProject)
+                if (!UserInfo.RightDetail.EnbaleDeleteProject && UserInfo.UserId != attachment.UploadUserId)
                 {
                     throw new BusinessException("无删除操作权限");
                 }
@@ -778,7 +778,7 @@ namespace ProjectCenter.Web.Controllers
                 throw new BusinessException("操作的评论不存");
             }
 
-            if (!UserInfo.RightDetail.EnbaleDeleteProject)
+            if (!UserInfo.RightDetail.EnbaleDeleteProject && UserInfo.UserId != comment.CreatorId)
             {
                 throw new BusinessException("无删除操作权限");
             }
