@@ -14,5 +14,7 @@ namespace ProjectCenter.Services
         IEnumerable<User> GetAllUser();
 
         LoginResult Login(string loginName, string password);
+
+        void ChangePassword(string userId, string password);
     }
 }

@@ -72,6 +72,14 @@ namespace ProjectCenter.Services.Imp
             return result;
         }
 
+        public void ChangePassword(string userId, string password)
+        {
+            User user = Users.FirstOrDefault(u => u.Id == userId);
+            user.Passwrod = GetMD5String(password);
+            UpdateEntity(user);
+            SaveChanges();
+        }
+
         private string GetMD5String(string str)
         {
             MD5 md5 = MD5.Create();
@@ -90,5 +98,6 @@ namespace ProjectCenter.Services.Imp
         {
             return Users.OrderBy(u => u.RightLevel).ToArray();
         }
+
     }
 }

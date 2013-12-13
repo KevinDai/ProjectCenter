@@ -482,7 +482,7 @@ textarea {
     }
 
 .message-header {
-    padding: 5px 10px;
+    padding: 5px 0px 5px 10px;
     color: white;
     background: #404040;
     cursor: default;
@@ -492,11 +492,21 @@ textarea {
         background-color: white;
         color: #333;
         width: 35px;
+        margin-right: 10px;
+        padding: 3px 7px 2px 7px;
     }
 
-        .message-header .badge:hover {
-            color: #333;
+    .message-header a {
+        color: white;
+    }
+
+        .message-header a:hover {
+            color: #ebebeb;
         }
+
+    .message-header .badge:hover {
+        color: #333;
+    }
 
     .message-header .glyphicon {
         top: 2px;

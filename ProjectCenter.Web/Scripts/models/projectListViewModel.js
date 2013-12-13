@@ -603,7 +603,7 @@ var projectListItemViewModel = function (project) {
 };
 
 var projectListViewModel = function (user) {
-    var self = this,
+    var self = window.viewModel = window.viewModel || {},
         init = function () {
             self.user = user;
             self.queryFilter = { FieldFilters: [], SortFields: [], PageIndex: 1, PageSize: 20 };
@@ -786,6 +786,10 @@ var projectListViewModel = function (user) {
                     ], "", self.query)
             ];
 
+            self.toggleMessageList = function () {
+                $(".message-list").toggle();
+                $(".message-header").find(".glyphicon").toggleClass("glyphicon-chevron-up glyphicon-minus");
+            };
             query(true);
             self.changeMessages.start();
         },
@@ -891,7 +895,4 @@ var projectChangeMessagesViewModel = function () {
     self.removeAll = function () {
         self.messages([]);
     };
-    $(".message-header").click(function () {
-        $(".message-list").toggle();
-    });
 };

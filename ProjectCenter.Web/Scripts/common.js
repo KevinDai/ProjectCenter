@@ -360,4 +360,36 @@
 
         })();
     });
+
+    var passwordEditViewModel = function () {
+        var self = this;
+        self.Password = ko.observable("");
+        self.PasswordConfrim = ko.observable("");
+        self.edit = function () {
+            self.Password("");
+            self.PasswordConfrim("");
+            $("#passwordEdit").modal("show");
+        };
+        self.save = function () {
+            var password = self.Password();
+            var confrim = self.PasswordConfrim();
+            if (password.length < 6 || password.length > 12) {
+                showErrorMessage("密码长度必须在6到12个字符之间");
+                return;
+            }
+            if (password != confrim) {
+                showErrorMessage("设置的新密码必须和确认密码一致");
+                return;
+            }
+            request("/User/ChangePassword", { password: password }, function (result) {
+                showMessage("更新密码成功，下次登录请使用新密码登录");
+                $("#passwordEdit").modal("hide");
+            });
+        };
+    };
+
+    window.viewModel = {
+        passwordEdit: new passwordEditViewModel()
+    };
+
 })(jQuery);

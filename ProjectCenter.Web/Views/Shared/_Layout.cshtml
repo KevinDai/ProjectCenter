@@ -42,6 +42,9 @@
                             <a href="#"><span class="glyphicon glyphicon-user"></span><span class="btn-glyphicon-content">@ViewBag.UserInfo.UserName</span></a>
                         </li>
                         <li>
+                            <a data-bind="click: passwordEdit.edit" href="#"><span class="glyphicon glyphicon-credit-card"></span><span class="btn-glyphicon-content">修改密码</span></a>
+                        </li>
+                        <li>
                             <a href="/Authenticate/Logout"><span class="glyphicon glyphicon-off"></span><span class="btn-glyphicon-content">退出</span></a>
                         </li>
                         <!--<li>
@@ -78,6 +81,42 @@
         </div>
         @RenderBody()
     </div>
+    <div id="passwordEdit" class="modal" data-backdrop="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" style="font-weight: bold;">修改密码</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                        </div>
+                    </div>
+                    <form data-bind="with: passwordEdit" class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">
+                                新密码：</label>
+                            <div class="col-md-6">
+                                <input data-bind="value: Password" class="form-control" type="password">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">
+                                确认密码：</label>
+                            <div class="col-md-6">
+                                <input data-bind="value: PasswordConfrim" class="form-control" type="password">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button data-bind="click: passwordEdit.save" type="button" class="btn btn-primary btn-action btn-primary btn-ok">确认</button>
+                    <button type="button" class="btn btn-default btn-action" data-dismiss="modal">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <div id="popMessage" class="modal" data-backdrop="false">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -91,19 +130,6 @@
                             <p class="content"></p>
                         </div>
                     </div>
-                    @*                    <div class="row">
-                        <div class="col-md-12">
-                            <ul class="list-unstyle list-inline pull-right">
-                                <li>
-                                    <button type="button" class="btn btn-primary btn-action btn-primary">确认</button>
-
-                                </li>
-                                <li>
-                                    <button type="button" class="btn btn-default btn-action" data-dismiss="modal">取消</button>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>*@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary btn-action btn-primary btn-ok">确认</button>
@@ -113,4 +139,10 @@
         </div>
     </div>
 </body>
+
+<script type="text/javascript">
+    $(function () {
+        ko.applyBindings(window.viewModel);
+    });
+</script>
 </html>

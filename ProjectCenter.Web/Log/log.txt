@@ -2326,3 +2326,83 @@ ClientConnectionId:f5d5dbd7-3233-443c-ab6e-516298402d62
 [Footer]
 [Header]
 [Footer]
+[Header]
+2013-12-10 08:45:17,369 [103] WARN   [(null)] - ProjectCenter.Util.Exceptions.BusinessException: 用户已过期，请重新登录！
+   在 ProjectCenter.Web.Controllers.SecurityController.OnAuthorization(AuthorizationContext filterContext) 位置 e:\Project\Common\ProjectCenter\ProjectCenter.Web\Controllers\SecurityController.cs:行号 63
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAuthorizationFilters(ControllerContext controllerContext, IList`1 filters, ActionDescriptor actionDescriptor)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAction(ControllerContext controllerContext, String actionName)
+2013-12-10 08:50:08,515 [95] WARN   [(null)] - ProjectCenter.Util.Exceptions.BusinessException: 用户已过期，请重新登录！
+   在 ProjectCenter.Web.Controllers.SecurityController.OnAuthorization(AuthorizationContext filterContext) 位置 e:\Project\Common\ProjectCenter\ProjectCenter.Web\Controllers\SecurityController.cs:行号 63
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAuthorizationFilters(ControllerContext controllerContext, IList`1 filters, ActionDescriptor actionDescriptor)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAction(ControllerContext controllerContext, String actionName)
+2013-12-10 08:55:08,492 [90] WARN   [(null)] - ProjectCenter.Util.Exceptions.BusinessException: 用户已过期，请重新登录！
+   在 ProjectCenter.Web.Controllers.SecurityController.OnAuthorization(AuthorizationContext filterContext) 位置 e:\Project\Common\ProjectCenter\ProjectCenter.Web\Controllers\SecurityController.cs:行号 63
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAuthorizationFilters(ControllerContext controllerContext, IList`1 filters, ActionDescriptor actionDescriptor)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAction(ControllerContext controllerContext, String actionName)
+2013-12-10 09:00:08,475 [85] WARN   [(null)] - ProjectCenter.Util.Exceptions.BusinessException: 用户已过期，请重新登录！
+   在 ProjectCenter.Web.Controllers.SecurityController.OnAuthorization(AuthorizationContext filterContext) 位置 e:\Project\Common\ProjectCenter\ProjectCenter.Web\Controllers\SecurityController.cs:行号 63
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAuthorizationFilters(ControllerContext controllerContext, IList`1 filters, ActionDescriptor actionDescriptor)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAction(ControllerContext controllerContext, String actionName)
+2013-12-10 09:05:08,477 [38] WARN   [(null)] - ProjectCenter.Util.Exceptions.BusinessException: 用户已过期，请重新登录！
+   在 ProjectCenter.Web.Controllers.SecurityController.OnAuthorization(AuthorizationContext filterContext) 位置 e:\Project\Common\ProjectCenter\ProjectCenter.Web\Controllers\SecurityController.cs:行号 63
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAuthorizationFilters(ControllerContext controllerContext, IList`1 filters, ActionDescriptor actionDescriptor)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAction(ControllerContext controllerContext, String actionName)
+2013-12-10 09:10:08,432 [99] WARN   [(null)] - ProjectCenter.Util.Exceptions.BusinessException: 用户已过期，请重新登录！
+   在 ProjectCenter.Web.Controllers.SecurityController.OnAuthorization(AuthorizationContext filterContext) 位置 e:\Project\Common\ProjectCenter\ProjectCenter.Web\Controllers\SecurityController.cs:行号 63
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAuthorizationFilters(ControllerContext controllerContext, IList`1 filters, ActionDescriptor actionDescriptor)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAction(ControllerContext controllerContext, String actionName)
+2013-12-10 09:15:08,413 [90] WARN   [(null)] - ProjectCenter.Util.Exceptions.BusinessException: 用户已过期，请重新登录！
+   在 ProjectCenter.Web.Controllers.SecurityController.OnAuthorization(AuthorizationContext filterContext) 位置 e:\Project\Common\ProjectCenter\ProjectCenter.Web\Controllers\SecurityController.cs:行号 63
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAuthorizationFilters(ControllerContext controllerContext, IList`1 filters, ActionDescriptor actionDescriptor)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAction(ControllerContext controllerContext, String actionName)
+2013-12-10 09:20:08,389 [70] WARN   [(null)] - ProjectCenter.Util.Exceptions.BusinessException: 用户已过期，请重新登录！
+   在 ProjectCenter.Web.Controllers.SecurityController.OnAuthorization(AuthorizationContext filterContext) 位置 e:\Project\Common\ProjectCenter\ProjectCenter.Web\Controllers\SecurityController.cs:行号 63
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAuthorizationFilters(ControllerContext controllerContext, IList`1 filters, ActionDescriptor actionDescriptor)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAction(ControllerContext controllerContext, String actionName)
+2013-12-10 09:25:08,371 [98] WARN   [(null)] - ProjectCenter.Util.Exceptions.BusinessException: 用户已过期，请重新登录！
+   在 ProjectCenter.Web.Controllers.SecurityController.OnAuthorization(AuthorizationContext filterContext) 位置 e:\Project\Common\ProjectCenter\ProjectCenter.Web\Controllers\SecurityController.cs:行号 63
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAuthorizationFilters(ControllerContext controllerContext, IList`1 filters, ActionDescriptor actionDescriptor)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAction(ControllerContext controllerContext, String actionName)
+2013-12-10 09:30:08,348 [68] WARN   [(null)] - ProjectCenter.Util.Exceptions.BusinessException: 用户已过期，请重新登录！
+   在 ProjectCenter.Web.Controllers.SecurityController.OnAuthorization(AuthorizationContext filterContext) 位置 e:\Project\Common\ProjectCenter\ProjectCenter.Web\Controllers\SecurityController.cs:行号 63
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAuthorizationFilters(ControllerContext controllerContext, IList`1 filters, ActionDescriptor actionDescriptor)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAction(ControllerContext controllerContext, String actionName)
+2013-12-10 09:35:08,321 [79] WARN   [(null)] - ProjectCenter.Util.Exceptions.BusinessException: 用户已过期，请重新登录！
+   在 ProjectCenter.Web.Controllers.SecurityController.OnAuthorization(AuthorizationContext filterContext) 位置 e:\Project\Common\ProjectCenter\ProjectCenter.Web\Controllers\SecurityController.cs:行号 63
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAuthorizationFilters(ControllerContext controllerContext, IList`1 filters, ActionDescriptor actionDescriptor)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAction(ControllerContext controllerContext, String actionName)
+2013-12-10 09:40:08,329 [66] WARN   [(null)] - ProjectCenter.Util.Exceptions.BusinessException: 用户已过期，请重新登录！
+   在 ProjectCenter.Web.Controllers.SecurityController.OnAuthorization(AuthorizationContext filterContext) 位置 e:\Project\Common\ProjectCenter\ProjectCenter.Web\Controllers\SecurityController.cs:行号 63
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAuthorizationFilters(ControllerContext controllerContext, IList`1 filters, ActionDescriptor actionDescriptor)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAction(ControllerContext controllerContext, String actionName)
+2013-12-10 09:45:08,282 [92] WARN   [(null)] - ProjectCenter.Util.Exceptions.BusinessException: 用户已过期，请重新登录！
+   在 ProjectCenter.Web.Controllers.SecurityController.OnAuthorization(AuthorizationContext filterContext) 位置 e:\Project\Common\ProjectCenter\ProjectCenter.Web\Controllers\SecurityController.cs:行号 63
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAuthorizationFilters(ControllerContext controllerContext, IList`1 filters, ActionDescriptor actionDescriptor)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAction(ControllerContext controllerContext, String actionName)
+[Footer]
+[Header]
+2013-12-13 13:32:03,166 [8] FATAL  [(null)] - System.Web.HttpException (0x80004005): 未找到路径“/favicon.ico”的控制器或该控制器未实现 IController。
+   在 System.Web.Mvc.DefaultControllerFactory.GetControllerInstance(RequestContext requestContext, Type controllerType)
+   在 System.Web.Mvc.DefaultControllerFactory.CreateController(RequestContext requestContext, String controllerName)
+   在 System.Web.Mvc.MvcHandler.ProcessRequestInit(HttpContextBase httpContext, IController& controller, IControllerFactory& factory)
+   在 System.Web.Mvc.MvcHandler.<>c__DisplayClass6.<BeginProcessRequest>b__2()
+   在 System.Web.Mvc.SecurityUtil.<>c__DisplayClassb`1.<ProcessInApplicationTrust>b__a()
+   在 System.Web.Mvc.SecurityUtil.ProcessInApplicationTrust[TResult](Func`1 func)
+   在 System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   在 System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+2013-12-13 13:55:26,179 [52] FATAL  [(null)] - System.Web.HttpException (0x80004005): 未找到路径“/favicon.ico”的控制器或该控制器未实现 IController。
+   在 System.Web.Mvc.DefaultControllerFactory.GetControllerInstance(RequestContext requestContext, Type controllerType)
+   在 System.Web.Mvc.DefaultControllerFactory.CreateController(RequestContext requestContext, String controllerName)
+   在 System.Web.Mvc.MvcHandler.ProcessRequestInit(HttpContextBase httpContext, IController& controller, IControllerFactory& factory)
+   在 System.Web.Mvc.MvcHandler.<>c__DisplayClass6.<BeginProcessRequest>b__2()
+   在 System.Web.Mvc.SecurityUtil.<>c__DisplayClassb`1.<ProcessInApplicationTrust>b__a()
+   在 System.Web.Mvc.SecurityUtil.ProcessInApplicationTrust[TResult](Func`1 func)
+   在 System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   在 System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+[Footer]
+[Header]
+[Footer]
+[Header]
+[Footer]
+[Header]
+[Footer]
