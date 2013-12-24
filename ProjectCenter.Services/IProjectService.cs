@@ -28,6 +28,8 @@ namespace ProjectCenter.Services
 
         IEnumerable<Expenditure> GetProjectExpenditures(string projectId, BudgetCategory category);
 
+        Dictionary<int, int> GetWaitCheckStatusGroupCount();
+
         PageList<Comment> GetProjectCommentPageList(string projectId, int pageIndex, int pageSize);
 
         PageList<ProjectChangeLog> GetProjectChangeLogPageList(string projectId, int pageIndex, int pageSize, bool containsFinance = false);

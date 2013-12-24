@@ -150,9 +150,10 @@
                                 <li data-bind="if: value"><a data-bind="click: clear" href="javascript:void(0);"><span
                                     class="text-all"><span class="glyphicon glyphicon-minus glyphicon-all"></span>全部</span></a></li>
                                 <li>
-                                    <ul data-bind="foreach: { data: selectListItems, as: 'item' }" class="nav nav-list">
+                                    <ul data-bind="foreach: { data: selectListItems, as: 'item' }" class="nav nav-list list-inline">
                                         <li data-bind="attr: { 'class': filterLink.value() == item.value ? 'active' : ''}"><a
                                             data-bind="text: item.name, click: filterLink.select" class="" href="#"></a>
+                                            <div data-bind="visible: item.count(), text: item.count" class="group-count"></div>
                                         </li>
                                     </ul>
                                 </li>

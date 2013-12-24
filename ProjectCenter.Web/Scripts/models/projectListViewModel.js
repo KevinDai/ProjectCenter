@@ -611,7 +611,7 @@ var projectListViewModel = function (user) {
             self.pageList = new pageListViewModel();
             self.projectEdit = new ko.validatedObservable(new projectEditViewModel({}));
             self.projectEdit.isValid();
-            self.changeMessages = new projectChangeMessagesViewModel();
+            self.changeMessages = new projectChangeMessagesViewModel(refrushWaitCheckStatusGroupCount);
             self.anyItemSelected = ko.computed(function () {
                 var items = self.pageList.List();
                 for (var i = 0; i < items.length; i++) {
@@ -621,7 +621,6 @@ var projectListViewModel = function (user) {
                 }
                 return false;
             });
-
             self.query = function () {
                 query(true);
                 showProjectListView();
@@ -680,11 +679,10 @@ var projectListViewModel = function (user) {
             };
             self.edit = function (data) {
                 if (data.EnableViewDetail) {
-                    editeProject(data.Id);
+                    editProject(data.Id);
                 } else {
                     showErrorMessage("无该项目的查看权限");
                 }
-
             };
             self.delete = function (data) {
                 showPopConfrimMessage("删除确认", "是否确认删除指定的项目？", function () {
@@ -759,9 +757,8 @@ var projectListViewModel = function (user) {
             };
 
             self.viewChangeMessage = function (item) {
-                editeProject(item.ProjectId);
+                editProject(item.ProjectId);
             };
-
             self.filterLinks = [
                 new filterLinkViewModel("RelationType", "我的项目",
                     [
@@ -793,7 +790,7 @@ var projectListViewModel = function (user) {
             query(true);
             self.changeMessages.start();
         },
-        editeProject = function (projectId) {
+        editProject = function (projectId) {
             self.changeMessages.remove(projectId);
             request("/Project/GetProject", { projectId: projectId }, function (result) {
                 self.projectEdit().update(result);
@@ -803,6 +800,7 @@ var projectListViewModel = function (user) {
         saveProject = function (data) {
             request("/Project/EditProject", data, function (result) {
                 self.projectEdit().update(result, true);
+                refrushWaitCheckStatusGroupCount();
                 showMessage("保存成功");
             });
         },
@@ -829,7 +827,7 @@ var projectListViewModel = function (user) {
             request("/Project/LoadProjects", { queryFilter: self.queryFilter }, function (result) {
                 updatePageList(result);
             });
-
+            refrushWaitCheckStatusGroupCount();
         },
         showProjectEditView = function () {
             $("#list").hide();
@@ -839,6 +837,20 @@ var projectListViewModel = function (user) {
             $("#editToolbar").show();
             $("#project_tab").tab("show");
             window.scrollTo(0, 0);
+        },
+        refrushWaitCheckStatusGroupCount = function () {
+            request("/Project/LoadWaitCheckStatusGroupCount", {}, function (result) {
+                var filterLink = self.filterLinks[1],
+                    item;
+                for (var i = 0; i < filterLink.selectListItems.length; i++) {
+                    item = filterLink.selectListItems[i];
+                    if (item.value == "0") {
+                        item.count(result["0"]);
+                    } else if (item.value == "2") {
+                        item.count(result["2"]);
+                    }
+                }
+            });
         },
         showProjectListView = function () {
             $("#list").show();
@@ -859,7 +871,7 @@ var projectListViewModel = function (user) {
     init();
 };
 
-var projectChangeMessagesViewModel = function () {
+var projectChangeMessagesViewModel = function (afterRefrush) {
     var self = this;
     self.messages = ko.observableArray([]);
     self.total = ko.computed(function () {
@@ -878,6 +890,9 @@ var projectChangeMessagesViewModel = function () {
         request("/Project/LoadChangeMessages", {}, function (result) {
             self.messages(result);
         });
+        if (afterRefrush) {
+            afterRefrush();
+        }
     };
     self.remove = function (projectId) {
         var removeItem = undefined,

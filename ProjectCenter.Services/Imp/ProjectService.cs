@@ -277,6 +277,18 @@ namespace ProjectCenter.Services.Imp
               .PageList(pageIndex, pageSize);
         }
 
+        public Dictionary<int, int> GetWaitCheckStatusGroupCount()
+        {
+            return Projects.Where(p =>p.Status == (int)ProjectStatus.PublishedWaitCheck 
+                || p.Status == (int)ProjectStatus.CompletedWaitCheck)
+                .GroupBy(p => p.Status)
+                .Select(g => new
+                {
+                    Key = g.Key,
+                    Count = g.Count()
+                }).ToDictionary(r => r.Key, r => r.Count);
+        }
+
         public void CheckProjects(string[] projectIds, ProjectStatus status)
         {
             if (projectIds != null && projectIds.Any())
@@ -482,5 +494,6 @@ namespace ProjectCenter.Services.Imp
         }
 
         #endregion
+
     }
 }

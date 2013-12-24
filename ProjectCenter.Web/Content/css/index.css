@@ -88,8 +88,9 @@ label {
     }
 
     .system-sidenav.nav .nav a {
-        padding: 5px 30px;
+        padding: 5px 20px 5px 30px;
         color: #333;
+        display: inline-block;
     }
 
     .system-sidenav.nav .nav > li.active {
@@ -512,3 +513,14 @@ textarea {
         top: 2px;
         margin-right: 3px;
     }
+
+.group-count {
+    padding: 2px 4px;
+    font-size: 90%;
+    color: #c7254e;
+    background-color: #f9f2f4;
+    white-space: nowrap;
+    border-radius: 4px;
+    width: 30px;
+    display: inline-block;
+}

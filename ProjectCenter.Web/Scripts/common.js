@@ -28,7 +28,9 @@
         var self = this;
         self.field = field;
         self.name = name;
-        self.selectListItems = selectListItems;
+        self.selectListItems = $.map(selectListItems, function (item) {
+            return new filterLinkItemViewModel(item);
+        });
         self.value = ko.observable(defaultValue);
         self.select = function (data) {
             self.value(data.value);
@@ -37,7 +39,15 @@
         self.clear = function () {
             self.value("");
             changeCallback();
-        }
+        };
+
+    };
+
+    function filterLinkItemViewModel(selectListItem) {
+        var self = this;
+        self.name = selectListItem.name;
+        self.value = selectListItem.value;
+        self.count = ko.observable("");
     };
 
     window.pageListViewModel = function (pageList) {

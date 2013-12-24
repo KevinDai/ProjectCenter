@@ -797,6 +797,13 @@ namespace ProjectCenter.Web.Controllers
             return JsonMessageResult(changeLogs);
         }
 
+        [HttpPost]
+        public ActionResult LoadWaitCheckStatusGroupCount()
+        {
+            var result = ProjectService.GetWaitCheckStatusGroupCount();
+            return JsonMessageResult(result);
+        }
+
         #endregion
 
     }
