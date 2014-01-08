@@ -168,29 +168,35 @@ namespace ProjectCenter.Web.Controllers
 
         private SortDescriptor<Project>[] BuildProjectSortDescriptor(QueryFilter queryFilter)
         {
-            List<SortDescriptor<Project>> sort = new List<SortDescriptor<Project>>();
-            if (queryFilter != null
-                && queryFilter.SortFields != null
-                && queryFilter.SortFields.Any())
-            {
-                foreach (var sortField in queryFilter.SortFields)
-                {
-                    //sort.Add(new SortDescriptor<Project>(sortField.Field, sortField.IsAsc ? ListSortDirection.Ascending : ListSortDirection.Descending));
-                    switch (sortField.Field)
-                    {
-                        case "Deadline":
-                            sort.Add(SortDescriptor<Project>.CreateSortDescriptor(p => p.Deadline));
-                            break;
-                    }
-                }
-            }
 
-            return sort.Count == 0
-                ?
-                new SortDescriptor<Project>[] { SortDescriptor<Project>.CreateSortDescriptor(p => p.Deadline) }
-                //new SortDescriptor<Project>[] { new SortDescriptor<Project>("Deadline") }
-                :
-                sort.ToArray();
+            return new SortDescriptor<Project>[] { 
+                SortDescriptor<Project>.CreateSortDescriptor(p => p.SortIndex,ListSortDirection.Descending),
+                SortDescriptor<Project>.CreateSortDescriptor(p => p.Deadline)
+            };
+
+            //List<SortDescriptor<Project>> sort = new List<SortDescriptor<Project>>();
+            //if (queryFilter != null
+            //    && queryFilter.SortFields != null
+            //    && queryFilter.SortFields.Any())
+            //{
+            //    foreach (var sortField in queryFilter.SortFields)
+            //    {
+            //        //sort.Add(new SortDescriptor<Project>(sortField.Field, sortField.IsAsc ? ListSortDirection.Ascending : ListSortDirection.Descending));
+            //        switch (sortField.Field)
+            //        {
+            //            case "Deadline":
+            //                sort.Add(SortDescriptor<Project>.CreateSortDescriptor(p => p.Deadline));
+            //                break;
+            //        }
+            //    }
+            //}
+
+            //return sort.Count == 0
+            //    ?
+            //    new SortDescriptor<Project>[] { SortDescriptor<Project>.CreateSortDescriptor(p => p.Deadline) }
+            //    //new SortDescriptor<Project>[] { new SortDescriptor<Project>("Deadline") }
+            //    :
+            //    sort.ToArray();
         }
 
         private string GetAttachmentPath(string projectId, string fileName)
@@ -477,6 +483,19 @@ namespace ProjectCenter.Web.Controllers
 
                 AddChangeLog(project.Id, ProjectActionType.Delete, project.Name);
             }
+
+            return JsonMessageResult(null);
+        }
+
+        [HttpPost]
+        public ActionResult TopProjects(string[] projectIds)
+        {
+            if (!UserInfo.RightDetail.EnableCheckProject)
+            {
+                throw new BusinessException("无置顶项目操作权限");
+            }
+
+            ProjectService.TopProject(projectIds);
 
             return JsonMessageResult(null);
         }

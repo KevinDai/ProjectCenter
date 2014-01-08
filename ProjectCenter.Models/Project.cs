@@ -230,6 +230,15 @@ namespace ProjectCenter.Models
         }
 
         /// <summary>
+        /// 排序字段，用于置顶，越大表示排序越前
+        /// </summary>
+        public int SortIndex
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
         /// 创建时间
         /// </summary>
         public DateTime CreateTime

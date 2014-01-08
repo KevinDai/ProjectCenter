@@ -29,12 +29,11 @@
                                                     <li><a data-bind="click: changeItemsChecked.bind($data, true)" href="#">全选</a></li>
                                                     <li><a data-bind="click: changeItemsChecked.bind($data, false)" href="#">全不选</a></li>
                                                 </ul>
-                                            </div>@*
-
-                                            <div data-bind="visible: AnyItemSelected" class="btn-group item-action">
+                                            </div>
+                                            <div data-bind="visible: anyItemSelected, click: topProjects" class="btn-group item-action">
                                                 <a class="btn btn-default btn-action" data-toggle="tooltip" data-placement="bottom"
-                                                    title="删除"><span class="glyphicon glyphicon-trash"></span></a>
-                                            </div>*@
+                                                    title="置顶"><span class="glyphicon glyphicon-arrow-up"></span></a>
+                                            </div>
                                             <div data-bind="visible: anyItemSelected" class="btn-group item-action">
                                                 <a class="btn btn-default dropdown-toggle btn-action" data-toggle="dropdown"><span
                                                     class="glyphicon glyphicon-tags"></span><span class="caret caret-right"></span>

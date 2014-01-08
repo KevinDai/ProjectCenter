@@ -42,6 +42,8 @@ namespace ProjectCenter.Services
 
         void DeleteProject(Project project);
 
+        void TopProject(string[] projectIds);
+
         Budget AddBudget(Budget budget);
 
         Budget EditBudget(Budget budget);

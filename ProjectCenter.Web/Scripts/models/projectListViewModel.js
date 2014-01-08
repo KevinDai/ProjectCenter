@@ -694,14 +694,15 @@ var projectListViewModel = function (user) {
                 });
             };
             self.check = function (status) {
-                var projectIds = [];
-                var projects = self.pageList.List();
-                for (var i = 0; i < projects.length; i++) {
-                    if (projects[i].Checked()) {
-                        projectIds.push(projects[i].Id);
-                    }
-                }
+                var projectIds = getCheckedProjectIds();
                 request("/Project/CheckProjects", { projectIds: projectIds, status: status }, function () {
+                    self.refrush();
+                    showMessage("操作成功");
+                });
+            };
+            self.topProjects = function () {
+                var projectIds = getCheckedProjectIds();
+                request("/Project/TopProjects", { projectIds: projectIds }, function () {
                     self.refrush();
                     showMessage("操作成功");
                 });
@@ -712,7 +713,6 @@ var projectListViewModel = function (user) {
                     items[i].Checked(checked);
                 }
             };
-
             self.AllChecked = ko.computed({
                 read: function () {
                     if (self.pageList.List().length > 0) {
@@ -789,6 +789,16 @@ var projectListViewModel = function (user) {
             };
             query(true);
             self.changeMessages.start();
+        },
+        getCheckedProjectIds = function () {
+            var projectIds = [];
+            var projects = self.pageList.List();
+            for (var i = 0; i < projects.length; i++) {
+                if (projects[i].Checked()) {
+                    projectIds.push(projects[i].Id);
+                }
+            }
+            return projectIds;
         },
         editProject = function (projectId) {
             self.changeMessages.remove(projectId);

@@ -103,7 +103,6 @@ namespace ProjectCenter.Services.Imp
             }
         }
 
-
         private void UpdateLatestNews(ProjectChangeLog log)
         {
             ProjectActionType actionType = (ProjectActionType)log.ActionType;
@@ -279,7 +278,7 @@ namespace ProjectCenter.Services.Imp
 
         public Dictionary<int, int> GetWaitCheckStatusGroupCount()
         {
-            return Projects.Where(p =>p.Status == (int)ProjectStatus.PublishedWaitCheck 
+            return Projects.Where(p => p.Status == (int)ProjectStatus.PublishedWaitCheck
                 || p.Status == (int)ProjectStatus.CompletedWaitCheck)
                 .GroupBy(p => p.Status)
                 .Select(g => new
@@ -328,6 +327,32 @@ namespace ProjectCenter.Services.Imp
                 SaveChanges();
 
                 ts.Complete();
+            }
+        }
+
+
+        public void TopProject(string[] projectIds)
+        {
+            if (projectIds != null && projectIds.Length > 0)
+            {
+                using (var ts = new TransactionScope())
+                {
+                    var maxSortIndex = Projects.Max(p => p.SortIndex);
+                    var parameterName = "@p";
+                    SqlParameter[] parameters = new SqlParameter[projectIds.Length];
+                    for (int i = 0; i < parameters.Length; i++)
+                    {
+                        parameters[i] = new SqlParameter { ParameterName = parameterName + i, Value = projectIds[i] };
+                    }
+
+                    var sql = string.Format("Update Projects Set SortIndex = {0} Where Id In ({1})",
+                        maxSortIndex + 1,
+                        string.Join(",", parameters.Select(p => p.ParameterName)));
+
+                    DbContext.Database.ExecuteSqlCommand(sql, parameters);
+
+                    ts.Complete();
+                }
             }
         }
 

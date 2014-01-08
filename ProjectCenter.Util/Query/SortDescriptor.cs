@@ -68,6 +68,7 @@ namespace ProjectCenter.Util.Query
             var sort = new SortDescriptor<T>();
             sort.KeyType = typeof(TValue);
             sort.SortKeySelector = exp;
+            sort.SortDirection = sortDirection;
             return sort;
         }
     }
