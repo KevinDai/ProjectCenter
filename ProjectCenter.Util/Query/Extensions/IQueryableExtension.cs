@@ -13,6 +13,8 @@ namespace ProjectCenter.Util.Query.Extensions
     {
         private static MethodInfo OrderByMethod = typeof(IQueryableExtension).GetMethod("OrderBy", BindingFlags.Static | BindingFlags.NonPublic);
         private static MethodInfo OrderByDescendingMethod = typeof(IQueryableExtension).GetMethod("OrderByDescending", BindingFlags.Static | BindingFlags.NonPublic);
+        private static MethodInfo ThenByMethod = typeof(IQueryableExtension).GetMethod("ThenBy", BindingFlags.Static | BindingFlags.NonPublic);
+        private static MethodInfo ThenByDescendingMethod = typeof(IQueryableExtension).GetMethod("ThenByDescending", BindingFlags.Static | BindingFlags.NonPublic);
 
         public static IQueryable<T> FindBy<T>(this IQueryable<T> query, ISpecification<T> specification) where T : class
         {
@@ -27,24 +29,34 @@ namespace ProjectCenter.Util.Query.Extensions
         {
             if (sortDescriptors != null && sortDescriptors.Any())
             {
-                //反转排序说明对象列表
-                var list = sortDescriptors.Reverse();
-                foreach (var item in list)
+                MethodInfo method;
+                SortDescriptor<T> item;
+                for (int i = 0; i < sortDescriptors.Length; i++)
                 {
-                    var method = item.SortDirection == ListSortDirection.Ascending ? OrderByMethod : OrderByDescendingMethod;
+                    item = sortDescriptors[i];
+                    if (i == 0)
+                    {
+                        method = item.SortDirection == ListSortDirection.Ascending ? OrderByMethod : OrderByDescendingMethod;
+                    }
+                    else
+                    {
+                        method = item.SortDirection == ListSortDirection.Ascending ? ThenByMethod : ThenByDescendingMethod;
+                    }
+
                     query = method.MakeGenericMethod(new Type[] { typeof(T), item.KeyType })
                         .Invoke(null, new object[] { query, item.SortKeySelector }) as IQueryable<T>;
-                    //?
-                    //OrderByMethod.MakeGenericMethod(new Type[] { typeof(T), item.KeyType })
-                    //.Invoke(null, new object[] { query, item.SortKeySelector }) as IQueryable<T>
-                    //typeof(IQueryable<T>).GetMethod("OrderBy").Invoke(query, new object[] { item.SortKeySelector }) as IQueryable<T> 
-                    //query.OrderBy(item.SortKeySelector)
-                    //:
-                    //typeof(System.Linq.Queryable).GetMethod("OrderByDescending")
-                    //.Invoke(null, new object[] { query, item.SortKeySelector }) as IQueryable<T>;
-                    //typeof(IQueryable<T>).GetMethod("OrderByDescending").Invoke(query, new object[] { item.SortKeySelector }) as IQueryable<T>;
-                    //query.OrderByDescending(item.SortKeySelector);
                 }
+
+                //?
+                //OrderByMethod.MakeGenericMethod(new Type[] { typeof(T), item.KeyType })
+                //.Invoke(null, new object[] { query, item.SortKeySelector }) as IQueryable<T>
+                //typeof(IQueryable<T>).GetMethod("OrderBy").Invoke(query, new object[] { item.SortKeySelector }) as IQueryable<T> 
+                //query.OrderBy(item.SortKeySelector)
+                //:
+                //typeof(System.Linq.Queryable).GetMethod("OrderByDescending")
+                //.Invoke(null, new object[] { query, item.SortKeySelector }) as IQueryable<T>;
+                //typeof(IQueryable<T>).GetMethod("OrderByDescending").Invoke(query, new object[] { item.SortKeySelector }) as IQueryable<T>;
+                //query.OrderByDescending(item.SortKeySelector);
             }
             //else
             //{
@@ -61,6 +73,16 @@ namespace ProjectCenter.Util.Query.Extensions
         private static IQueryable<T> OrderByDescending<T, TValue>(IQueryable<T> source, Expression<Func<T, TValue>> keySelector)
         {
             return System.Linq.Queryable.OrderByDescending(source, keySelector);
+        }
+
+        private static IQueryable<T> ThenBy<T, TValue>(IOrderedQueryable<T> source, Expression<Func<T, TValue>> keySelector)
+        {
+            return System.Linq.Queryable.ThenBy(source, keySelector);
+        }
+
+        private static IQueryable<T> ThenByDescending<T, TValue>(IOrderedQueryable<T> source, Expression<Func<T, TValue>> keySelector)
+        {
+            return System.Linq.Queryable.ThenByDescending(source, keySelector);
         }
 
         public static IQueryable<T> Paginate<T>(this IQueryable<T> query, int pageIndex, int pageSize)

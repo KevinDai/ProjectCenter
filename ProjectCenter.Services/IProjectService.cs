@@ -5,12 +5,15 @@ using System.Text;
 using ProjectCenter.Models;
 using ProjectCenter.Util.Query;
 using ProjectCenter.Util.Query.Specification;
+using ProjectCenter.Services.Models;
 
 namespace ProjectCenter.Services
 {
     public interface IProjectService
     {
         PageList<Project> GetProjectPageList(ISpecification<Project> specs, SortDescriptor<Project>[] sorts, int pageIndex, int pageSize);
+
+        IEnumerable<ProjectStatisticItem> GetProjectStatistics(ISpecification<Project> spec);
 
         Project GetProject(string projectId);
 

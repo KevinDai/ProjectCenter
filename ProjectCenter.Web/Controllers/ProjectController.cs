@@ -46,12 +46,22 @@ namespace ProjectCenter.Web.Controllers
 
         private ISpecification<Project> BuildProjectSpecification(QueryFilter queryFilter)
         {
-            ISpecification<Project> spec = null;
-            if (queryFilter != null
-                && queryFilter.FieldFilters != null
-                && queryFilter.FieldFilters.Any())
+            if (queryFilter != null)
             {
-                foreach (var fieldFilter in queryFilter.FieldFilters)
+                return BuildProjectSpecification(queryFilter.FieldFilters);
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        private ISpecification<Project> BuildProjectSpecification(IEnumerable<FieldFilter> fieldFilters)
+        {
+            ISpecification<Project> spec = null;
+            if (fieldFilters != null && fieldFilters.Any())
+            {
+                foreach (var fieldFilter in fieldFilters)
                 {
                     ISpecification<Project> temp = null;
                     switch (fieldFilter.Field)
@@ -299,6 +309,12 @@ namespace ProjectCenter.Web.Controllers
             return View();
         }
 
+        [HttpGet]
+        public ActionResult Statistics()
+        {
+            return View();
+        }
+
         [HttpPost]
         public ActionResult LoadProjects(QueryFilter queryFilter)
         {
@@ -324,6 +340,17 @@ namespace ProjectCenter.Web.Controllers
                 result.PageIndex, result.PageSize, result.Total);
 
             return JsonMessageResult(model);
+        }
+
+
+        [HttpPost]
+        public ActionResult LoadProjectStatistics(FieldFilter[] filters)
+        {
+            ISpecification<Project> spec = BuildProjectSpecification(filters);
+
+            var result = ProjectService.GetProjectStatistics(spec);
+
+            return JsonMessageResult(result);
         }
 
         [HttpPost]

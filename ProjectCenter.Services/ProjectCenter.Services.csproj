@@ -53,6 +53,8 @@
     <Compile Include="IServiceFactory.cs" />
     <Compile Include="IUserService.cs" />
     <Compile Include="Models\LoginResult.cs" />
+    <Compile Include="Models\ProjectStatisticItem.cs" />
+    <Compile Include="ProjectStatistics.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceFactory.cs" />
     <Compile Include="Specifications\DateTimeSpanSpecification.cs" />

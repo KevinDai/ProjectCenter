@@ -10,6 +10,7 @@ using System.Transactions;
 using ProjectCenter.Util.Query.Specification;
 using System.Data.SqlClient;
 using ProjectCenter.Util.Exceptions;
+using ProjectCenter.Services.Models;
 
 namespace ProjectCenter.Services.Imp
 {
@@ -160,6 +161,35 @@ namespace ProjectCenter.Services.Imp
             }
 
             return query.PageList(pageIndex, pageSize);
+        }
+
+        public IEnumerable<ProjectStatisticItem> GetProjectStatistics(ISpecification<Project> spec)
+        {
+            //控制每次处理数据量
+            var pageSize = 1000;
+
+            var users = Users.OrderBy(u => u.RightLevel).ToArray();
+            var projectStatistics = new ProjectStatistics(users);
+
+            var query = Projects as IQueryable<Project>;
+            if (spec != null)
+            {
+                query = query.Where(spec.SatisfiedBy());
+            }
+
+            var count = query.Count();
+            var pageCount = count % pageSize == 0 ? count / pageSize : count / pageSize + 1;
+
+            //增加排序，否则SQL无法分页
+            query = query.OrderBy(q => q.Id);
+
+            for (int i = 0; i < pageCount; i++)
+            {
+                var projects = query.Paginate(i, pageSize).ToArray();
+                projectStatistics.Count(projects);
+            }
+
+            return projectStatistics.GetItems();
         }
 
         public Project GetProject(string projectId)

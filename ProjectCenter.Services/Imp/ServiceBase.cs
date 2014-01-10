@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Data.Entity;
 using System.Data;
+using ProjectCenter.Models;
 
 namespace ProjectCenter.Services.Imp
 {
@@ -13,6 +14,14 @@ namespace ProjectCenter.Services.Imp
         {
             get;
             private set;
+        }
+
+        protected IDbSet<User> Users
+        {
+            get
+            {
+                return DbContext.Set<User>();
+            }
         }
 
         public ServiceBase(DbContext dbContext)

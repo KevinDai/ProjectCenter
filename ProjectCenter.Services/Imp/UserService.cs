@@ -13,13 +13,6 @@ namespace ProjectCenter.Services.Imp
     internal class UserService : ServiceBase, IUserService
     {
 
-        protected IDbSet<User> Users
-        {
-            get
-            {
-                return DbContext.Set<User>();
-            }
-        }
         //public static IEnumerable<User> _usersCache;
         //public static IDictionary<string, User> _usersDicByLoginName = new Dictionary<string, User>();
         //public static IDictionary<string, User> _usersDicById = new Dictionary<string, User>();
