@@ -1,28 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
+using System.Text;
 
-namespace ProjectCenter.Web.Exports
+namespace ProjectCenter.Services.Models
 {
-    public class ExportColumn
+    public class ExpenditureStatisticItem
     {
-        public string Name
+        public string ProjectId
         {
             get;
             set;
         }
 
-        public int Width
+        public int BudgetCategory
         {
             get;
             set;
         }
 
-        public string DataFormat
+        public double Total
         {
             get;
             set;
         }
+
     }
 }

@@ -72,11 +72,11 @@ namespace ProjectCenter.Services
                     {
                         if (countManager)
                         {
-                            temp.ManagerCount.Count(status);
+                            temp.ManagerStatistics.Count(status);
                         }
                         else
                         {
-                            temp.ParticipantCount.Count(status);
+                            temp.ParticipantStatistics.Count(status);
                         }
                     }
                 }

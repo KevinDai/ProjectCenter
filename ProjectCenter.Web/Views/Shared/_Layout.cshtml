@@ -61,7 +61,8 @@
             <nav class="navbar navbar-default nav-system-header" role="navigation">
                 <div class="container">
                     <ul class="nav navbar-nav navbar-right">
-                        <li class="@(ViewContext.RouteData.Values["Controller"].ToString() == "Project" ? "active" : "")">@Html.ActionLink("项目清单", "List", "Project")</li>
+                        <li class="@(ViewBag.Tab == "ProjectList" ? "active" : "")">@Html.ActionLink("项目清单", "List", "Project")</li>
+                        <li class="@(ViewBag.Tab == "ProjectStatistics" ? "active" : "")">@Html.ActionLink("项目统计", "Statistics", "Project")</li>
                         <li class="@(ViewContext.RouteData.Values["Controller"].ToString() == "Note" ? "active" : "")">@Html.ActionLink("工作日志", "List", "Note")</li>
                         <!--<li>
                     <div class="btn-group">

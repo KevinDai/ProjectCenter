@@ -163,6 +163,39 @@ namespace ProjectCenter.Services.Imp
             return query.PageList(pageIndex, pageSize);
         }
 
+        /// <summary>
+        /// 获取项目的支出统计信息
+        /// </summary>
+        /// <param name="spec"></param>
+        /// <returns></returns>
+        public IEnumerable<ExpenditureStatisticItem> GetExpenditureStatistics(ISpecification<Project> spec, int pageIndex, int pageSize)
+        {
+            var projectsQuery = Projects as IQueryable<Project>;
+            if (spec != null)
+            {
+                projectsQuery = projectsQuery.Where(spec.SatisfiedBy());
+            }
+            projectsQuery = projectsQuery.OrderBy(p => p.Id);
+            projectsQuery = projectsQuery.Paginate(pageIndex, pageSize);
+
+            var expendituresQuery = Expenditures as IQueryable<Expenditure>;
+
+            expendituresQuery = expendituresQuery.Where(e => projectsQuery.Any(p => p.Id == e.ProjectId));
+            var result = expendituresQuery
+                 .GroupBy(q => new
+                 {
+                     ProjectId = q.ProjectId,
+                     BudgetCategory = q.BudgetCategory
+                 })
+                 .Select(q => new ExpenditureStatisticItem()
+                 {
+                     ProjectId = q.Key.ProjectId,
+                     BudgetCategory = q.Key.BudgetCategory,
+                     Total = q.Sum(t => t.Count)
+                 }).ToArray();
+            return result;
+        }
+
         public IEnumerable<ProjectStatisticItem> GetProjectStatistics(ISpecification<Project> spec)
         {
             //控制每次处理数据量
@@ -185,7 +218,7 @@ namespace ProjectCenter.Services.Imp
 
             for (int i = 0; i < pageCount; i++)
             {
-                var projects = query.Paginate(i, pageSize).ToArray();
+                var projects = query.Paginate(i + 1, pageSize).ToArray();
                 projectStatistics.Count(projects);
             }
 

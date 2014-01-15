@@ -13,6 +13,8 @@ namespace ProjectCenter.Services
     {
         PageList<Project> GetProjectPageList(ISpecification<Project> specs, SortDescriptor<Project>[] sorts, int pageIndex, int pageSize);
 
+        IEnumerable<ExpenditureStatisticItem> GetExpenditureStatistics(ISpecification<Project> spec, int pageIndex, int pageSize);
+
         IEnumerable<ProjectStatisticItem> GetProjectStatistics(ISpecification<Project> spec);
 
         Project GetProject(string projectId);

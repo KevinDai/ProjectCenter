@@ -1,0 +1,140 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Tab = "ProjectStatistics";
+}
+<div class="row">
+    <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-7">
+                <div data-bind="with: searchFilter" class="form-group" style="width: 540px; display: inline-block;">
+                    <div>
+                        <div class="input-group date input-daterange">
+                            <span class="input-group-addon">开始时间：
+                            </span>
+                            <input data-bind="value: StartTimeFrom" name="start" class="form-control required" style="width: 203px" type="text">
+                            <span class="input-group-addon">至
+                            </span>
+                            <input data-bind="value: StartTimeTo" name="end" class="form-control required" style="width: 203px" type="text">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <button data-bind="click: $root.search" class="btn btn-default btn-action btn-primary">查询</button>
+            </div>
+        </div>
+        <hr class="toolbar-hr">
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-hover list-table table-bordered">
+                    <colgroup>
+                        <col style="width: 80px;">
+                        <col style="width: 100px;">
+                        <col style="width: 100px;">
+                        <col style="width: 100px;">
+                        <col style="width: 100px;">
+                        <col style="width: 100px;">
+                        <col style="width: 60px;">
+                        <col style="width: 60px;">
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th>姓名</th>
+                            <th>类型</th>
+                            <th>发布待审</th>
+                            <th>进行中</th>
+                            <th>完成待审</th>
+                            <th>已完成</th>
+                            <th>合计</th>
+                            <th>总计</th>
+                        </tr>
+                    </thead>
+                    <tbody data-bind="foreach: statistics">
+                        <tr>
+                            <td data-bind="text: UserName" rowspan="2"></td>
+                            <td>负责项目</td>
+                            <td data-bind="text: ManagerStatistics.PublishedWaitCheck"></td>
+                            <td data-bind="text: ManagerStatistics.PublishedAndChecked"></td>
+                            <td data-bind="text: ManagerStatistics.CompletedWaitCheck"></td>
+                            <td data-bind="text: ManagerStatistics.CompletedAndChecked"></td>
+                            <td data-bind="text: ManagerStatistics.Total"></td>
+                            <td data-bind="text: Total" rowspan="2"></td>
+                        </tr>
+                        <tr>
+                            <td>参与项目</td>
+                            <td data-bind="text: ParticipantStatistics.PublishedWaitCheck"></td>
+                            <td data-bind="text: ParticipantStatistics.PublishedAndChecked"></td>
+                            <td data-bind="text: ParticipantStatistics.CompletedWaitCheck"></td>
+                            <td data-bind="text: ParticipantStatistics.CompletedAndChecked"></td>
+                            <td data-bind="text: ParticipantStatistics.Total"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    function initViewModel() {
+        var self = window.viewModel = window.viewModel || {};
+        self.statistics = ko.observable([]);
+        self.searchFilter = new searchFilterViewModel();
+        self.search = function () {
+            var filters = self.searchFilter.getFilters();
+            request("/Project/LoadProjectStatistics", { filters: filters }, function (result) {
+                self.statistics(result);
+            });
+        };
+    };
+
+    function timeRangeComputed(model, fromField, toField) {
+        return ko.computed(function () {
+            var from = model[fromField]() || "";
+            var to = model[toField]() || "";
+            if (from || to) {
+                return from + "," + to;
+            } else {
+                return "";
+            }
+        });
+    };
+
+    var searchFilterViewModel = function () {
+        var self = this;
+        self.FilterFields = ["StartTime"];
+        self.StartTimeFrom = ko.observable();
+        self.StartTimeTo = ko.observable();
+        self.StartTime = timeRangeComputed(self, "StartTimeFrom", "StartTimeTo");
+        self.clear = function () {
+            for (var prop in self) {
+                if (self.hasOwnProperty(prop) && ko.isObservable(self[prop])) {
+                    self[prop]("");
+                }
+            }
+        };
+        self.getFilters = function () {
+            var filters = [];
+            for (var i = 0; i < self.FilterFields.length; i++) {
+                var field = self.FilterFields[i];
+                if (self[field]()) {
+                    filters.push({ Field: field, Value: self[field]() });
+                }
+            }
+            return filters;
+        };
+    };
+
+    $(function () {
+        initViewModel();
+        $(".input-daterange").datepicker({
+            format: "yyyy-mm-dd",
+            autoclose: true,
+            orientation: "top left",
+            language: "zh-CN",
+            todayBtn: "linked"
+        });
+    });
+
+</script>

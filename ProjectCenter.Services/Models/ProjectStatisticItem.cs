@@ -16,18 +16,25 @@ namespace ProjectCenter.Services.Models
             private set;
         }
 
-        public ProjectStatusStatistics ManagerCount
+        public ProjectStatusStatistics ManagerStatistics
         {
             get;
             private set;
         }
 
-        public ProjectStatusStatistics ParticipantCount
+        public ProjectStatusStatistics ParticipantStatistics
         {
             get;
             private set;
         }
 
+        public int Total
+        {
+            get
+            {
+                return ManagerStatistics.Total + ParticipantStatistics.Total;
+            }
+        }
 
         public ProjectStatisticItem(User user)
         {
@@ -35,8 +42,8 @@ namespace ProjectCenter.Services.Models
 
             UserName = user.Name;
 
-            ManagerCount = new ProjectStatusStatistics();
-            ParticipantCount = new ProjectStatusStatistics();
+            ManagerStatistics = new ProjectStatusStatistics();
+            ParticipantStatistics = new ProjectStatusStatistics();
         }
 
     }
@@ -65,6 +72,14 @@ namespace ProjectCenter.Services.Models
         {
             get;
             private set;
+        }
+
+        public int Total
+        {
+            get
+            {
+                return PublishedWaitCheck + PublishedAndChecked + CompletedWaitCheck + CompletedAndChecked;
+            }
         }
 
         public void Count(ProjectStatus status)

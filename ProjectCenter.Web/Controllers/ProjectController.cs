@@ -16,6 +16,7 @@ using System.Web;
 using System.Web.Mvc;
 using ProjectCenter.Web.Extensions;
 using System.Transactions;
+using ProjectCenter.Services.Models;
 
 namespace ProjectCenter.Web.Controllers
 {
@@ -356,7 +357,7 @@ namespace ProjectCenter.Web.Controllers
         [HttpPost]
         public ActionResult ExportProjects(QueryFilter queryFilter)
         {
-            var export = new ProjectExprot();
+            var export = new ProjectExprot(UserInfo.RightDetail.EnableManageFinance);
 
             ISpecification<Project> spec = BuildProjectSpecification(queryFilter);
             SortDescriptor<Project>[] sort = new SortDescriptor<Project>[] { 
@@ -364,17 +365,29 @@ namespace ProjectCenter.Web.Controllers
             };
 
             PageList<Project> pageList = null;
+            Dictionary<string, List<ExpenditureStatisticItem>> expenditureStatisticsDic = null;
+            List<ExpenditureStatisticItem> tempItems = null;
             int pageIndex = 1;
             int pageSize = ExportPageSize;
             do
             {
                 pageList = ProjectService.GetProjectPageList(spec, sort, pageIndex, pageSize);
+
+                if (export.WithFinance)
+                {
+                    expenditureStatisticsDic = ProjectService
+                        .GetExpenditureStatistics(spec, queryFilter.PageIndex, queryFilter.PageSize)
+                        .GroupBy(q => q.ProjectId).ToDictionary(q => q.Key, q => q.ToList());
+                }
+
                 foreach (var project in pageList.List)
                 {
-                    if (UserInfo.EnableViewDetail(project))
+                    if (expenditureStatisticsDic != null)
                     {
-                        export.WriteProject(project);
+                        expenditureStatisticsDic.TryGetValue(project.Id, out tempItems);
                     }
+
+                    export.WriteProject(project, tempItems);
                 }
             } while (pageList.Total > pageIndex++ * pageSize);
             export.GroupProjectTypeColumn();

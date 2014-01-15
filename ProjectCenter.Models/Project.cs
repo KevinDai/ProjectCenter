@@ -294,6 +294,42 @@ namespace ProjectCenter.Models
             }
         }
 
+        public string InvoiceStatusString
+        {
+            get
+            {
+                switch ((InvoiceStatus)InvoiceStatus)
+                {
+                    case Models.InvoiceStatus.None:
+                        return "未开票";
+                    case Models.InvoiceStatus.AccountCertificate:
+                        return "已开到账证明";
+                    case Models.InvoiceStatus.Release:
+                        return "已开票";
+                    default:
+                        return "未知状态";
+                }
+            }
+        }
+
+        public string AmountReceivedStatusString
+        {
+            get
+            {
+                switch ((Models.AmountReceivedStatus)AmountReceivedStatus)
+                {
+                    case Models.AmountReceivedStatus.None:
+                        return "未到账";
+                    case Models.AmountReceivedStatus.Part:
+                        return "已部分到账";
+                    case Models.AmountReceivedStatus.All:
+                        return "已全部到账";
+                    default:
+                        return "未知状态";
+                }
+            }
+        }
+
         public bool NeedManageFinance()
         {
             var projectType = (ProjectType)Type;

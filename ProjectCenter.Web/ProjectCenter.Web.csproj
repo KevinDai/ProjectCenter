@@ -237,6 +237,7 @@
     <Content Include="packages.config" />
     <Content Include="Views\Authenticate\Login.cshtml" />
     <None Include="Properties\PublishProfiles\ProjectCenter.pubxml" />
+    <Content Include="Views\Project\Statistics.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ProjectCenter.Models\ProjectCenter.Models.csproj">
