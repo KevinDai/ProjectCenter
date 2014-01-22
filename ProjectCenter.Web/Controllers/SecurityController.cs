@@ -10,6 +10,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
+using System.Web.Security;
 
 namespace ProjectCenter.Web.Controllers
 {
@@ -46,19 +47,34 @@ namespace ProjectCenter.Web.Controllers
         {
             base.OnAuthorization(filterContext);
 
+            bool authenticated = false;
+
             if (User.Identity.IsAuthenticated)
             {
                 var user = GetUser(User.Identity.Name);
-                UserInfo = new UserInfo()
+                if (user != null)
                 {
-                    UserId = user.Id,
-                    UserName = user.Name,
-                    RightDetail = new RightDetail(user.RightLevel)
-                };
+                    UserInfo = new UserInfo()
+                    {
+                        UserId = user.Id,
+                        UserName = user.Name,
+                        RightDetail = new RightDetail(user.RightLevel)
+                    };
+                    authenticated = true;
+                }
+
             }
-            else if (Request.IsAjaxRequest())
+
+            if (!authenticated)
             {
-                throw new BusinessException("用户已过期，请重新登录！");
+                if (Request.IsAjaxRequest())
+                {
+                    throw new BusinessException("用户已过期，请重新登录！");
+                }
+                else
+                {
+                    FormsAuthentication.RedirectToLoginPage();
+                }
             }
         }
 

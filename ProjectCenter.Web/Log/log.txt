@@ -3250,3 +3250,333 @@ ClientConnectionId:f5d5dbd7-3233-443c-ab6e-516298402d62
    在 ProjectCenter.Web.Controllers.SecurityController.OnAuthorization(AuthorizationContext filterContext) 位置 e:\Project\Common\ProjectCenter\ProjectCenter.Web\Controllers\SecurityController.cs:行号 63
    在 System.Web.Mvc.ControllerActionInvoker.InvokeAuthorizationFilters(ControllerContext controllerContext, IList`1 filters, ActionDescriptor actionDescriptor)
    在 System.Web.Mvc.ControllerActionInvoker.InvokeAction(ControllerContext controllerContext, String actionName)
+2014-01-15 15:11:45,623 [11] WARN   [(null)] - ProjectCenter.Util.Exceptions.BusinessException: 用户已过期，请重新登录！
+   在 ProjectCenter.Web.Controllers.SecurityController.OnAuthorization(AuthorizationContext filterContext) 位置 e:\Project\Common\ProjectCenter\ProjectCenter.Web\Controllers\SecurityController.cs:行号 63
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAuthorizationFilters(ControllerContext controllerContext, IList`1 filters, ActionDescriptor actionDescriptor)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAction(ControllerContext controllerContext, String actionName)
+2014-01-15 15:11:45,626 [92] WARN   [(null)] - ProjectCenter.Util.Exceptions.BusinessException: 用户已过期，请重新登录！
+   在 ProjectCenter.Web.Controllers.SecurityController.OnAuthorization(AuthorizationContext filterContext) 位置 e:\Project\Common\ProjectCenter\ProjectCenter.Web\Controllers\SecurityController.cs:行号 63
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAuthorizationFilters(ControllerContext controllerContext, IList`1 filters, ActionDescriptor actionDescriptor)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAction(ControllerContext controllerContext, String actionName)
+2014-01-15 15:16:45,587 [88] WARN   [(null)] - ProjectCenter.Util.Exceptions.BusinessException: 用户已过期，请重新登录！
+   在 ProjectCenter.Web.Controllers.SecurityController.OnAuthorization(AuthorizationContext filterContext) 位置 e:\Project\Common\ProjectCenter\ProjectCenter.Web\Controllers\SecurityController.cs:行号 63
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAuthorizationFilters(ControllerContext controllerContext, IList`1 filters, ActionDescriptor actionDescriptor)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAction(ControllerContext controllerContext, String actionName)
+2014-01-15 15:16:45,587 [15] WARN   [(null)] - ProjectCenter.Util.Exceptions.BusinessException: 用户已过期，请重新登录！
+   在 ProjectCenter.Web.Controllers.SecurityController.OnAuthorization(AuthorizationContext filterContext) 位置 e:\Project\Common\ProjectCenter\ProjectCenter.Web\Controllers\SecurityController.cs:行号 63
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAuthorizationFilters(ControllerContext controllerContext, IList`1 filters, ActionDescriptor actionDescriptor)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAction(ControllerContext controllerContext, String actionName)
+[Footer]
+[Header]
+2014-01-22 15:55:41,139 [5] FATAL  [(null)] - System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ProjectCenter.Web.Controllers.SecurityController.OnAuthorization(AuthorizationContext filterContext) 位置 e:\Project\Common\ProjectCenter\ProjectCenter.Web\Controllers\SecurityController.cs:行号 52
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAuthorizationFilters(ControllerContext controllerContext, IList`1 filters, ActionDescriptor actionDescriptor)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAction(ControllerContext controllerContext, String actionName)
+   在 System.Web.Mvc.Controller.ExecuteCore()
+   在 System.Web.Mvc.ControllerBase.Execute(RequestContext requestContext)
+   在 System.Web.Mvc.MvcHandler.<>c__DisplayClass6.<>c__DisplayClassb.<BeginProcessRequest>b__5()
+   在 System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass1.<MakeVoidDelegate>b__0()
+   在 System.Web.Mvc.MvcHandler.<>c__DisplayClasse.<EndProcessRequest>b__d()
+   在 System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   在 System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+[Footer]
+[Header]
+2014-01-22 15:55:46,770 [7] FATAL  [(null)] - System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ProjectCenter.Web.Controllers.SecurityController.OnAuthorization(AuthorizationContext filterContext) 位置 e:\Project\Common\ProjectCenter\ProjectCenter.Web\Controllers\SecurityController.cs:行号 52
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAuthorizationFilters(ControllerContext controllerContext, IList`1 filters, ActionDescriptor actionDescriptor)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAction(ControllerContext controllerContext, String actionName)
+   在 System.Web.Mvc.Controller.ExecuteCore()
+   在 System.Web.Mvc.ControllerBase.Execute(RequestContext requestContext)
+   在 System.Web.Mvc.MvcHandler.<>c__DisplayClass6.<>c__DisplayClassb.<BeginProcessRequest>b__5()
+   在 System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass1.<MakeVoidDelegate>b__0()
+   在 System.Web.Mvc.MvcHandler.<>c__DisplayClasse.<EndProcessRequest>b__d()
+   在 System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   在 System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+2014-01-22 15:55:52,252 [7] FATAL  [(null)] - System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ProjectCenter.Web.Controllers.SecurityController.OnAuthorization(AuthorizationContext filterContext) 位置 e:\Project\Common\ProjectCenter\ProjectCenter.Web\Controllers\SecurityController.cs:行号 52
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAuthorizationFilters(ControllerContext controllerContext, IList`1 filters, ActionDescriptor actionDescriptor)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAction(ControllerContext controllerContext, String actionName)
+   在 System.Web.Mvc.Controller.ExecuteCore()
+   在 System.Web.Mvc.ControllerBase.Execute(RequestContext requestContext)
+   在 System.Web.Mvc.MvcHandler.<>c__DisplayClass6.<>c__DisplayClassb.<BeginProcessRequest>b__5()
+   在 System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass1.<MakeVoidDelegate>b__0()
+   在 System.Web.Mvc.MvcHandler.<>c__DisplayClasse.<EndProcessRequest>b__d()
+   在 System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   在 System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+[Footer]
+[Header]
+2014-01-22 15:56:03,754 [8] FATAL  [(null)] - System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ProjectCenter.Web.Controllers.SecurityController.OnAuthorization(AuthorizationContext filterContext) 位置 e:\Project\Common\ProjectCenter\ProjectCenter.Web\Controllers\SecurityController.cs:行号 52
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAuthorizationFilters(ControllerContext controllerContext, IList`1 filters, ActionDescriptor actionDescriptor)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAction(ControllerContext controllerContext, String actionName)
+   在 System.Web.Mvc.Controller.ExecuteCore()
+   在 System.Web.Mvc.ControllerBase.Execute(RequestContext requestContext)
+   在 System.Web.Mvc.MvcHandler.<>c__DisplayClass6.<>c__DisplayClassb.<BeginProcessRequest>b__5()
+   在 System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass1.<MakeVoidDelegate>b__0()
+   在 System.Web.Mvc.MvcHandler.<>c__DisplayClasse.<EndProcessRequest>b__d()
+   在 System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   在 System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+2014-01-22 15:57:51,282 [8] FATAL  [(null)] - System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ProjectCenter.Web.Controllers.SecurityController.OnAuthorization(AuthorizationContext filterContext) 位置 e:\Project\Common\ProjectCenter\ProjectCenter.Web\Controllers\SecurityController.cs:行号 52
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAuthorizationFilters(ControllerContext controllerContext, IList`1 filters, ActionDescriptor actionDescriptor)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAction(ControllerContext controllerContext, String actionName)
+   在 System.Web.Mvc.Controller.ExecuteCore()
+   在 System.Web.Mvc.ControllerBase.Execute(RequestContext requestContext)
+   在 System.Web.Mvc.MvcHandler.<>c__DisplayClass6.<>c__DisplayClassb.<BeginProcessRequest>b__5()
+   在 System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass1.<MakeVoidDelegate>b__0()
+   在 System.Web.Mvc.MvcHandler.<>c__DisplayClasse.<EndProcessRequest>b__d()
+   在 System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   在 System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+2014-01-22 15:58:38,043 [14] FATAL  [(null)] - System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ProjectCenter.Web.Controllers.SecurityController.OnAuthorization(AuthorizationContext filterContext) 位置 e:\Project\Common\ProjectCenter\ProjectCenter.Web\Controllers\SecurityController.cs:行号 52
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAuthorizationFilters(ControllerContext controllerContext, IList`1 filters, ActionDescriptor actionDescriptor)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAction(ControllerContext controllerContext, String actionName)
+   在 System.Web.Mvc.Controller.ExecuteCore()
+   在 System.Web.Mvc.ControllerBase.Execute(RequestContext requestContext)
+   在 System.Web.Mvc.MvcHandler.<>c__DisplayClass6.<>c__DisplayClassb.<BeginProcessRequest>b__5()
+   在 System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass1.<MakeVoidDelegate>b__0()
+   在 System.Web.Mvc.MvcHandler.<>c__DisplayClasse.<EndProcessRequest>b__d()
+   在 System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   在 System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+2014-01-22 15:59:02,076 [5] FATAL  [(null)] - System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ProjectCenter.Web.Controllers.SecurityController.OnAuthorization(AuthorizationContext filterContext) 位置 e:\Project\Common\ProjectCenter\ProjectCenter.Web\Controllers\SecurityController.cs:行号 52
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAuthorizationFilters(ControllerContext controllerContext, IList`1 filters, ActionDescriptor actionDescriptor)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAction(ControllerContext controllerContext, String actionName)
+   在 System.Web.Mvc.Controller.ExecuteCore()
+   在 System.Web.Mvc.ControllerBase.Execute(RequestContext requestContext)
+   在 System.Web.Mvc.MvcHandler.<>c__DisplayClass6.<>c__DisplayClassb.<BeginProcessRequest>b__5()
+   在 System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass1.<MakeVoidDelegate>b__0()
+   在 System.Web.Mvc.MvcHandler.<>c__DisplayClasse.<EndProcessRequest>b__d()
+   在 System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   在 System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+2014-01-22 15:59:02,796 [14] FATAL  [(null)] - System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ProjectCenter.Web.Controllers.SecurityController.OnAuthorization(AuthorizationContext filterContext) 位置 e:\Project\Common\ProjectCenter\ProjectCenter.Web\Controllers\SecurityController.cs:行号 52
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAuthorizationFilters(ControllerContext controllerContext, IList`1 filters, ActionDescriptor actionDescriptor)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAction(ControllerContext controllerContext, String actionName)
+   在 System.Web.Mvc.Controller.ExecuteCore()
+   在 System.Web.Mvc.ControllerBase.Execute(RequestContext requestContext)
+   在 System.Web.Mvc.MvcHandler.<>c__DisplayClass6.<>c__DisplayClassb.<BeginProcessRequest>b__5()
+   在 System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass1.<MakeVoidDelegate>b__0()
+   在 System.Web.Mvc.MvcHandler.<>c__DisplayClasse.<EndProcessRequest>b__d()
+   在 System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   在 System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+2014-01-22 15:59:03,071 [8] FATAL  [(null)] - System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ProjectCenter.Web.Controllers.SecurityController.OnAuthorization(AuthorizationContext filterContext) 位置 e:\Project\Common\ProjectCenter\ProjectCenter.Web\Controllers\SecurityController.cs:行号 52
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAuthorizationFilters(ControllerContext controllerContext, IList`1 filters, ActionDescriptor actionDescriptor)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAction(ControllerContext controllerContext, String actionName)
+   在 System.Web.Mvc.Controller.ExecuteCore()
+   在 System.Web.Mvc.ControllerBase.Execute(RequestContext requestContext)
+   在 System.Web.Mvc.MvcHandler.<>c__DisplayClass6.<>c__DisplayClassb.<BeginProcessRequest>b__5()
+   在 System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass1.<MakeVoidDelegate>b__0()
+   在 System.Web.Mvc.MvcHandler.<>c__DisplayClasse.<EndProcessRequest>b__d()
+   在 System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   在 System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+2014-01-22 16:00:11,969 [14] FATAL  [(null)] - System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ProjectCenter.Web.Controllers.SecurityController.OnAuthorization(AuthorizationContext filterContext) 位置 e:\Project\Common\ProjectCenter\ProjectCenter.Web\Controllers\SecurityController.cs:行号 52
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAuthorizationFilters(ControllerContext controllerContext, IList`1 filters, ActionDescriptor actionDescriptor)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAction(ControllerContext controllerContext, String actionName)
+   在 System.Web.Mvc.Controller.ExecuteCore()
+   在 System.Web.Mvc.ControllerBase.Execute(RequestContext requestContext)
+   在 System.Web.Mvc.MvcHandler.<>c__DisplayClass6.<>c__DisplayClassb.<BeginProcessRequest>b__5()
+   在 System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass1.<MakeVoidDelegate>b__0()
+   在 System.Web.Mvc.MvcHandler.<>c__DisplayClasse.<EndProcessRequest>b__d()
+   在 System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   在 System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+[Footer]
+[Header]
+2014-01-22 16:09:36,360 [29] FATAL  [(null)] - System.NullReferenceException: 未将对象引用设置到对象的实例。
+   在 ProjectCenter.Web.Controllers.SecurityController.OnAuthorization(AuthorizationContext filterContext) 位置 e:\Project\Common\ProjectCenter\ProjectCenter.Web\Controllers\SecurityController.cs:行号 52
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAuthorizationFilters(ControllerContext controllerContext, IList`1 filters, ActionDescriptor actionDescriptor)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAction(ControllerContext controllerContext, String actionName)
+   在 System.Web.Mvc.Controller.ExecuteCore()
+   在 System.Web.Mvc.ControllerBase.Execute(RequestContext requestContext)
+   在 System.Web.Mvc.MvcHandler.<>c__DisplayClass6.<>c__DisplayClassb.<BeginProcessRequest>b__5()
+   在 System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass1.<MakeVoidDelegate>b__0()
+   在 System.Web.Mvc.MvcHandler.<>c__DisplayClasse.<EndProcessRequest>b__d()
+   在 System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   在 System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+[Footer]
+[Header]
+2014-01-22 16:13:00,135 [52] FATAL  [(null)] - Microsoft.CSharp.RuntimeBinder.RuntimeBinderException: 无法对 null 引用执行运行时绑定
+   在 CallSite.Target(Closure , CallSite , Object )
+   在 System.Dynamic.UpdateDelegates.UpdateAndExecute1[T0,TRet](CallSite site, T0 arg0)
+   在 ASP._Page_Views_Project_List_cshtml.Execute() 位置 e:\Project\Common\ProjectCenter\ProjectCenter.Web\Views\Project\List.cshtml:行号 23
+   在 System.Web.WebPages.WebPageBase.ExecutePageHierarchy()
+   在 System.Web.Mvc.WebViewPage.ExecutePageHierarchy()
+   在 System.Web.WebPages.StartPage.ExecutePageHierarchy()
+   在 System.Web.WebPages.WebPageBase.ExecutePageHierarchy(WebPageContext pageContext, TextWriter writer, WebPageRenderingBase startPage)
+   在 System.Web.Mvc.ViewResultBase.ExecuteResult(ControllerContext context)
+   在 System.Web.Mvc.ControllerActionInvoker.<>c__DisplayClass1c.<InvokeActionResultWithFilters>b__19()
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResultFilter(IResultFilter filter, ResultExecutingContext preContext, Func`1 continuation)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResultWithFilters(ControllerContext controllerContext, IList`1 filters, ActionResult actionResult)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAction(ControllerContext controllerContext, String actionName)
+   在 System.Web.Mvc.Controller.ExecuteCore()
+   在 System.Web.Mvc.ControllerBase.Execute(RequestContext requestContext)
+   在 System.Web.Mvc.MvcHandler.<>c__DisplayClass6.<>c__DisplayClassb.<BeginProcessRequest>b__5()
+   在 System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass1.<MakeVoidDelegate>b__0()
+   在 System.Web.Mvc.MvcHandler.<>c__DisplayClasse.<EndProcessRequest>b__d()
+   在 System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   在 System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+[Footer]
+[Header]
+2014-01-22 16:13:22,114 [54] FATAL  [(null)] - Microsoft.CSharp.RuntimeBinder.RuntimeBinderException: 无法对 null 引用执行运行时绑定
+   在 CallSite.Target(Closure , CallSite , Object )
+   在 System.Dynamic.UpdateDelegates.UpdateAndExecute1[T0,TRet](CallSite site, T0 arg0)
+   在 ASP._Page_Views_Project_List_cshtml.Execute() 位置 e:\Project\Common\ProjectCenter\ProjectCenter.Web\Views\Project\List.cshtml:行号 23
+   在 System.Web.WebPages.WebPageBase.ExecutePageHierarchy()
+   在 System.Web.Mvc.WebViewPage.ExecutePageHierarchy()
+   在 System.Web.WebPages.StartPage.ExecutePageHierarchy()
+   在 System.Web.WebPages.WebPageBase.ExecutePageHierarchy(WebPageContext pageContext, TextWriter writer, WebPageRenderingBase startPage)
+   在 System.Web.Mvc.ViewResultBase.ExecuteResult(ControllerContext context)
+   在 System.Web.Mvc.ControllerActionInvoker.<>c__DisplayClass1c.<InvokeActionResultWithFilters>b__19()
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResultFilter(IResultFilter filter, ResultExecutingContext preContext, Func`1 continuation)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResultWithFilters(ControllerContext controllerContext, IList`1 filters, ActionResult actionResult)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAction(ControllerContext controllerContext, String actionName)
+   在 System.Web.Mvc.Controller.ExecuteCore()
+   在 System.Web.Mvc.ControllerBase.Execute(RequestContext requestContext)
+   在 System.Web.Mvc.MvcHandler.<>c__DisplayClass6.<>c__DisplayClassb.<BeginProcessRequest>b__5()
+   在 System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass1.<MakeVoidDelegate>b__0()
+   在 System.Web.Mvc.MvcHandler.<>c__DisplayClasse.<EndProcessRequest>b__d()
+   在 System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   在 System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+[Footer]
+[Header]
+2014-01-22 16:15:17,620 [29] FATAL  [(null)] - Microsoft.CSharp.RuntimeBinder.RuntimeBinderException: 无法对 null 引用执行运行时绑定
+   在 CallSite.Target(Closure , CallSite , Object )
+   在 System.Dynamic.UpdateDelegates.UpdateAndExecute1[T0,TRet](CallSite site, T0 arg0)
+   在 ASP._Page_Views_Project_List_cshtml.Execute() 位置 e:\Project\Common\ProjectCenter\ProjectCenter.Web\Views\Project\List.cshtml:行号 23
+   在 System.Web.WebPages.WebPageBase.ExecutePageHierarchy()
+   在 System.Web.Mvc.WebViewPage.ExecutePageHierarchy()
+   在 System.Web.WebPages.StartPage.ExecutePageHierarchy()
+   在 System.Web.WebPages.WebPageBase.ExecutePageHierarchy(WebPageContext pageContext, TextWriter writer, WebPageRenderingBase startPage)
+   在 System.Web.Mvc.ViewResultBase.ExecuteResult(ControllerContext context)
+   在 System.Web.Mvc.ControllerActionInvoker.<>c__DisplayClass1c.<InvokeActionResultWithFilters>b__19()
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResultFilter(IResultFilter filter, ResultExecutingContext preContext, Func`1 continuation)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResultWithFilters(ControllerContext controllerContext, IList`1 filters, ActionResult actionResult)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAction(ControllerContext controllerContext, String actionName)
+   在 System.Web.Mvc.Controller.ExecuteCore()
+   在 System.Web.Mvc.ControllerBase.Execute(RequestContext requestContext)
+   在 System.Web.Mvc.MvcHandler.<>c__DisplayClass6.<>c__DisplayClassb.<BeginProcessRequest>b__5()
+   在 System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass1.<MakeVoidDelegate>b__0()
+   在 System.Web.Mvc.MvcHandler.<>c__DisplayClasse.<EndProcessRequest>b__d()
+   在 System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   在 System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+[Footer]
+[Header]
+2014-01-22 16:15:29,979 [54] FATAL  [(null)] - Microsoft.CSharp.RuntimeBinder.RuntimeBinderException: 无法对 null 引用执行运行时绑定
+   在 CallSite.Target(Closure , CallSite , Object )
+   在 System.Dynamic.UpdateDelegates.UpdateAndExecute1[T0,TRet](CallSite site, T0 arg0)
+   在 ASP._Page_Views_Project_List_cshtml.Execute() 位置 e:\Project\Common\ProjectCenter\ProjectCenter.Web\Views\Project\List.cshtml:行号 23
+   在 System.Web.WebPages.WebPageBase.ExecutePageHierarchy()
+   在 System.Web.Mvc.WebViewPage.ExecutePageHierarchy()
+   在 System.Web.WebPages.StartPage.ExecutePageHierarchy()
+   在 System.Web.WebPages.WebPageBase.ExecutePageHierarchy(WebPageContext pageContext, TextWriter writer, WebPageRenderingBase startPage)
+   在 System.Web.Mvc.ViewResultBase.ExecuteResult(ControllerContext context)
+   在 System.Web.Mvc.ControllerActionInvoker.<>c__DisplayClass1c.<InvokeActionResultWithFilters>b__19()
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResultFilter(IResultFilter filter, ResultExecutingContext preContext, Func`1 continuation)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeActionResultWithFilters(ControllerContext controllerContext, IList`1 filters, ActionResult actionResult)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAction(ControllerContext controllerContext, String actionName)
+   在 System.Web.Mvc.Controller.ExecuteCore()
+   在 System.Web.Mvc.ControllerBase.Execute(RequestContext requestContext)
+   在 System.Web.Mvc.MvcHandler.<>c__DisplayClass6.<>c__DisplayClassb.<BeginProcessRequest>b__5()
+   在 System.Web.Mvc.Async.AsyncResultWrapper.<>c__DisplayClass1.<MakeVoidDelegate>b__0()
+   在 System.Web.Mvc.MvcHandler.<>c__DisplayClasse.<EndProcessRequest>b__d()
+   在 System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   在 System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+[Footer]
+[Header]
+[Footer]
+[Header]
+[Footer]
+[Header]
+[Footer]
+[Header]
+[Footer]
+[Header]
+[Footer]
+[Header]
+[Footer]
+[Header]
+[Footer]
+[Header]
+[Footer]
+[Header]
+[Footer]
+[Header]
+2014-01-22 16:31:19,143 [10] WARN   [(null)] - ProjectCenter.Util.Exceptions.BusinessException: 用户已过期，请重新登录！
+   在 ProjectCenter.Web.Controllers.SecurityController.OnAuthorization(AuthorizationContext filterContext) 位置 e:\Project\Common\ProjectCenter\ProjectCenter.Web\Controllers\SecurityController.cs:行号 75
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAuthorizationFilters(ControllerContext controllerContext, IList`1 filters, ActionDescriptor actionDescriptor)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAction(ControllerContext controllerContext, String actionName)
+2014-01-22 16:31:19,143 [22] WARN   [(null)] - ProjectCenter.Util.Exceptions.BusinessException: 用户已过期，请重新登录！
+   在 ProjectCenter.Web.Controllers.SecurityController.OnAuthorization(AuthorizationContext filterContext) 位置 e:\Project\Common\ProjectCenter\ProjectCenter.Web\Controllers\SecurityController.cs:行号 75
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAuthorizationFilters(ControllerContext controllerContext, IList`1 filters, ActionDescriptor actionDescriptor)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAction(ControllerContext controllerContext, String actionName)
+2014-01-22 16:36:19,103 [49] WARN   [(null)] - ProjectCenter.Util.Exceptions.BusinessException: 用户已过期，请重新登录！
+   在 ProjectCenter.Web.Controllers.SecurityController.OnAuthorization(AuthorizationContext filterContext) 位置 e:\Project\Common\ProjectCenter\ProjectCenter.Web\Controllers\SecurityController.cs:行号 75
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAuthorizationFilters(ControllerContext controllerContext, IList`1 filters, ActionDescriptor actionDescriptor)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAction(ControllerContext controllerContext, String actionName)
+2014-01-22 16:36:19,104 [38] WARN   [(null)] - ProjectCenter.Util.Exceptions.BusinessException: 用户已过期，请重新登录！
+   在 ProjectCenter.Web.Controllers.SecurityController.OnAuthorization(AuthorizationContext filterContext) 位置 e:\Project\Common\ProjectCenter\ProjectCenter.Web\Controllers\SecurityController.cs:行号 75
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAuthorizationFilters(ControllerContext controllerContext, IList`1 filters, ActionDescriptor actionDescriptor)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAction(ControllerContext controllerContext, String actionName)
+2014-01-22 16:41:07,965 [64] WARN   [(null)] - ProjectCenter.Util.Exceptions.BusinessException: 用户已过期，请重新登录！
+   在 ProjectCenter.Web.Controllers.SecurityController.OnAuthorization(AuthorizationContext filterContext) 位置 e:\Project\Common\ProjectCenter\ProjectCenter.Web\Controllers\SecurityController.cs:行号 75
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAuthorizationFilters(ControllerContext controllerContext, IList`1 filters, ActionDescriptor actionDescriptor)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAction(ControllerContext controllerContext, String actionName)
+2014-01-22 16:41:19,100 [56] WARN   [(null)] - ProjectCenter.Util.Exceptions.BusinessException: 用户已过期，请重新登录！
+   在 ProjectCenter.Web.Controllers.SecurityController.OnAuthorization(AuthorizationContext filterContext) 位置 e:\Project\Common\ProjectCenter\ProjectCenter.Web\Controllers\SecurityController.cs:行号 75
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAuthorizationFilters(ControllerContext controllerContext, IList`1 filters, ActionDescriptor actionDescriptor)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAction(ControllerContext controllerContext, String actionName)
+2014-01-22 16:41:19,102 [64] WARN   [(null)] - ProjectCenter.Util.Exceptions.BusinessException: 用户已过期，请重新登录！
+   在 ProjectCenter.Web.Controllers.SecurityController.OnAuthorization(AuthorizationContext filterContext) 位置 e:\Project\Common\ProjectCenter\ProjectCenter.Web\Controllers\SecurityController.cs:行号 75
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAuthorizationFilters(ControllerContext controllerContext, IList`1 filters, ActionDescriptor actionDescriptor)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAction(ControllerContext controllerContext, String actionName)
+2014-01-22 16:46:26,108 [79] WARN   [(null)] - ProjectCenter.Util.Exceptions.BusinessException: 用户已过期，请重新登录！
+   在 ProjectCenter.Web.Controllers.SecurityController.OnAuthorization(AuthorizationContext filterContext) 位置 e:\Project\Common\ProjectCenter\ProjectCenter.Web\Controllers\SecurityController.cs:行号 75
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAuthorizationFilters(ControllerContext controllerContext, IList`1 filters, ActionDescriptor actionDescriptor)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAction(ControllerContext controllerContext, String actionName)
+2014-01-22 16:46:26,109 [68] WARN   [(null)] - ProjectCenter.Util.Exceptions.BusinessException: 用户已过期，请重新登录！
+   在 ProjectCenter.Web.Controllers.SecurityController.OnAuthorization(AuthorizationContext filterContext) 位置 e:\Project\Common\ProjectCenter\ProjectCenter.Web\Controllers\SecurityController.cs:行号 75
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAuthorizationFilters(ControllerContext controllerContext, IList`1 filters, ActionDescriptor actionDescriptor)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAction(ControllerContext controllerContext, String actionName)
+2014-01-22 16:51:26,100 [102] WARN   [(null)] - ProjectCenter.Util.Exceptions.BusinessException: 用户已过期，请重新登录！
+   在 ProjectCenter.Web.Controllers.SecurityController.OnAuthorization(AuthorizationContext filterContext) 位置 e:\Project\Common\ProjectCenter\ProjectCenter.Web\Controllers\SecurityController.cs:行号 75
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAuthorizationFilters(ControllerContext controllerContext, IList`1 filters, ActionDescriptor actionDescriptor)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAction(ControllerContext controllerContext, String actionName)
+2014-01-22 16:51:26,100 [101] WARN   [(null)] - ProjectCenter.Util.Exceptions.BusinessException: 用户已过期，请重新登录！
+   在 ProjectCenter.Web.Controllers.SecurityController.OnAuthorization(AuthorizationContext filterContext) 位置 e:\Project\Common\ProjectCenter\ProjectCenter.Web\Controllers\SecurityController.cs:行号 75
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAuthorizationFilters(ControllerContext controllerContext, IList`1 filters, ActionDescriptor actionDescriptor)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAction(ControllerContext controllerContext, String actionName)
+2014-01-22 16:56:26,103 [125] WARN   [(null)] - ProjectCenter.Util.Exceptions.BusinessException: 用户已过期，请重新登录！
+   在 ProjectCenter.Web.Controllers.SecurityController.OnAuthorization(AuthorizationContext filterContext) 位置 e:\Project\Common\ProjectCenter\ProjectCenter.Web\Controllers\SecurityController.cs:行号 75
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAuthorizationFilters(ControllerContext controllerContext, IList`1 filters, ActionDescriptor actionDescriptor)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAction(ControllerContext controllerContext, String actionName)
+2014-01-22 16:56:26,104 [118] WARN   [(null)] - ProjectCenter.Util.Exceptions.BusinessException: 用户已过期，请重新登录！
+   在 ProjectCenter.Web.Controllers.SecurityController.OnAuthorization(AuthorizationContext filterContext) 位置 e:\Project\Common\ProjectCenter\ProjectCenter.Web\Controllers\SecurityController.cs:行号 75
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAuthorizationFilters(ControllerContext controllerContext, IList`1 filters, ActionDescriptor actionDescriptor)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAction(ControllerContext controllerContext, String actionName)
+2014-01-22 17:01:26,104 [147] WARN   [(null)] - ProjectCenter.Util.Exceptions.BusinessException: 用户已过期，请重新登录！
+   在 ProjectCenter.Web.Controllers.SecurityController.OnAuthorization(AuthorizationContext filterContext) 位置 e:\Project\Common\ProjectCenter\ProjectCenter.Web\Controllers\SecurityController.cs:行号 75
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAuthorizationFilters(ControllerContext controllerContext, IList`1 filters, ActionDescriptor actionDescriptor)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAction(ControllerContext controllerContext, String actionName)
+2014-01-22 17:01:26,105 [143] WARN   [(null)] - ProjectCenter.Util.Exceptions.BusinessException: 用户已过期，请重新登录！
+   在 ProjectCenter.Web.Controllers.SecurityController.OnAuthorization(AuthorizationContext filterContext) 位置 e:\Project\Common\ProjectCenter\ProjectCenter.Web\Controllers\SecurityController.cs:行号 75
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAuthorizationFilters(ControllerContext controllerContext, IList`1 filters, ActionDescriptor actionDescriptor)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAction(ControllerContext controllerContext, String actionName)
+2014-01-22 17:06:26,104 [167] WARN   [(null)] - ProjectCenter.Util.Exceptions.BusinessException: 用户已过期，请重新登录！
+   在 ProjectCenter.Web.Controllers.SecurityController.OnAuthorization(AuthorizationContext filterContext) 位置 e:\Project\Common\ProjectCenter\ProjectCenter.Web\Controllers\SecurityController.cs:行号 75
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAuthorizationFilters(ControllerContext controllerContext, IList`1 filters, ActionDescriptor actionDescriptor)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAction(ControllerContext controllerContext, String actionName)
+2014-01-22 17:06:26,105 [143] WARN   [(null)] - ProjectCenter.Util.Exceptions.BusinessException: 用户已过期，请重新登录！
+   在 ProjectCenter.Web.Controllers.SecurityController.OnAuthorization(AuthorizationContext filterContext) 位置 e:\Project\Common\ProjectCenter\ProjectCenter.Web\Controllers\SecurityController.cs:行号 75
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAuthorizationFilters(ControllerContext controllerContext, IList`1 filters, ActionDescriptor actionDescriptor)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAction(ControllerContext controllerContext, String actionName)
+2014-01-22 17:09:46,995 [163] WARN   [(null)] - ProjectCenter.Util.Exceptions.BusinessException: 用户已过期，请重新登录！
+   在 ProjectCenter.Web.Controllers.SecurityController.OnAuthorization(AuthorizationContext filterContext) 位置 e:\Project\Common\ProjectCenter\ProjectCenter.Web\Controllers\SecurityController.cs:行号 75
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAuthorizationFilters(ControllerContext controllerContext, IList`1 filters, ActionDescriptor actionDescriptor)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAction(ControllerContext controllerContext, String actionName)
+2014-01-22 17:09:46,995 [175] WARN   [(null)] - ProjectCenter.Util.Exceptions.BusinessException: 用户已过期，请重新登录！
+   在 ProjectCenter.Web.Controllers.SecurityController.OnAuthorization(AuthorizationContext filterContext) 位置 e:\Project\Common\ProjectCenter\ProjectCenter.Web\Controllers\SecurityController.cs:行号 75
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAuthorizationFilters(ControllerContext controllerContext, IList`1 filters, ActionDescriptor actionDescriptor)
+   在 System.Web.Mvc.ControllerActionInvoker.InvokeAction(ControllerContext controllerContext, String actionName)
+[Footer]
