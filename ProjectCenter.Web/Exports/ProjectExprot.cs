@@ -131,11 +131,14 @@ namespace ProjectCenter.Web.Exports
             WriteTitle(ProjectSheet, ProjectSheetColumns.Length, ProjectSheetTitle);
             WriteProjectSheetHeader(ProjectSheet);
 
-            FinanceSheet = HSSFWorkbook.CreateSheet("财务信息");
-            FinanceSheet.DisplayGridlines = true;
-            SetColumnStyle(FinanceSheet, FinanceSheetColumns);
-            WriteTitle(FinanceSheet, FinanceSheetColumns.Length, FinanceSheetTitle);
-            WriteFinanceSheetHeader(FinanceSheet);
+            if (WithFinance)
+            {
+                FinanceSheet = HSSFWorkbook.CreateSheet("财务信息");
+                FinanceSheet.DisplayGridlines = true;
+                SetColumnStyle(FinanceSheet, FinanceSheetColumns);
+                WriteTitle(FinanceSheet, FinanceSheetColumns.Length, FinanceSheetTitle);
+                WriteFinanceSheetHeader(FinanceSheet);
+            }
 
             ProjectSheetDataRowIndex = ProjectSheetDataRowStartIndex;
             FinanceSheetDataRowIndex = FinanceSheetDataRowStartIndex;
@@ -307,8 +310,10 @@ namespace ProjectCenter.Web.Exports
             row.CreateCell(13).SetCellValue(project.Deadline.Year.ToString());
 
             ProjectSheetDataRowIndex++;
-
-            WirteFinance(project, items);
+            if (WithFinance)
+            {
+                WirteFinance(project, items);
+            }
         }
 
         protected void WirteFinance(Project project, IEnumerable<ExpenditureStatisticItem> items)
