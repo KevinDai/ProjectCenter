@@ -1,0 +1,239 @@
+﻿@{
+    ViewBag.Tab = "UserList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<row>
+    <div class="col-md-12">
+        <button data-bind="click: add" type="button" class="btn btn-primary btn-action">新增</button>
+        <hr />
+    </div>
+    <div class="col-md-12">
+        <ul class="nav nav-tabs">
+          <li class="active"><a href="#enableUsers" data-toggle="tab">有效用户</a></li>
+          <li><a href="#disableUsers" data-toggle="tab">已停用</a></li>
+        </ul>
+
+        <div class="tab-content">
+            <div data-bind="template: {name: 'users-template', data: enableUsers}" class="tab-pane active" id="enableUsers">
+            </div>
+            <div data-bind="template: {name: 'users-template', data: disableUsers}" class="tab-pane" id="disableUsers"></div>
+        </div>
+       
+    </div>
+</row>
+
+<div id="userEditDialog" class="modal fade" data-backdrop="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" style="font-weight: bold;">用户信息</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form data-bind="with: userEdit()" class="form-horizontal">
+                            <div class="form-group">
+                                <label class="col-md-4 control-label">登录名称：</label>
+                                <label data-bind="text: LoginName, visible: Id()" class="col-md-6 control-label" style="text-align: left;"></label>
+                                <div data-bind="visible: !Id()" class="col-md-6">
+                                    <input data-bind="value: LoginName" type="text" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 control-label">用户名称：</label>
+                                <div class="col-md-6">
+                                    <input data-bind="value: Name" type="text" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 control-label">权限级别：</label>
+                                <div class="col-md-6">
+                                    <select data-bind="value: RightLevel" name="type" class="form-control selectpicker" data-size="5">
+                                        <option value="0">已停用</option>
+                                        <option value="1">1级用户（管理员权限）</option>
+                                        <option value="2">2级用户</option>
+                                        <option value="3">3级用户</option>
+                                        <option value="4">4级用户（财务专员）</option>
+                                    </select>
+                                    @*<input data-bind="value: RightLevel" class="form-control" type="text">*@
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <ul class="list-unstyle list-inline pull-right">
+                            <li>
+                                <button data-bind="click: save" type="button" class="btn btn-primary btn-primary">保存</button>
+                            </li>
+                            <li>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<script type="text/html" id="users-template">
+    <table class="table table-hover">
+        <colgroup>
+            <col>
+            <col>
+            <col>
+            <col style="width: 100px;">
+            <col style="width: 30px;">
+            <col style="width: 30px;">
+        </colgroup>
+        <thead>
+            <tr>
+                <th>登录名称</th>
+                <th>用户名称</th>
+                <th>权限等级</th>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody data-bind="foreach: $data">
+            <tr>
+                <td data-bind="text: Name"></td>
+                <td data-bind="text: LoginName"></td>
+                <td data-bind="text: RightLevelDisplayName"></td>
+                <td>
+                    <a data-bind="click: $root.resetPassword" href="#">重置密码</a>
+                </td>
+                <td>
+                    <a data-bind="click: $root.edit" href="#" title="编辑"><span class="glyphicon glyphicon-edit"></span></a>
+                </td>
+                <td>
+                    <a data-bind="click: $root.delete" href="#" title="删除"><span class="glyphicon glyphicon-trash"></span></a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</script>
+
+
+<script type="text/javascript">
+
+
+    function initViewModel() {
+        var self = window.viewModel = window.viewModel || {},
+            load = function (users) {
+                var enableUsers = [];
+                var disableUsers = [];
+                $.each(users, function (i, item) {
+                    if (item.RightLevel > 0) {
+                        enableUsers.push(item);
+                    } else {
+                        disableUsers.push(item);
+                    }
+                    setRightLevelDisplayName(item);
+                });
+                self.enableUsers(enableUsers);
+                self.disableUsers(disableUsers);
+            },
+            setRightLevelDisplayName = function (user) {
+                switch (user.RightLevel) {
+                    case 0:
+                        user.RightLevelDisplayName = "已停用";
+                        break;
+                    case 1:
+                        user.RightLevelDisplayName = "1级用户（管理员权限）";
+                        break;
+                    case 2:
+                        user.RightLevelDisplayName = "2级用户";
+                        break;
+                    case 3:
+                        user.RightLevelDisplayName = "3级用户";
+                        break;
+                    case 4:
+                        user.RightLevelDisplayName = "4级用户（财务专员）";
+                        break;
+                    default:
+                        user.RightLevelDisplayName = "无效权限级别";
+                        break;
+                }
+            };
+        self.enableUsers = ko.observableArray([]);
+        self.disableUsers = ko.observableArray([]);
+        self.userEdit = new ko.validatedObservable(new UserEditViewModel({}));
+        self.userEdit.isValid();
+
+        self.refrush = function () {
+            request("/User/LoadUsers", {}, function (result) {
+                load(result || []);
+            });
+        };
+        self.add = function (user) {
+            self.userEdit().update({ RightLevel: 3 });
+            $("#userEditDialog").modal("show");
+        };
+        self.edit = function (user) {
+            self.userEdit().update(user);
+            $("#userEditDialog").modal("show");
+        };
+        self.delete = function (user) {
+            showPopConfrimMessage("删除确认", "是否确认删除指定的用户？", function () {
+                request("/User/DeleteUser", { userId: user.Id }, function (result) {
+                    showMessage("删除用户成功");
+                    self.refrush();
+                });
+            });
+        };
+        self.resetPassword = function (user) {
+            showPopConfrimMessage("重置密码确认", "是否确认重置指定的用户？", function () {
+                request("/User/ResetPassword", { userId: user.Id }, function (result) {
+                    showMessage("重置密码成功");
+                    $("#passwordEdit").modal("hide");
+                });
+            });
+        };
+        self.save = function () {
+            if (self.userEdit.isValid()) {
+                var user = self.userEdit(),
+                    url = user.Id() ? "/User/EditUserBaseInfo" : "/User/AddUser";
+                request(url, { user: user }, function (result) {
+                    $("#userEditDialog").modal("hide");
+                    showMessage("保存用户成功");
+                    self.refrush();
+                });
+            }
+        };
+        self.refrush();
+    }
+
+    var UserEditViewModel = function () {
+        var self = this;
+
+        self.Id = ko.observable();
+        self.LoginName = ko.observable("").extend({ required: true });;
+        self.Name = ko.observable("").extend({ required: true });;
+        self.RightLevel = ko.observable();
+
+        self.update = function (user) {
+            self.Id(user.Id);
+            self.Name(user.Name);
+            self.LoginName(user.LoginName);
+            self.RightLevel(user.RightLevel);
+
+            $('.selectpicker').selectpicker('refresh');
+        };
+    }
+
+
+    $(function () {
+        $('.selectpicker').selectpicker({
+            size: 6
+        });
+        initViewModel();
+    });
+</script>

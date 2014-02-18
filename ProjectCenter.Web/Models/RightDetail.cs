@@ -10,9 +10,10 @@ namespace ProjectCenter.Web.Models
 
         public RightDetail(int rightLevel)
         {
-            EnableViewList = rightLevel >= 0;
-            EnableViewDetail = rightLevel >= 0;
+            EnableViewList = rightLevel > 0;
+            EnableViewDetail = rightLevel > 0;
             EnableEditProject = rightLevel == 1;
+            EnableUserManage = rightLevel == 1;
             EnableCheckProject = rightLevel == 1;
             EnableSetProjectUser = rightLevel == 1;
             EnbaleDeleteProject = rightLevel == 1;
@@ -61,5 +62,10 @@ namespace ProjectCenter.Web.Models
             set;
         }
 
+        public bool EnableUserManage
+        {
+            get;
+            set;
+        }
     }
 }

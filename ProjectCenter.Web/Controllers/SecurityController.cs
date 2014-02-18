@@ -2,6 +2,8 @@
 using ProjectCenter.Services;
 using ProjectCenter.Util;
 using ProjectCenter.Util.Exceptions;
+using ProjectCenter.Util.Query;
+using ProjectCenter.Util.Query.Specification;
 using ProjectCenter.Web.ActionResults;
 using ProjectCenter.Web.Models;
 using System;
@@ -98,7 +100,9 @@ namespace ProjectCenter.Web.Controllers
             var users = Cache.Instance.Get(UsersCacheKey) as IEnumerable<User>;
             if (users == null)
             {
-                users = UserService.GetAllUser();
+                users = UserService.GetUserList(
+                    new DirectSpecification<User>(u => u.RightLevel != 0),
+                    new SortDescriptor<User>[] { SortDescriptor<User>.CreateSortDescriptor(u => u.RightLevel) });
                 Cache.Instance.Set(UsersCacheKey, users, 30);
             }
             return users;

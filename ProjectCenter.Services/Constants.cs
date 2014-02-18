@@ -11,5 +11,7 @@ namespace ProjectCenter.Services
 
         public static readonly string AllUserId = UserIdPrefix + "all";
 
+        public static readonly string DefaultPassword = "111111";
+
     }
 }

@@ -7,6 +7,10 @@ using System.Text;
 using System.Security.Cryptography;
 using ProjectCenter.Util.Exceptions;
 using ProjectCenter.Services.Models;
+using ProjectCenter.Util.Query;
+using ProjectCenter.Util.Query.Specification;
+using ProjectCenter.Util.Query.Extensions;
+using System.Transactions;
 
 namespace ProjectCenter.Services.Imp
 {
@@ -50,7 +54,7 @@ namespace ProjectCenter.Services.Imp
             {
                 result.FailMessage = "不存在该用户名的用户";
             }
-            else if (user.RightLevel < 0)
+            else if (user.RightLevel <= 0)
             {
                 result.FailMessage = "该用户不允许登录";
             }
@@ -92,5 +96,52 @@ namespace ProjectCenter.Services.Imp
             return Users.OrderBy(u => u.RightLevel).ToArray();
         }
 
+        public IEnumerable<User> GetUserList(ISpecification<User> spec, SortDescriptor<User>[] sorts)
+        {
+            var query = Users.FindBy(spec);
+            var result = query.Sort(sorts);
+            return result.ToArray();
+        }
+
+        public void EditUserBaseInfo(User user)
+        {
+            User entity = Users.FirstOrDefault(u => u.Id == user.Id);
+
+            entity.Name = user.Name;
+            entity.RightLevel = user.RightLevel;
+
+            UpdateEntity(entity);
+            SaveChanges();
+        }
+
+        public void AddUser(User user)
+        {
+            using (var ts = new TransactionScope())
+            {
+                if (Users.Count(u => u.LoginName == user.LoginName) > 0)
+                {
+                    throw new BusinessException("已存在指定登录名称的用户");
+                }
+
+                user.Passwrod = GetMD5String(Constants.DefaultPassword);
+                user.Id = Guid.NewGuid().ToString();
+
+                AddEntity(user);
+
+                SaveChanges();
+                ts.Complete();
+            }
+
+        }
+
+        public void DeleteUser(string userId)
+        {
+            User entity = Users.FirstOrDefault(u => u.Id == userId);
+            if (entity != null)
+            {
+                DeleteEntity(entity);
+                SaveChanges();
+            }
+        }
     }
 }

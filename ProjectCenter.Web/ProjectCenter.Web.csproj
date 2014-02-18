@@ -106,6 +106,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActionResults\CommonJsonResult.cs" />
+    <Content Include="Content\css\bootstrap-select.min.css" />
     <Content Include="Content\css\datepicker.css" />
     <Content Include="Content\css\logon.css" />
     <Compile Include="Controllers\AuthenticateController.cs" />
@@ -133,6 +134,7 @@
     <Compile Include="Models\QueryFilter.cs" />
     <Compile Include="Models\RightDetail.cs" />
     <Compile Include="Models\UserInfo.cs" />
+    <Compile Include="Models\UserListItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -195,6 +197,7 @@
     <Content Include="Content\themes\base\images\ui-icons_888888_256x240.png" />
     <Content Include="Content\themes\base\images\ui-icons_cd0a0a_256x240.png" />
     <Content Include="Scripts\bootstrap-datepicker.js" />
+    <Content Include="Scripts\bootstrap-select.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\common.js" />
@@ -240,6 +243,7 @@
     <Content Include="Views\Authenticate\Login.cshtml" />
     <None Include="Properties\PublishProfiles\ProjectCenter.pubxml" />
     <Content Include="Views\Project\Statistics.cshtml" />
+    <Content Include="Views\User\UserList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ProjectCenter.Models\ProjectCenter.Models.csproj">
