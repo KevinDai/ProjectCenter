@@ -172,9 +172,9 @@ namespace ProjectCenter.Services.Imp
                 case ProjectType.HorizontalEnquire:
                     return "HXZX";
                 case ProjectType.VerticalWork:
-                    return "ZXZX";
-                case ProjectType.CenterWork:
                     return "ZXGZ";
+                case ProjectType.CenterWork:
+                    return "BMGZ";
                 default:
                     throw new Exception("异常的项目类型");
             }

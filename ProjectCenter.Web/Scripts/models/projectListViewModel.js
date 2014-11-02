@@ -782,7 +782,7 @@ var projectListViewModel = function (user) {
                         { value: "1", name: "横向研究" },
                         { value: "2", name: "横向咨询" },
                         { value: "3", name: "纵向工作" },
-                        { value: "4", name: "中心工作" }
+                        { value: "4", name: "部门工作" }
                     ], "", self.query)
             ];
 

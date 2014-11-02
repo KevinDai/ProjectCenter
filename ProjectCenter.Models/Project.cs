@@ -269,9 +269,9 @@ namespace ProjectCenter.Models
                     case ProjectType.HorizontalEnquire:
                         return "横向咨询";
                     case ProjectType.VerticalWork:
-                        return "纵向咨询";
+                        return "纵向工作";
                     case ProjectType.CenterWork:
-                        return "中心工作";
+                        return "部门工作";
                     default:
                         return "未归类";
                 }

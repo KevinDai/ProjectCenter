@@ -48,7 +48,7 @@ namespace ProjectCenter.Web
 
             log4net.Config.XmlConfigurator.Configure();
 
-            //ServiceFactory.Instance.CreateProjectService().InitProjectCode();
+            ServiceFactory.Instance.CreateProjectService().InitProjectCode();
         }
 
         protected void Application_Error(object sender, EventArgs e)
