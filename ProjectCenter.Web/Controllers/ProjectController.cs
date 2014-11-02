@@ -362,7 +362,8 @@ namespace ProjectCenter.Web.Controllers
 
             ISpecification<Project> spec = BuildProjectSpecification(queryFilter);
             SortDescriptor<Project>[] sort = new SortDescriptor<Project>[] { 
-                SortDescriptor<Project>.CreateSortDescriptor(p => p.Type) 
+                SortDescriptor<Project>.CreateSortDescriptor(p => p.Type) ,
+                SortDescriptor<Project>.CreateSortDescriptor(p => p.CreateTime) 
             };
 
             PageList<Project> pageList = null;

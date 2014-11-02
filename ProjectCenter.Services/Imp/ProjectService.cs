@@ -144,6 +144,42 @@ namespace ProjectCenter.Services.Imp
             return result ?? 0.0;
         }
 
+
+        private void SetProjectCode(Project project)
+        {
+            var codePrefix = string.Format("{0}{1}-", GetTypePrefix((ProjectType)project.Type), project.CreateTime.Year.ToString());
+            var maxCode = Projects.Where(q => q.Code.StartsWith(codePrefix)).OrderByDescending(q => q.Code).Select(q => q.Code).FirstOrDefault();
+            var index = 1;
+            if (!string.IsNullOrEmpty(maxCode))
+            {
+                index = int.Parse(maxCode.Substring(9, 3)) + 1;
+            }
+            if (index > 999)
+            {
+                throw new Exception("今天该类型项目的编码已经达到最大值，请联系管理员");
+            }
+            project.Code = codePrefix + string.Format("{0:D3}", index.ToString("D3"));
+        }
+
+        private string GetTypePrefix(ProjectType type)
+        {
+            switch (type)
+            {
+                case ProjectType.VerticalResearch:
+                    return "ZXYJ";
+                case ProjectType.HorizontalResearch:
+                    return "HXYJ";
+                case ProjectType.HorizontalEnquire:
+                    return "HXZX";
+                case ProjectType.VerticalWork:
+                    return "ZXZX";
+                case ProjectType.CenterWork:
+                    return "ZXGZ";
+                default:
+                    throw new Exception("异常的项目类型");
+            }
+        }
+
         #endregion
 
         #region IProjectService接口实现
@@ -276,7 +312,7 @@ namespace ProjectCenter.Services.Imp
                 project.CreateTime = DateTime.Now;
 
                 ProjectValidSet(project);
-
+                SetProjectCode(project);
                 AddEntity(project);
 
                 //if (attachmentIds != null && attachmentIds.Any())
@@ -580,6 +616,18 @@ namespace ProjectCenter.Services.Imp
 
             return query.ToArray();
         }
+
+        public void InitProjectCode()
+        {
+            var projects = Projects.OrderBy(q => q.CreateTime).ToArray();
+            foreach (var project in projects)
+            {
+                SetProjectCode(project);
+                UpdateEntity(project);
+                SaveChanges();
+            }
+        }
+
 
         #endregion
 

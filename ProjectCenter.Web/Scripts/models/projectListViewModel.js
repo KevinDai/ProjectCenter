@@ -38,6 +38,7 @@ var projectEditViewModel = function (project) {
     self.EnableDelete = ko.observable(false);
     self.Id = ko.observable();
     self.Type = ko.observable();
+    self.Code = ko.observable();
     self.Name = ko.observable("").extend({ required: true });
     self.Consignor = ko.observable("").extend({ required: true });
     self.StartTime = ko.observable("").extend({ required: true });
@@ -324,6 +325,7 @@ var projectEditViewModel = function (project) {
         self.EnableManageFinance(project.EnableManageFinance);
         self.Id(project.Id);
         self.Type(project.Type);
+        self.Code(project.Code);
         self.Name(project.Name);
         self.Consignor(project.Consignor);
         self.StartTime(formattedDateStr(project.StartTime));
@@ -531,6 +533,7 @@ var projectListItemViewModel = function (project) {
             self.Checked = ko.observable(false);
             self.Id = project.Id;
             self.Name = project.Name;
+            self.Code = project.Code;
             self.StartTime = formatDateString(project.StartTime);
             self.Deadline = formatDateString(project.Deadline);
             self.ManagerNames = project.ManagerNames;

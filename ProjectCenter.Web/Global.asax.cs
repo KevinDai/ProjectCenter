@@ -1,4 +1,5 @@
 ﻿using log4net;
+using ProjectCenter.Services;
 using ProjectCenter.Web.Controllers;
 using System;
 using System.Collections.Generic;
@@ -46,6 +47,8 @@ namespace ProjectCenter.Web
             }
 
             log4net.Config.XmlConfigurator.Configure();
+
+            //ServiceFactory.Instance.CreateProjectService().InitProjectCode();
         }
 
         protected void Application_Error(object sender, EventArgs e)

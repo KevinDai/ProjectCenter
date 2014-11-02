@@ -23,6 +23,15 @@ namespace ProjectCenter.Models
         }
 
         /// <summary>
+        /// 项目编码
+        /// </summary>
+        public string Code
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
         /// 任务名称
         /// </summary>
         public string Name
@@ -260,7 +269,7 @@ namespace ProjectCenter.Models
                     case ProjectType.HorizontalEnquire:
                         return "横向咨询";
                     case ProjectType.VerticalWork:
-                        return "纵向工作";
+                        return "纵向咨询";
                     case ProjectType.CenterWork:
                         return "中心工作";
                     default:

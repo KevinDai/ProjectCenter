@@ -76,5 +76,7 @@ namespace ProjectCenter.Services
         ProjectChangeLog AddChangeLog(ProjectChangeLog log);
 
         IEnumerable<ProjectViewStatusDetail> GetChangedProjectViewStatusDetail(string userId, bool includeFinanceStatus);
+
+        void InitProjectCode();
     }
 }

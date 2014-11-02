@@ -27,6 +27,15 @@ namespace ProjectCenter.Web.Models
         }
 
         /// <summary>
+        /// 任务编码
+        /// </summary>
+        public string Code
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
         /// 开始时间
         /// </summary>
         public DateTime StartTime

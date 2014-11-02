@@ -27,6 +27,7 @@ namespace ProjectCenter.Web.Exports
         private static readonly ExportColumn[] ProjectSheetColumns = new ExportColumn[] {
             new ExportColumn(){Name="序号",Width=5},
             new ExportColumn(){Name="类别",Width=10},
+            new ExportColumn(){Name="任务编码",Width=15},
             new ExportColumn(){Name="任务内容",Width=25},
             new ExportColumn(){Name="委托单位",Width=25},
             new ExportColumn(){Name="工作内容",Width=25},
@@ -296,18 +297,19 @@ namespace ProjectCenter.Web.Exports
 
             row.CreateCell(0).SetCellValue(ProjectSheetDataRowIndex - ProjectSheetDataRowStartIndex + 1);
             row.CreateCell(1).SetCellValue(project.TypeString);
-            row.CreateCell(2).SetCellValue(project.Name);
-            row.CreateCell(3).SetCellValue(project.Consignor);
-            row.CreateCell(4).SetCellValue(project.NeedFinish);
-            row.CreateCell(5).SetCellValue(project.CurrentProgress);
-            row.CreateCell(6).SetCellValue(project.ManagerNames);
-            row.CreateCell(7).SetCellValue(project.ParticipantNames);
-            row.CreateCell(8).SetCellValue(project.Deadline.ToShortDateString());
-            row.CreateCell(9).SetCellValue(project.NeedSupport);
-            row.CreateCell(10).SetCellValue(project.AdvancePlan);
-            row.CreateCell(11).SetCellValue(project.StatusString);
-            row.CreateCell(12).SetCellValue(project.StartTime.Year.ToString());
-            row.CreateCell(13).SetCellValue(project.Deadline.Year.ToString());
+            row.CreateCell(2).SetCellValue(project.Code);
+            row.CreateCell(3).SetCellValue(project.Name);
+            row.CreateCell(4).SetCellValue(project.Consignor);
+            row.CreateCell(5).SetCellValue(project.NeedFinish);
+            row.CreateCell(6).SetCellValue(project.CurrentProgress);
+            row.CreateCell(7).SetCellValue(project.ManagerNames);
+            row.CreateCell(8).SetCellValue(project.ParticipantNames);
+            row.CreateCell(9).SetCellValue(project.Deadline.ToShortDateString());
+            row.CreateCell(10).SetCellValue(project.NeedSupport);
+            row.CreateCell(11).SetCellValue(project.AdvancePlan);
+            row.CreateCell(12).SetCellValue(project.StatusString);
+            row.CreateCell(13).SetCellValue(project.StartTime.Year.ToString());
+            row.CreateCell(14).SetCellValue(project.Deadline.Year.ToString());
 
             ProjectSheetDataRowIndex++;
             if (WithFinance)

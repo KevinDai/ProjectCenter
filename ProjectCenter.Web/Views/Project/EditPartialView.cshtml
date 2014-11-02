@@ -17,13 +17,21 @@
                                 <label class="col-md-2 control-label">
                                     项目类型：</label>
                                 <div class="col-md-4">
-                                    <select data-bind="value: Type, enable: EnableEditProject" class="form-control">
+                                    <select data-bind="value: Type, enable: !Id()" class="form-control">
                                         <option value="0">纵向研究</option>
                                         <option value="1">横向研究</option>
                                         <option value="2">横向咨询</option>
-                                        <option value="3">纵向工作</option>
+                                        <option value="3">纵向咨询</option>
                                         <option value="4">中心工作</option>
                                     </select>
+                                </div>
+                            </div>
+                            <div class="form-group" data-bind="visible: Id()">
+                                <label class="col-md-2 control-label">
+                                    项目编码：
+                                </label>
+                                <div class="col-md-4">
+                                    <input data-bind="value: Code, enable: false" class="form-control" type="text">
                                 </div>
                             </div>
                             <div class="form-group">
