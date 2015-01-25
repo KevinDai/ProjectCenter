@@ -272,6 +272,8 @@ namespace ProjectCenter.Models
                         return "纵向工作";
                     case ProjectType.CenterWork:
                         return "部门工作";
+                    case ProjectType.AssociationWork:
+                        return "协会工作";
                     default:
                         return "未归类";
                 }

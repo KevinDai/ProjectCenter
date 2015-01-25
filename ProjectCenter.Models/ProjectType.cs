@@ -14,7 +14,7 @@ namespace ProjectCenter.Models
         /// 纵向研究
         /// </summary>
         VerticalResearch = 0,
-        
+
         /// <summary>
         /// 横向研究
         /// </summary>
@@ -33,7 +33,12 @@ namespace ProjectCenter.Models
         /// <summary>
         /// 中心工作
         /// </summary>
-        CenterWork = 4
+        CenterWork = 4,
+
+        /// <summary>
+        /// 协会工作
+        /// </summary>
+        AssociationWork = 5
 
     }
 }
